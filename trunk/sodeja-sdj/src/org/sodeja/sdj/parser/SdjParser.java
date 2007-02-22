@@ -11,6 +11,7 @@ import org.sodeja.parsec.ParsecUtils;
 import org.sodeja.parsec.Parser;
 import org.sodeja.sdj.expression.Alternative;
 import org.sodeja.sdj.expression.Application;
+import org.sodeja.sdj.expression.BinaryOperator;
 import org.sodeja.sdj.expression.Case;
 import org.sodeja.sdj.expression.Constructor;
 import org.sodeja.sdj.expression.Definition;
@@ -19,6 +20,7 @@ import org.sodeja.sdj.expression.Lambda;
 import org.sodeja.sdj.expression.Let;
 import org.sodeja.sdj.expression.Name;
 import org.sodeja.sdj.expression.Number;
+import org.sodeja.sdj.expression.Operator;
 import org.sodeja.sdj.expression.Program;
 import org.sodeja.sdj.expression.Supercombinator;
 import org.sodeja.sdj.expression.Variable;
@@ -94,6 +96,15 @@ public class SdjParser {
 		);
 	
 	public Parser<String, List<Definition<Name>>> DEFINITIONS_PARSER = ParsecUtils.oneOrMoreSep("DEFINITIONS_PARSER", DEFINITION_PARSER, new PLit(";"));
+	
+	public Parser<String, Operator<Name>> BIN_OPERATOR_PARSER = 
+		ParsecUtils.thenParser3("BIN_OPERATOR_PARSER", new POp(), ATOMIC_EXPRESSION_PARSER, ATOMIC_EXPRESSION_PARSER, 
+			new Function3<Operator<Name>, BinaryOperator, Expression<Name>, Expression<Name>>() {
+				public Operator<Name> execute(BinaryOperator p1, Expression<Name> p2, Expression<Name> p3) {
+					return new Operator<Name>(p1, p2, p3);
+				}
+			}
+		);
 	
 	public Parser<String, Let<Name>> LET_PARSER = 
 		ParsecUtils.thenParser4("LET_PARSER", new PLit("let"), DEFINITIONS_PARSER, new PLit("in"), EXPRESSION_PARSER, 
@@ -188,18 +199,33 @@ public class SdjParser {
 		);
 	
 	public SdjParser() {
-		Parser<String, Expression<Name>> nalt1 = ParsecUtils.alternative1("EXPRESSION_PARSER_nalt2", LETREC_PARSER, CASE_PARSER);
-		Parser<String, Expression<Name>> nalt2 = ParsecUtils.alternative1("EXPRESSION_PARSER_nalt3", LAMBDA_PARSER, ATOMIC_EXPRESSION_PARSER);
-		EXPRESSION_PARSER_NOAPPLY.delegate = ParsecUtils.alternative1("EXPRESSION_PARSER_nalt123", ParsecUtils.alternative1("EXPRESSION_PARSER_nalt12", LET_PARSER, nalt1), nalt2);
+		Parser<String, Expression<Name>> nalt1 = ParsecUtils.alternative1("EXPRESSION_PARSER_nalt1", BIN_OPERATOR_PARSER, LET_PARSER);
+		Parser<String, Expression<Name>> nalt2 = ParsecUtils.alternative1("EXPRESSION_PARSER_nalt2", LETREC_PARSER, CASE_PARSER);
+		Parser<String, Expression<Name>> nalt3 = ParsecUtils.alternative1("EXPRESSION_PARSER_nalt3", LAMBDA_PARSER, ATOMIC_EXPRESSION_PARSER);
+		EXPRESSION_PARSER_NOAPPLY.delegate = ParsecUtils.alternative1("EXPRESSION_PARSER_nalt123", ParsecUtils.alternative1("EXPRESSION_PARSER_nalt12", nalt1, nalt2), nalt3);
 		
-		Parser<String, Expression<Name>> alt1 = ParsecUtils.alternative1("EXPRESSION_PARSER_alt1", APPLICATION_PARSER, LET_PARSER);
-		Parser<String, Expression<Name>> alt2 = ParsecUtils.alternative1("EXPRESSION_PARSER_alt2", LETREC_PARSER, CASE_PARSER);
-		Parser<String, Expression<Name>> alt3 = ParsecUtils.alternative1("EXPRESSION_PARSER_alt3", LAMBDA_PARSER, ATOMIC_EXPRESSION_PARSER);
-		EXPRESSION_PARSER.delegate = ParsecUtils.alternative1("EXPRESSION_PARSER_alt123", ParsecUtils.alternative1("EXPRESSION_PARSER_alt12", alt1, alt2), alt3);
+		Parser<String, Expression<Name>> alt1 = ParsecUtils.alternative1("EXPRESSION_PARSER_alt1", APPLICATION_PARSER, BIN_OPERATOR_PARSER);
+		Parser<String, Expression<Name>> alt2 = ParsecUtils.alternative1("EXPRESSION_PARSER_alt2", LET_PARSER, LETREC_PARSER);
+		Parser<String, Expression<Name>> alt3 = ParsecUtils.alternative1("EXPRESSION_PARSER_alt3", CASE_PARSER, LAMBDA_PARSER);
+		
+		Parser<String, Expression<Name>> alt12 = ParsecUtils.alternative1("EXPRESSION_PARSER_alt12", alt1, alt2);
+		Parser<String, Expression<Name>> alt3A = ParsecUtils.alternative1("EXPRESSION_PARSER_alt3A", alt3, ATOMIC_EXPRESSION_PARSER);
+		EXPRESSION_PARSER.delegate = ParsecUtils.alternative("EXPRESSION_PARSER_alt123A", alt12, alt3A);
 		
 		// Atomic
 		Parser<String, Expression<Name>> atAlt1 = ParsecUtils.alternative1("ATOMIC_EXPRESSION_PARSER_alt1", VARIABLE_PARSER, NUMBER_PARSER);
 		Parser<String, Expression<Name>> atAlt2 = ParsecUtils.alternative1("ATOMIC_EXPRESSION_PARSER_alt2", CONSTRUCTOR_PARSER, PARENTHESISED_EXPRESSION_PARSER);
 		ATOMIC_EXPRESSION_PARSER.delegate = ParsecUtils.alternative("ATOMIC_EXPRESSION_PARSER", atAlt1, atAlt2);
+	}
+	
+	public Program<Name> parse(List<String> tokens) {
+		List<Pair<Program<Name>, List<String>>> result = PROGRAM_PARSER.execute(tokens);
+		for(Pair<Program<Name>, List<String>> pair : result) {
+			if(pair.second.isEmpty()) {
+				return pair.first;
+			}
+		}
+		
+		throw new RuntimeException("Syntax error!");
 	}
 }

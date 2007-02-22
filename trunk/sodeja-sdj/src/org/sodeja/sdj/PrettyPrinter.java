@@ -6,8 +6,8 @@ import org.sodeja.sdj.expression.Case;
 import org.sodeja.sdj.expression.Definition;
 import org.sodeja.sdj.expression.Expression;
 import org.sodeja.sdj.expression.Let;
-import org.sodeja.sdj.expression.Name;
 import org.sodeja.sdj.expression.Number;
+import org.sodeja.sdj.expression.Operator;
 import org.sodeja.sdj.expression.Program;
 import org.sodeja.sdj.expression.Supercombinator;
 import org.sodeja.sdj.expression.Variable;
@@ -73,6 +73,13 @@ public class PrettyPrinter {
 				print(alt.expression);
 				System.out.print(";");
 			}
+		} else if(expression instanceof Operator) {
+			Operator<T> op = (Operator<T>) expression;
+			System.out.print(op.operator.text);
+			System.out.print(" ");
+			print(op.first);
+			System.out.print(" ");
+			print(op.second);
 		} else {
 			throw new UnsupportedOperationException();
 		}

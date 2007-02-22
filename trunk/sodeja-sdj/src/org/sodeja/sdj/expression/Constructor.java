@@ -8,4 +8,9 @@ public class Constructor<T> extends Expression<T> {
 		this.tag = tag;
 		this.arity = arity;
 	}
+
+	@Override
+	public boolean isAtomic() {
+		return true;
+	}
 }
