@@ -1,14 +1,5 @@
-main = double 21 
-double x = x + x 
-
-main = quadruple 20
-quadruple x = let twice_x = x+x 
-	in twice_x + twice_x 
-
-ininite n = letrec ns = cons n ns 
-		in ns 
-
-quad_plus_one x = 1 + (let tx = x+x in tx+tx) 
-
-double_list xs = map (\x. 2*x) xs 
-
+f = 3 ;
+g x y = let z = x in z ;
+h x = case (let y = x in y) of
+	<1> -> 2 ;
+	<2> -> 5

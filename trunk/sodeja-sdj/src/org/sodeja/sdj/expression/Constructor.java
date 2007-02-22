@@ -1,10 +1,10 @@
 package org.sodeja.sdj.expression;
 
-public class Constructor extends Expression {
-	public final Integer tag;
-	public final Integer arity;
+public class Constructor<T> extends Expression<T> {
+	public final Number<T> tag;
+	public final Number<T> arity;
 	
-	public Constructor(final Integer tag, final Integer arity) {
+	public Constructor(final Number<T> tag, final Number<T> arity) {
 		this.tag = tag;
 		this.arity = arity;
 	}
