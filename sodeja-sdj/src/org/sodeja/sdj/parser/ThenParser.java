@@ -1,5 +1,6 @@
 package org.sodeja.sdj.parser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.sodeja.functional.Function2;
@@ -19,11 +20,21 @@ public class ThenParser<Tok, Res, Res1, Res2> extends AbstractParser<Tok, Res> {
 
 	@Override
 	protected List<Pair<Res, List<Tok>>> executeDelegate(List<Tok> tokens) {
-		List<Pair<Res1, List<Tok>>> firstResult = first.execute(tokens);
-		List<Pair<Res2, List<Tok>>> secondResult = second.execute(firstResult.get(0).second);
+		List<Pair<Res, List<Tok>>> result = new ArrayList<Pair<Res, List<Tok>>>();
+		List<Tok> tempTokens = tokens;
 		
-		return create(
-				combinator.execute(firstResult.get(0).first, secondResult.get(0).first), 
-				secondResult.get(0).second);
+		for(List<Pair<Res1, List<Tok>>> firstResult = first.execute(tempTokens); !firstResult.isEmpty(); firstResult = first.execute(tempTokens)) {
+			for(Pair<Res1, List<Tok>> firstPair : firstResult) {
+				List<Tok> intTokens = firstPair.second;
+				
+				for(List<Pair<Res2, List<Tok>>> secondResult = second.execute(intTokens); ! secondResult.isEmpty(); secondResult = second.execute(intTokens)) {
+					for(Pair<Res2, List<Tok>> secondPair : secondResult) {
+						result.add(new Pair<Res, List<Tok>>(combinator.execute(firstPair.first, secondPair.first), secondPair.second));
+					}
+				}
+			}
+		}
+		
+		return result;
 	}
 }
