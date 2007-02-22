@@ -4,14 +4,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.sodeja.collections.ListUtils;
-import org.sodeja.functional.Function2;
+import org.sodeja.functional.Function3;
 import org.sodeja.functional.Pair;
 import org.sodeja.sdj.parser.AlternativeParser;
+import org.sodeja.sdj.parser.OneOrMoreParser;
 import org.sodeja.sdj.parser.Parser;
-import org.sodeja.sdj.parser.ThenParser;
+import org.sodeja.sdj.parser.ThenParser3;
 import org.sodeja.sdj.parser.hw.PLit;
 import org.sodeja.sdj.parser.hw.PVar;
-
 
 public class Main {
 	public static void main(String[] args) throws Exception {
@@ -20,22 +20,23 @@ public class Main {
 //		List<Pair<String, List<String>>> result = PLit.Util.getParserFor("hello").execute(initial);
 //		System.out.println("Result: " + result);
 		
-		List<String> initial = Collections.unmodifiableList(ListUtils.asList("hello", "John", "!"));
+		List<String> initial = Collections.unmodifiableList(ListUtils.asList("hello", "John", "!", "hello", "John", "!"));
 		System.out.println("Initial: " + initial);
 		
 		Parser<String, String> helloOrGoodbye = new AlternativeParser<String, String>(
 				new PLit("hello"), new PLit("goodbye"));
 		
-		Parser<String, Pair<String, String>> greeting1 = new ThenParser<String, Pair<String, String>, String, String>(
-				helloOrGoodbye, new PVar(), Function2.Utils.createPairFunctor(String.class, String.class));
-		
-		Parser<String, Pair<String, String>> greeting = new ThenParser<String, Pair<String,String>, Pair<String,String>, String>(
-				greeting1, new PLit("!"), new Function2<Pair<String,String>, Pair<String,String>, String>() {
-					public Pair<String, String> execute(Pair<String, String> p1, String p2) {
-						return p1;
-					}});
+		Parser<String, Pair<String, String>> greeting = new ThenParser3<String, Pair<String, String>, String, String, String>(
+				helloOrGoodbye, new PVar(), new PLit("!"), 
+				new Function3<Pair<String, String>, String, String, String>() {
+					public Pair<String, String> execute(String p1, String p2, String p3) {
+						return new Pair<String, String>(p1, p2);
+					}
+				});
 
-		List result = greeting.execute(initial);
-		System.out.println("Result: " + result);
+		System.out.println("Result(greeting): " + greeting.execute(initial));
+		
+		Parser<String, List<Pair<String, String>>> oneOrMoreGreetings = new OneOrMoreParser<String, Pair<String, String>>(greeting);
+		System.out.println("Result(oneOrMoreGreetings): " + oneOrMoreGreetings.execute(initial));
 	}
 }
