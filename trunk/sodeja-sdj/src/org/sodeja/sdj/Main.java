@@ -6,12 +6,12 @@ import java.util.List;
 import org.sodeja.collections.ListUtils;
 import org.sodeja.functional.Function3;
 import org.sodeja.functional.Pair;
-import org.sodeja.sdj.parser.AlternativeParser;
-import org.sodeja.sdj.parser.OneOrMoreParser;
-import org.sodeja.sdj.parser.Parser;
-import org.sodeja.sdj.parser.ThenParser3;
-import org.sodeja.sdj.parser.hw.PLit;
-import org.sodeja.sdj.parser.hw.PVar;
+import org.sodeja.parsec.AlternativeParser;
+import org.sodeja.parsec.OneOrMoreParser;
+import org.sodeja.parsec.Parser;
+import org.sodeja.parsec.ThenParser3;
+import org.sodeja.sdj.parser.PLit;
+import org.sodeja.sdj.parser.PVar;
 
 // TODO currently something very wrong. Test cases are needed more
 public class Main {

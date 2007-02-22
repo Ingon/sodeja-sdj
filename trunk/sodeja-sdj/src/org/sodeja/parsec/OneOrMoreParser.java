@@ -1,19 +1,18 @@
-package org.sodeja.sdj.parser;
+package org.sodeja.parsec;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.sodeja.functional.Pair;
 
-public class ZeroOrMoreParser<Tok, Res> extends AbstractParser<Tok, List<Res>> {
+public class OneOrMoreParser<Tok, Res> extends AbstractParser<Tok, List<Res>> {
 
 	private final Parser<Tok, Res> internal;
 
-	public ZeroOrMoreParser(final Parser<Tok, Res> internal) {
+	public OneOrMoreParser(final Parser<Tok, Res> internal) {
 		this.internal = internal;
 	}
-
-	// TODO refactor to use OneOrMoreParser + EmptyParser
+	
 	@Override
 	protected List<Pair<List<Res>, List<Tok>>> executeDelegate(List<Tok> tokens) {
 		List<Tok> tempTokens = tokens;
@@ -24,6 +23,10 @@ public class ZeroOrMoreParser<Tok, Res> extends AbstractParser<Tok, List<Res>> {
 			
 			tempResult.add(internalResult.get(0).first);
 			tempTokens = internalResult.get(0).second;
+		}
+		
+		if(tempResult.size() == 0) {
+			return EMPTY;
 		}
 		
 		return create(tempResult, tempTokens);
