@@ -47,6 +47,7 @@ public class OneOrMoreWithSeparator<Tok, Res, Res1> extends AbstractParser<Tok, 
 		}
 		
 		List<Pair<List<Res>, List<Tok>>> result = new ArrayList<Pair<List<Res>, List<Tok>>>();
+		result.add(new Pair<List<Res>, List<Tok>>(results, tempTokens));
 		return result;
 	}
 }
