@@ -13,7 +13,8 @@ public class ThenParser3<Tok, Res, Res1, Res2, Res3> extends AbstractParser<Tok,
 	private final Parser<Tok, Res3> third;
 	private final Function3<Res, Res1, Res2, Res3> combinator;
 	
-	public ThenParser3(final Parser<Tok, Res1> first, final Parser<Tok, Res2> second, final Parser<Tok, Res3> third, final Function3<Res, Res1, Res2, Res3> combinator) {
+	public ThenParser3(final String name, final Parser<Tok, Res1> first, final Parser<Tok, Res2> second, final Parser<Tok, Res3> third, final Function3<Res, Res1, Res2, Res3> combinator) {
+		super(name);
 		this.first = first;
 		this.second = second;
 		this.third = third;

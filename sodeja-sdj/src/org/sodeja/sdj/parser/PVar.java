@@ -17,8 +17,8 @@ public class PVar extends SatisfiesParser<String> {
 		return false;
 	}
 	
-	public PVar() {
-		super(new Predicate1<String>() {
+	public PVar(String name) {
+		super(name, new Predicate1<String>() {
 			public Boolean execute(String p) {
 				if(isKeyword(p)) {
 					return false;

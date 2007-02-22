@@ -11,7 +11,8 @@ public class ApplyParser<Tok, Res, Res1> extends AbstractParser<Tok, Res> {
 	private final Parser<Tok, Res1> parser;
 	private final Function1<Res, Res1> functor;
 	
-	public ApplyParser(final Parser<Tok, Res1> parser, final Function1<Res, Res1> functor) {
+	public ApplyParser(final String name, final Parser<Tok, Res1> parser, final Function1<Res, Res1> functor) {
+		super(name);
 		this.parser = parser;
 		this.functor = functor;
 	}

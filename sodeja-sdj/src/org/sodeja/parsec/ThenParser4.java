@@ -14,9 +14,10 @@ public class ThenParser4<Tok, Res, Res1, Res2, Res3, Res4> extends AbstractParse
 	private final Parser<Tok, Res4> fourth;
 	private final Function4<Res, Res1, Res2, Res3, Res4> combinator;
 	
-	public ThenParser4(final Parser<Tok, Res1> first, final Parser<Tok, Res2> second, 
+	public ThenParser4(final String name, final Parser<Tok, Res1> first, final Parser<Tok, Res2> second, 
 			final Parser<Tok, Res3> third, final Parser<Tok, Res4> fourth, 
 			final Function4<Res, Res1, Res2, Res3, Res4> combinator) {
+		super(name);
 		this.first = first;
 		this.second = second;
 		this.third = third;

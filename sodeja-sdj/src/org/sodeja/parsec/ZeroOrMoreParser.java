@@ -9,7 +9,8 @@ public class ZeroOrMoreParser<Tok, Res> extends AbstractParser<Tok, List<Res>> {
 
 	private final Parser<Tok, Res> internal;
 
-	public ZeroOrMoreParser(final Parser<Tok, Res> internal) {
+	public ZeroOrMoreParser(final String name, final Parser<Tok, Res> internal) {
+		super(name);
 		this.internal = internal;
 	}
 

@@ -10,6 +10,12 @@ public abstract class AbstractParser<Tok, Res> implements Parser<Tok, Res> {
 	
 	protected final List<Pair<Res, List<Tok>>> EMPTY = Collections.unmodifiableList(new ArrayList<Pair<Res, List<Tok>>>());
 	
+	private String name;
+	
+	public AbstractParser(final String name) {
+		this.name = name;
+	}
+	
 	public List<Pair<Res, List<Tok>>> execute(List<Tok> tokens) {
 		if(tokens.isEmpty()) {
 			return EMPTY;

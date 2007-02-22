@@ -9,7 +9,8 @@ public class OneOrMoreParser<Tok, Res> extends AbstractParser<Tok, List<Res>> {
 
 	private final Parser<Tok, Res> internal;
 
-	public OneOrMoreParser(final Parser<Tok, Res> internal) {
+	public OneOrMoreParser(final String name, final Parser<Tok, Res> internal) {
+		super(name);
 		this.internal = internal;
 	}
 	
