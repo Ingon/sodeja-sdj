@@ -7,6 +7,7 @@ import org.sodeja.functional.Function2;
 import org.sodeja.functional.Function3;
 import org.sodeja.functional.Function4;
 import org.sodeja.functional.Pair;
+import org.sodeja.parsec.DelegateParser;
 import org.sodeja.parsec.ParsecUtils;
 import org.sodeja.parsec.Parser;
 import org.sodeja.sdj.expression.Alternative;
