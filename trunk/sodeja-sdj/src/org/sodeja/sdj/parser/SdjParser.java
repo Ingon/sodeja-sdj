@@ -27,6 +27,8 @@ public class SdjParser {
 	
 	public DelegateParser<String, Expression<Name>> EXPRESSION_PARSER = new DelegateParser<String, Expression<Name>>("EXPRESSION_PARSER");
 	
+	public DelegateParser<String, Expression<Name>> EXPRESSION_PARSER_NOAPPLY = new DelegateParser<String, Expression<Name>>("EXPRESSION_PARSER");
+	
 	public DelegateParser<String, Expression<Name>> ATOMIC_EXPRESSION_PARSER = new DelegateParser<String, Expression<Name>>("ATOMIC_EXPRESSION_PARSER");
 	
 	public Parser<String, Name> NAME_PARSER = 
@@ -112,7 +114,7 @@ public class SdjParser {
 		);
 	
 	public Parser<String, Case<Name>> CASE_PARSER =
-		ParsecUtils.thenParser4("CASE_PARSER", new PLit("case"), EXPRESSION_PARSER, new PLit("if"), ALTERNATIVES_PARSER, 
+		ParsecUtils.thenParser4("CASE_PARSER", new PLit("case"), EXPRESSION_PARSER, new PLit("of"), ALTERNATIVES_PARSER, 
 			new Function4<Case<Name>, String, Expression<Name>, String, List<Alternative<Name>>>() {
 				public Case<Name> execute(String p1, Expression<Name> p2, String p3, List<Alternative<Name>> p4) {
 					return new Case<Name>(p2, p4);
@@ -130,7 +132,7 @@ public class SdjParser {
 		);
 	
 	public Parser<String, Application<Name>> APPLICATION_PARSER = 
-		ParsecUtils.thenParser("APPLICATION_PARSER", EXPRESSION_PARSER, ATOMIC_EXPRESSION_PARSER, 
+		ParsecUtils.thenParser("APPLICATION_PARSER", EXPRESSION_PARSER_NOAPPLY, ATOMIC_EXPRESSION_PARSER, 
 			new Function2<Application<Name>, Expression<Name>, Expression<Name>>() {
 				public Application<Name> execute(Expression<Name> p1, Expression<Name> p2) {
 					return new Application<Name>(p1, p2);
@@ -186,6 +188,10 @@ public class SdjParser {
 		);
 	
 	public SdjParser() {
+		Parser<String, Expression<Name>> nalt1 = ParsecUtils.alternative1("EXPRESSION_PARSER_nalt2", LETREC_PARSER, CASE_PARSER);
+		Parser<String, Expression<Name>> nalt2 = ParsecUtils.alternative1("EXPRESSION_PARSER_nalt3", LAMBDA_PARSER, ATOMIC_EXPRESSION_PARSER);
+		EXPRESSION_PARSER_NOAPPLY.delegate = ParsecUtils.alternative1("EXPRESSION_PARSER_nalt123", ParsecUtils.alternative1("EXPRESSION_PARSER_nalt12", LET_PARSER, nalt1), nalt2);
+		
 		Parser<String, Expression<Name>> alt1 = ParsecUtils.alternative1("EXPRESSION_PARSER_alt1", APPLICATION_PARSER, LET_PARSER);
 		Parser<String, Expression<Name>> alt2 = ParsecUtils.alternative1("EXPRESSION_PARSER_alt2", LETREC_PARSER, CASE_PARSER);
 		Parser<String, Expression<Name>> alt3 = ParsecUtils.alternative1("EXPRESSION_PARSER_alt3", LAMBDA_PARSER, ATOMIC_EXPRESSION_PARSER);

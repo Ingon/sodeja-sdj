@@ -1,7 +1,12 @@
 package org.sodeja.sdj;
 
+import org.sodeja.sdj.expression.Alternative;
 import org.sodeja.sdj.expression.Application;
+import org.sodeja.sdj.expression.Case;
+import org.sodeja.sdj.expression.Definition;
 import org.sodeja.sdj.expression.Expression;
+import org.sodeja.sdj.expression.Let;
+import org.sodeja.sdj.expression.Name;
 import org.sodeja.sdj.expression.Number;
 import org.sodeja.sdj.expression.Program;
 import org.sodeja.sdj.expression.Supercombinator;
@@ -21,7 +26,7 @@ public class PrettyPrinter {
 			
 			print(combinator.expression);
 			
-			System.out.println();
+			System.out.println(";");
 		}
 	}
 	
@@ -35,6 +40,39 @@ public class PrettyPrinter {
 			print(application.left);
 			System.out.print(" ");
 			printA(application.right);
+		} else if(expression instanceof Let) {
+			Let<T> let = (Let<T>) expression;
+			if(let.isRec) {
+				System.out.print("letrec ");
+			} else {
+				System.out.print("let ");
+			}
+			for(Definition<T> def : let.definitions) {
+				print(def.first);
+				System.out.print(" = ");
+				print(def.second);
+			}
+			
+			System.out.print(" in ");
+			print(let.body);
+		} else if(expression instanceof Case) {
+			Case<T> cas = (Case<T>) expression;
+			System.out.print("case ");
+			print(cas.scrutinise);
+			System.out.print(" of ");
+			for(Alternative<T> alt : cas.alternatives) {
+				System.out.print("\r\n  <");
+				print(alt.id);
+				System.out.print("> ");
+				
+				for(Variable<T> var : alt.bindings) {
+					print(var);
+				}
+				
+				System.out.print("-> ");
+				print(alt.expression);
+				System.out.print(";");
+			}
 		} else {
 			throw new UnsupportedOperationException();
 		}

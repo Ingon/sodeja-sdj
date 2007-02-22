@@ -36,6 +36,7 @@ public class Lexer {
 					readTillEOL();
 					continue;
 				}
+				returnChar(nextChar);
 			}
 			
 			if(Character.isDigit(ch)) {

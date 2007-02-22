@@ -61,6 +61,8 @@ public class Main {
 //		
 //		List<Pair<List<Expression<Name>>, List<String>>> parserResult = parser.execute(strTokens);
 		
-		System.out.println("Result: " + sdjParser.PROGRAM_PARSER.execute(strTokens));
+		List<Pair<Program<Name>, List<String>>> result = sdjParser.PROGRAM_PARSER.execute(strTokens);
+		System.out.println("Result: " + result);
+		PrettyPrinter.print(result.get(0).first);
 	}
 }
