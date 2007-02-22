@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.sodeja.functional.Pair;
 
-public class OneOrMoreWithSeparator<Tok, Res, Res1> extends AbstractParser<Tok, Res> {
+public class OneOrMoreWithSeparator<Tok, Res, Res1> extends AbstractParser<Tok, List<Res>> {
 
 	private final Parser<Tok, Res> internal;
 	private final Parser<Tok, Res1> separator;
@@ -16,8 +16,8 @@ public class OneOrMoreWithSeparator<Tok, Res, Res1> extends AbstractParser<Tok, 
 	}
 
 	@Override
-	protected List<Pair<Res, List<Tok>>> executeDelegate(List<Tok> tokens) {
-		List<Pair<Res, List<Tok>>> result = new ArrayList<Pair<Res,List<Tok>>>();
+	protected List<Pair<List<Res>, List<Tok>>> executeDelegate(List<Tok> tokens) {
+		List<Res> results = new ArrayList<Res>();
 		List<Tok> tempTokens = tokens;
 		
 		List<Pair<Res, List<Tok>>> internalResult = internal.execute(tempTokens);
@@ -25,7 +25,8 @@ public class OneOrMoreWithSeparator<Tok, Res, Res1> extends AbstractParser<Tok, 
 			return EMPTY;
 		}
 		
-		result.addAll(internalResult);
+		results.add(internalResult.get(0).first);
+		tempTokens = internalResult.get(0).second;
 		
 		for(List<Pair<Res1, List<Tok>>> separatorResult = separator.execute(tempTokens); 
 				! separatorResult.isEmpty(); 
@@ -40,9 +41,11 @@ public class OneOrMoreWithSeparator<Tok, Res, Res1> extends AbstractParser<Tok, 
 				return EMPTY;
 			}
 			
-			result.addAll(internalResult);
+			results.add(internalResult.get(0).first);
+			tempTokens = internalResult.get(0).second;
 		}
 		
+		List<Pair<List<Res>, List<Tok>>> result = new ArrayList<Pair<List<Res>, List<Tok>>>();
 		return result;
 	}
 }
