@@ -5,7 +5,7 @@ import org.sodeja.parsec.SatisfiesParser;
 
 public class PLit extends SatisfiesParser<String> {
 	public PLit(final String expected) {
-		super(new Predicate1<String>() {
+		super(expected, new Predicate1<String>() {
 			public Boolean execute(String p) {
 				return expected.equals(p);
 			}});

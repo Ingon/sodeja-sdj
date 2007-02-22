@@ -10,7 +10,8 @@ public class AlternativeParser<Tok, Res> extends AbstractParser<Tok, Res> {
 	private final Parser<Tok, Res> first;
 	private final Parser<Tok, Res> second;
 	
-	public AlternativeParser(final Parser<Tok, Res> first, final Parser<Tok, Res> second) {
+	public AlternativeParser(final String name, final Parser<Tok, Res> first, final Parser<Tok, Res> second) {
+		super(name);
 		this.first = first;
 		this.second = second;
 	}

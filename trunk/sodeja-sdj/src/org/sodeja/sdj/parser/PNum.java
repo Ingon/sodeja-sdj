@@ -24,16 +24,24 @@ public class PNum extends AbstractParser<String, Integer> {
 	private final Parser<String, String> digitsParser;
 	private final Parser<String, Integer> convertParser;
 	
-	public PNum() {
-		digitsParser = new SatisfiesParser<String>(new Predicate1<String>() {
-			public Boolean execute(String p) {
-				return allDigits(p);
-			}});
+	public PNum(final String name) {
+		super(name);
 		
-		convertParser = new ApplyParser<String, Integer, String>(digitsParser, new Function1<Integer, String>() {
-			public Integer execute(String p) {
-				return new Integer(p);
-			}});
+		digitsParser = new SatisfiesParser<String>(name, 
+			new Predicate1<String>() {
+				public Boolean execute(String p) {
+					return allDigits(p);
+				}
+			}
+		);
+		
+		convertParser = new ApplyParser<String, Integer, String>(name, 
+			digitsParser, new Function1<Integer, String>() {
+				public Integer execute(String p) {
+					return new Integer(p);
+				}
+			}
+		);
 	}
 	
 	@Override

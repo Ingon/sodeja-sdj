@@ -10,7 +10,8 @@ public class OneOrMoreWithSeparator<Tok, Res, Res1> extends AbstractParser<Tok, 
 	private final Parser<Tok, Res> internal;
 	private final Parser<Tok, Res1> separator;
 	
-	public OneOrMoreWithSeparator(final Parser<Tok, Res> internal, final Parser<Tok, Res1> separator) {
+	public OneOrMoreWithSeparator(final String name, final Parser<Tok, Res> internal, final Parser<Tok, Res1> separator) {
+		super(name);
 		this.internal = internal;
 		this.separator = separator;
 	}

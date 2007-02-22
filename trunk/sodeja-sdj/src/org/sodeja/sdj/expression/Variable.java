@@ -11,4 +11,9 @@ public class Variable<T> extends Expression<T> {
 	public boolean isAtomic() {
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("Variable(%s)", name);
+	}
 }

@@ -11,4 +11,9 @@ public class Number<T> extends Expression<T> {
 	public boolean isAtomic() {
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("Number(%s)", value);
+	}
 }

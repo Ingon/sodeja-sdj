@@ -9,7 +9,8 @@ public class SatisfiesParser<Tok> extends AbstractParser<Tok, Tok> {
 
 	private final Predicate1<Tok> functor;
 	
-	public SatisfiesParser(final Predicate1<Tok> functor) {
+	public SatisfiesParser(final String name, final Predicate1<Tok> functor) {
+		super(name);
 		this.functor = functor;
 	}
 

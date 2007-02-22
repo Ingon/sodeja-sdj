@@ -6,9 +6,12 @@ import java.util.List;
 import org.sodeja.collections.ListUtils;
 import org.sodeja.functional.Function1;
 import org.sodeja.functional.Pair;
+import org.sodeja.parsec.ParsecUtils;
 import org.sodeja.parsec.Parser;
+import org.sodeja.sdj.expression.Expression;
 import org.sodeja.sdj.expression.Name;
 import org.sodeja.sdj.expression.Program;
+import org.sodeja.sdj.expression.Variable;
 import org.sodeja.sdj.lexer.Lexer;
 import org.sodeja.sdj.lexer.Token;
 import org.sodeja.sdj.parser.SdjParser;
@@ -51,9 +54,13 @@ public class Main {
 				return p.name;
 			}});
 		
-		Parser<String, Program<Name>> program = SdjParser.PROGRAM_PARSER;
-		List<Pair<Program<Name>, List<String>>> parserResult = program.execute(strTokens);
+		SdjParser sdjParser = new SdjParser();
 		
-//		System.out.println("Result: " + parserResult);
+//		Parser<String, Expression<Name>> internal = ParsecUtils.alternative1(sdjParser.VARIABLE_PARSER, sdjParser.NUMBER_PARSER);
+//		Parser<String, List<Expression<Name>>> parser = ParsecUtils.oneOrMore(internal);
+//		
+//		List<Pair<List<Expression<Name>>, List<String>>> parserResult = parser.execute(strTokens);
+		
+		System.out.println("Result: " + sdjParser.PROGRAM_PARSER.execute(strTokens));
 	}
 }

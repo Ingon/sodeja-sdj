@@ -12,7 +12,8 @@ public class ThenParser<Tok, Res, Res1, Res2> extends AbstractParser<Tok, Res> {
 	private final Parser<Tok, Res2> second;
 	private final Function2<Res, Res1, Res2> combinator;
 	
-	public ThenParser(final Parser<Tok, Res1> first, final Parser<Tok, Res2> second, final Function2<Res, Res1, Res2> combinator) {
+	public ThenParser(final String name, final Parser<Tok, Res1> first, final Parser<Tok, Res2> second, final Function2<Res, Res1, Res2> combinator) {
+		super(name);
 		this.first = first;
 		this.second = second;
 		this.combinator = combinator;
