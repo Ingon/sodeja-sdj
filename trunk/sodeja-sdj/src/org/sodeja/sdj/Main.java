@@ -13,6 +13,7 @@ import org.sodeja.sdj.parser.ThenParser3;
 import org.sodeja.sdj.parser.hw.PLit;
 import org.sodeja.sdj.parser.hw.PVar;
 
+// TODO currently something very wrong. Test cases are needed more
 public class Main {
 	public static void main(String[] args) throws Exception {
 //		List<String> initial = ListUtils.asList("hello", "John", "!");
