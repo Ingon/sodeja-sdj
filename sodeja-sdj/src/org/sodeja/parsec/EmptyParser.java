@@ -1,4 +1,4 @@
-package org.sodeja.sdj.parser;
+package org.sodeja.parsec;
 
 import java.util.List;
 
