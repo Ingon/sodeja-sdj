@@ -1,5 +1,6 @@
 package org.sodeja.sdj.parser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.sodeja.functional.Function4;
@@ -25,17 +26,28 @@ public class ThenParser4<Tok, Res, Res1, Res2, Res3, Res4> extends AbstractParse
 
 	@Override
 	protected List<Pair<Res, List<Tok>>> executeDelegate(List<Tok> tokens) {
-		List<Pair<Res1, List<Tok>>> firstResult = first.execute(tokens);
-		List<Pair<Res2, List<Tok>>> secondResult = second.execute(firstResult.get(0).second);
-		List<Pair<Res3, List<Tok>>> thirdResult = third.execute(secondResult.get(0).second);
-		List<Pair<Res4, List<Tok>>> fourthResult = fourth.execute(thirdResult.get(0).second);
+		List<Pair<Res, List<Tok>>> result = new ArrayList<Pair<Res, List<Tok>>>();
 		
-		return create(
-				combinator.execute(
-						firstResult.get(0).first, 
-						secondResult.get(0).first, 
-						thirdResult.get(0).first,
-						fourthResult.get(0).first), 
-				fourthResult.get(0).second);
+		List<Pair<Res1, List<Tok>>> firstResult = first.execute(tokens);
+		for(Pair<Res1, List<Tok>> firstPair : firstResult) {
+			List<Pair<Res2, List<Tok>>> secondResult = second.execute(firstPair.second);
+			
+			for(Pair<Res2, List<Tok>> secondPair : secondResult) {
+				List<Pair<Res3, List<Tok>>> thirdResult = third.execute(secondPair.second);
+				
+				for(Pair<Res3, List<Tok>> thirdPair : thirdResult) {
+					List<Pair<Res4, List<Tok>>> fourthResult = fourth.execute(thirdPair.second);
+					
+					for(Pair<Res4, List<Tok>> fourthPair : fourthResult) {
+						result.add(new Pair<Res, List<Tok>>(
+								combinator.execute(firstPair.first, secondPair.first, thirdPair.first, fourthPair.first),
+								fourthPair.second
+								));
+					}
+				}
+			}
+		}
+		
+		return result;
 	}
 }
