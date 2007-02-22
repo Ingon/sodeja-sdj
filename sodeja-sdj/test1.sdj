@@ -1,5 +1,5 @@
-t = + f 7;
 f = 3;
+t = + f 7;
 g x y = letrec z = x in z;
 h x = case (let y = x in y) of
   <1> -> 2;
