@@ -52,7 +52,7 @@ public class Lexer extends AbstractLexer<Token> {
 		if (twoChars(ch)) {
 			return;
 		}
-
+		
 		tokens.add(new Token(line, ch));
 	}
 	

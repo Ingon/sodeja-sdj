@@ -1,6 +1,12 @@
 f = 3;
+
 t = + f 7;
+
 g x y = letrec z = x in z;
+
+square x = * x x;
+
 h x = case (let y = x in y) of
   <1> -> 2;
   <2> -> 5
+
