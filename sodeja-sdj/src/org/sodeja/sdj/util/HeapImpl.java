@@ -1,6 +1,7 @@
 package org.sodeja.sdj.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,8 +11,16 @@ public class HeapImpl<T> implements Heap<T> {
 
 	private static final Address NULL_ADDRESS = new LongAddress();
 	
-	public Map<Address, T> values;
+	private Map<Address, T> values;
 	
+	public HeapImpl() {
+		values = new HashMap<Address, T>();
+	}
+	
+	public HeapImpl(Heap<T> tiHeap) {
+		values = new HashMap<Address, T>(((HeapImpl) tiHeap).values);
+	}
+
 	public Address alloc(T obj) {
 		Address addr = new LongAddress();
 		values.put(addr, obj);
