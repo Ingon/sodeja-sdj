@@ -5,7 +5,7 @@ public interface Heap<T> {
 	public void update(Address addr, T obj);
 	public void free(Address addr);
 	
-	public Object lookup(Address addr);
+	public T lookup(Address addr);
 	
 	public Address[] addresses();
 	public int size();

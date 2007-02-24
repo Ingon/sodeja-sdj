@@ -10,6 +10,7 @@ import org.sodeja.sdj.expression.Program;
 import org.sodeja.sdj.lexer.Lexer;
 import org.sodeja.sdj.lexer.Token;
 import org.sodeja.sdj.parser.SdjParser;
+import org.sodeja.sdj.ti.TiState;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
@@ -27,6 +28,9 @@ public class Main {
 		
 		SdjParser sdjParser = new SdjParser();
 		Program<Name> program = sdjParser.parse(strTokens);
+		
 		PrettyPrinter.print(program);
+		
+		TiState compiled = new TiState(program);
 	}
 }
