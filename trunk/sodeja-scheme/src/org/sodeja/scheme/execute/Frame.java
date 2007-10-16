@@ -59,7 +59,8 @@ public class Frame {
 	
 	public void setSymbol(String symbol, Object value) {
 		if(! objects.containsKey(symbol)) {
-			throw new IllegalArgumentException("Setting unknown symbol: " + symbol);
+			parent.setSymbol(symbol, value);
+			return;
 		}
 		objects.put(symbol, value);
 	}
@@ -122,6 +123,11 @@ public class Frame {
 
 		@Override
 		public Object getSymbolValue(String symbol) {
+			throw new IllegalArgumentException("Symbol '" + symbol + "' does not exists!");
+		}
+
+		@Override
+		public void setSymbol(String symbol, Object value) {
 			throw new IllegalArgumentException("Symbol '" + symbol + "' does not exists!");
 		}
 	}

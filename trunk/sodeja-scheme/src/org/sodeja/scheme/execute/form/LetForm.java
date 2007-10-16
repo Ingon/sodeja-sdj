@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.sodeja.collections.ListUtils;
 import org.sodeja.scheme.execute.Frame;
 import org.sodeja.scheme.parse.model.Expression;
 import org.sodeja.scheme.parse.model.SExpression;
@@ -12,12 +13,12 @@ import org.sodeja.scheme.parse.model.SymbolExpression;
 public class LetForm implements Form {
 	@Override
 	public Object execute(Frame frame, List<Expression> expressions) {
-		if(expressions.size() != 2) {
-			throw new IllegalArgumentException("Expect two expressions - var binding and and executed");
+		if(expressions.size() < 2) {
+			throw new IllegalArgumentException("Expect at least two expressions - var binding and and executed");
 		}
 		
 		Map<String, Object> objects = new HashMap<String, Object>();
-		SExpression bindings = (SExpression) expressions.get(0);
+		SExpression bindings = (SExpression) ListUtils.head(expressions);
 		for(Expression bindingExp : bindings.expressions) {
 			SExpression binding = (SExpression) bindingExp;
 			if(binding.expressions.size() != 2) {
@@ -33,6 +34,11 @@ public class LetForm implements Form {
 		}
 		
 		Frame newFrame = new Frame(frame, objects);
-		return newFrame.eval(expressions.get(1));
+		
+		Object val = null;
+		for(Expression exp : ListUtils.tail(expressions)) {
+			val = newFrame.eval(exp);
+		}
+		return val;
 	}
 }
