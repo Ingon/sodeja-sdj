@@ -14,6 +14,8 @@ import org.sodeja.scheme.execute.primitive.aritmetic.DivProcedure;
 import org.sodeja.scheme.execute.primitive.aritmetic.MulProcedure;
 import org.sodeja.scheme.execute.primitive.aritmetic.SubProcedure;
 import org.sodeja.scheme.execute.primitive.aritmetic.SumProcedure;
+import org.sodeja.scheme.execute.primitive.pair.CarProcedure;
+import org.sodeja.scheme.execute.primitive.pair.CdrProcedure;
 import org.sodeja.scheme.execute.primitive.pair.ConsProcedure;
 import org.sodeja.scheme.execute.primitive.relational.BiggerThenProcedure;
 import org.sodeja.scheme.execute.primitive.relational.EqualProcedure;
@@ -47,6 +49,8 @@ public class LispExecutor {
 			put("quit", new QuitProcedure());
 			
 			put("cons", new ConsProcedure());
+			put("car", new CarProcedure());
+			put("cdr", new CdrProcedure());
 		}};
 		
 		frame = new Frame(null, procedures);
