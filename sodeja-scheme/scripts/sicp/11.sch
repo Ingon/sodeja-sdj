@@ -21,7 +21,7 @@ b
 
 ; some other functions
 (def (abs x) (if (< x 0) (- x) x))
-(def (average x y) (/ (+ x y) 2))
+;(def (average x y) (/ (+ x y) 2))
 (def (mean-square x y) (average (square x) (square y)))
 
 ; sqrt plain
