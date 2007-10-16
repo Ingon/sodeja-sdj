@@ -2,6 +2,7 @@ package org.sodeja.scheme.execute.form;
 
 import java.util.List;
 
+import org.sodeja.collections.ListUtils;
 import org.sodeja.scheme.execute.Frame;
 import org.sodeja.scheme.parse.model.Expression;
 import org.sodeja.scheme.parse.model.SExpression;
@@ -15,11 +16,11 @@ public class CondForm implements Form {
 			}
 			
 			SExpression clauseExp = (SExpression) exp;
-			if(clauseExp.expressions.size() != 2) {
-				throw new IllegalArgumentException("Clause expression contains predicate and action");
+			if(clauseExp.expressions.size() < 2) {
+				throw new IllegalArgumentException("Clause expression contains predicate and at least one action");
 			}
 			
-			Expression predicate = clauseExp.expressions.get(0);
+			Expression predicate = ListUtils.head(clauseExp.expressions);
 			Object obj = frame.eval(predicate);
 			if(! (obj instanceof Boolean)) {
 				throw new IllegalArgumentException("Predicate does not returns boolean!");
@@ -28,9 +29,12 @@ public class CondForm implements Form {
 			if(! ((Boolean) obj).booleanValue()) {
 				continue;
 			}
-			
-			Expression action = clauseExp.expressions.get(1);
-			return frame.eval(action);
+
+			Object val = null;
+			for(Expression resultExp : ListUtils.tail(clauseExp.expressions)) {
+				val = frame.eval(resultExp);
+			}
+			return val;
 		}
 		
 		throw new RuntimeException("No matching clause was found!");

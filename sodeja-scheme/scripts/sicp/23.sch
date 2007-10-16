@@ -44,10 +44,34 @@
 (def (angle z)
   (atan (cdr z) (car z)))
 
-(def z1 (make-rect 1 1))
+; Polar
 
-(def z2 (make-rect 2 2))
+; Typed data
+(def (attach-type type contents)
+  (cons type contents))
 
-(+c z1 z2)
+(def (type datum)
+  (car datum))
+  
+(def (contents datum)
+  (cdr datum))
 
-(*c z1 z2)
+; Tests
+
+;(def z1 (make-rect 1 1))
+
+;(def z2 (make-rect 2 2))
+
+;(+c z1 z2)
+
+(def z1 (attach-type 't1 1))
+
+(def z2 (attach-type 't2 2))
+
+(def (test-dispatch z)
+  (cond ((eq? (type z) 't1) (contents z))
+        ((eq? (type z) 't2) (contents z))
+        (else 'error)))
+
+(test-dispatch z1)
+(test-dispatch z2)
