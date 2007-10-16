@@ -42,11 +42,15 @@ public class Lexer extends AbstractLexer<String> {
 			return;
 		}
 		
-		if(Character.isDigit(ch) || Character.isLetter(ch)) {
-			LexerHelper.readIdentifierS(this, ch);
+		if(ch == '(') {
+			tokens.add("(");
 			return;
 		}
-		
-		tokens.add(String.valueOf(ch));
+//		if(Character.isDigit(ch) || Character.isLetter(ch)) {
+			LexerHelper.readIdentifierS(this, ch);
+//			return;
+//		}
+//		
+//		tokens.add(String.valueOf(ch));
 	}
 }

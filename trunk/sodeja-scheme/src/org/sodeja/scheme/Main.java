@@ -22,7 +22,7 @@ public class Main {
 		for(String arg : args) {
 			Lexer lex = new Lexer(new FileReader(arg));
 			List<String> tokens = lex.tokenize();
-//			System.out.println(tokens);
+			System.out.println(tokens);
 
 			SemanticParser parser = new SemanticParser();
 			Script script = parser.parse(tokens);
