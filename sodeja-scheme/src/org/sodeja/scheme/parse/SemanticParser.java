@@ -3,7 +3,7 @@ package org.sodeja.scheme.parse;
 import static org.sodeja.parsec.ParsecUtils.alternative1;
 import static org.sodeja.parsec.ParsecUtils.applyCons;
 import static org.sodeja.parsec.ParsecUtils.thenParser3Cons2;
-import static org.sodeja.parsec.ParsecUtils.thenParserCons;
+import static org.sodeja.parsec.ParsecUtils.thenParserCons2;
 import static org.sodeja.parsec.ParsecUtils.zeroOrMoreSep;
 import static org.sodeja.parsec.standart.StandartParsers.justText;
 import static org.sodeja.parsec.standart.StandartParsers.literal;
@@ -31,9 +31,9 @@ public class SemanticParser extends AbstractSemanticParser<String, Script>{
 	
 	private Parser<String, SymbolExpression> SYMBOL_EXPRESSION = applyCons("SYMBOL_EXPRESSION", SYMBOL, SymbolExpression.class);
 	
-	private Parser<String, RationalExpression> RATIONAL_EXPRESSION = applyCons("DECIMAL_EXPRESSION", RATIONAL, RationalExpression.class);
+	private Parser<String, RationalExpression> RATIONAL_EXPRESSION = applyCons("RATIONAL_EXPRESSION", RATIONAL, RationalExpression.class);
 	
-	private Parser<String, QuoteExpression> QUOTE_EXPRESSION = thenParserCons("QUOTE_EXPRESSION", literal("'"), justText("QUOTE_EXPRESSION_TEXT"), QuoteExpression.class);
+	private Parser<String, QuoteExpression> QUOTE_EXPRESSION = thenParserCons2("QUOTE_EXPRESSION", literal("'"), justText("QUOTE_EXPRESSION_TEXT"), QuoteExpression.class);
 	
 	private Parser<String, SimpleExpression<?>> TEXT_EXPRESSION = alternative1("TEXT_EXPRESSION", QUOTE_EXPRESSION, SYMBOL_EXPRESSION);
 	

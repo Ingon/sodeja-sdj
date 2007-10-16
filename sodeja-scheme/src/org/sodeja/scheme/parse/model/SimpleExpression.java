@@ -1,14 +1,14 @@
 package org.sodeja.scheme.parse.model;
 
 public abstract class SimpleExpression<T> implements Expression {
-	public final String value;
+	public final T value;
 	
-	public SimpleExpression(String value) {
+	public SimpleExpression(T value) {
 		this.value = value;
 	}
 
 	@Override
 	public String toString() {
-		return value;
+		return String.valueOf(value);
 	}
 }
