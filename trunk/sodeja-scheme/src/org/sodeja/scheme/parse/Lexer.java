@@ -19,15 +19,16 @@ public class Lexer extends AbstractLexer<String> {
 	@Override
 	protected void tokenizeDelegate(char ch) {
 		if(Character.isWhitespace(ch)) {
-			if(! " ".equals(ListUtils.last(tokens))) {
+			String last = ListUtils.last(tokens);
+			if(last != null && !" ".equals(last)) { 
 				tokens.add(" ");
 			}
 			
 			Character temp = readChar();
 			if(temp == null) {
 				int lastIndex = tokens.size() - 1;
-				String last = tokens.get(lastIndex);
-				if(" ".equals(last)) {
+				String lastToken = tokens.get(lastIndex);
+				if(" ".equals(lastToken)) {
 					tokens.remove(lastIndex);
 				}
 			} else {
