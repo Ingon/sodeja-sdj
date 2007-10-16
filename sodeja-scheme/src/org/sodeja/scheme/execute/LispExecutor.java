@@ -10,6 +10,7 @@ import org.sodeja.scheme.execute.form.DefineForm;
 import org.sodeja.scheme.execute.form.IfForm;
 import org.sodeja.scheme.execute.form.LambdaForm;
 import org.sodeja.scheme.execute.form.LetForm;
+import org.sodeja.scheme.execute.form.SetForm;
 import org.sodeja.scheme.execute.primitive.QuitProcedure;
 import org.sodeja.scheme.execute.primitive.aritmetic.AverageProcedure;
 import org.sodeja.scheme.execute.primitive.aritmetic.DivProcedure;
@@ -39,6 +40,8 @@ public class LispExecutor {
 			put("cond", new CondForm());
 			put("if", new IfForm());
 			put("else", Boolean.TRUE);
+			
+			put("set!", new SetForm());
 			
 			// Here is an option - add these as libraries or something like this
 			put("+", new SumProcedure());

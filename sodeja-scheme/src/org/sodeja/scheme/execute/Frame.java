@@ -56,6 +56,13 @@ public class Frame {
 		objects.put(symbol, value);
 	}
 	
+	public void setSymbol(String symbol, Object value) {
+		if(! objects.containsKey(symbol)) {
+			throw new IllegalArgumentException("Setting unknown symbol: " + symbol);
+		}
+		objects.put(symbol, value);
+	}
+	
 	public Object apply(final SExpression exp) {
 		Executable exec = evalExec(ListUtils.head(exp.expressions));
 		List<Expression> params = ListUtils.tail(exp.expressions);
