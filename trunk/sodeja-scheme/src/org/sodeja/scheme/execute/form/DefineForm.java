@@ -16,7 +16,7 @@ public class DefineForm implements Form {
 		Expression what = expressions.get(0);
 		
 		if(what instanceof SymbolExpression) {
-			String symbol = ((SymbolExpression) what).name;
+			String symbol = ((SymbolExpression) what).value;
 			Object evalResult = frame.eval(expressions.get(1));
 			return define(frame, symbol, evalResult);
 		}
@@ -36,7 +36,7 @@ public class DefineForm implements Form {
 	 * 	(def (<symbol> <params>) (<evals>))
 	 */
 	private String defineFunction(Frame frame, SExpression definition, List<Expression> evals) {
-		String symbol = ((SymbolExpression) definition.expressions.get(0)).name;
+		String symbol = ((SymbolExpression) definition.expressions.get(0)).value;
 		LispProcedure proc = FormUtils.makeProcedure(frame, ListUtils.tail(definition.expressions), evals);
 		return define(frame, symbol, proc);
 	}
