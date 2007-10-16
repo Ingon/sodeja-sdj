@@ -9,6 +9,7 @@ import org.sodeja.functional.Function4;
 import org.sodeja.functional.Pair;
 import org.sodeja.parsec.DelegateParser;
 import org.sodeja.parsec.Parser;
+import org.sodeja.parsec.semantic.AbstractSemanticParser;
 import org.sodeja.sdj.expression.Alternative;
 import org.sodeja.sdj.expression.Application;
 import org.sodeja.sdj.expression.BinaryOperator;
@@ -28,7 +29,7 @@ import org.sodeja.sdj.expression.Variable;
 import static org.sodeja.parsec.ParsecUtils.*;
 import static org.sodeja.parsec.standart.StandartParsers.*;
 
-public class SdjParser {
+public class SdjParser extends AbstractSemanticParser<String, Program<Name>>{
 	
 	public DelegateParser<String, Expression<Name>> EXPRESSION_PARSER = 
 		new DelegateParser<String, Expression<Name>>("EXPRESSION_PARSER");
@@ -230,14 +231,8 @@ public class SdjParser {
 		ATOMIC_EXPRESSION_PARSER.delegate = alternative("ATOMIC_EXPRESSION_PARSER", atAlt1, atAlt2);
 	}
 	
-	public Program<Name> parse(List<String> tokens) {
-		List<Pair<Program<Name>, List<String>>> result = PROGRAM_PARSER.execute(tokens);
-		for(Pair<Program<Name>, List<String>> pair : result) {
-			if(pair.second.isEmpty()) {
-				return pair.first;
-			}
-		}
-		
-		throw new RuntimeException("Syntax error!");
+	@Override
+	protected Parser<String, Program<Name>> getParser() {
+		return PROGRAM_PARSER;
 	}
 }
