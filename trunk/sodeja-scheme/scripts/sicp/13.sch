@@ -26,7 +26,7 @@
 
 (* 8 (pi-sum 1 300))
 
-(def (average x y) (/ (+ x y) 2))
+;(def (average x y) (/ (+ x y) 2))
 
 (def (sqrt1 x)
   (fixed-point (\ (y) (average (/ x y) y)) 1))

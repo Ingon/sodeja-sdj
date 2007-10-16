@@ -11,6 +11,7 @@ import org.sodeja.scheme.execute.form.IfForm;
 import org.sodeja.scheme.execute.form.LambdaForm;
 import org.sodeja.scheme.execute.form.LetForm;
 import org.sodeja.scheme.execute.primitive.QuitProcedure;
+import org.sodeja.scheme.execute.primitive.aritmetic.AverageProcedure;
 import org.sodeja.scheme.execute.primitive.aritmetic.DivProcedure;
 import org.sodeja.scheme.execute.primitive.aritmetic.MulProcedure;
 import org.sodeja.scheme.execute.primitive.aritmetic.SubProcedure;
@@ -39,10 +40,12 @@ public class LispExecutor {
 			put("if", new IfForm());
 			put("else", Boolean.TRUE);
 			
+			// Here is an option - add these as libraries or something like this
 			put("+", new SumProcedure());
 			put("-", new SubProcedure());
 			put("*", new MulProcedure());
 			put("/", new DivProcedure());
+			put("average", new AverageProcedure());
 			
 			put("<", new LessThenProcedure());
 			put("=", new EqualProcedure());
