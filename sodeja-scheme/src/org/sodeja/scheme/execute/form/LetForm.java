@@ -29,7 +29,7 @@ public class LetForm implements Form {
 			// If we construct frame now and use it in every consequent expression maybe letrec?
 			Object value = frame.eval(binding.expressions.get(1));
 			
-			objects.put(symbolExp.name, value);
+			objects.put(symbolExp.value, value);
 		}
 		
 		Frame newFrame = new Frame(frame, objects);

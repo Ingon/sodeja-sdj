@@ -13,7 +13,7 @@ class FormUtils {
 		return ListUtils.map(expressions, new Function1<String, Expression>() {
 			@Override
 			public String execute(Expression p) {
-				return ((SymbolExpression) p).name;
+				return ((SymbolExpression) p).value;
 			}});
 	}
 	

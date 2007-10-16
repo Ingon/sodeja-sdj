@@ -13,7 +13,7 @@ public class SetForm implements Form {
 		Object value = frame.eval(expressions.get(1));
 		
 		// Destruct the current value by adding additional
-		frame.setSymbol(varExp.name, value);
+		frame.setSymbol(varExp.value, value);
 		
 		return value;
 	}

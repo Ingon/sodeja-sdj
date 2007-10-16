@@ -8,6 +8,7 @@ import org.sodeja.collections.ListUtils;
 import org.sodeja.functional.Function1;
 import org.sodeja.scheme.execute.form.Form;
 import org.sodeja.scheme.parse.model.Expression;
+import org.sodeja.scheme.parse.model.QuoteExpression;
 import org.sodeja.scheme.parse.model.RationalExpression;
 import org.sodeja.scheme.parse.model.SExpression;
 import org.sodeja.scheme.parse.model.SymbolExpression;
@@ -93,17 +94,21 @@ public class Frame {
 	}
 	
 	public Object eval(final Expression exp) {
+		if(exp instanceof SymbolExpression) {
+			String symbol = ((SymbolExpression) exp).value;
+			return getSymbolValue(symbol);
+		}
+
+		if(exp instanceof SExpression){
+			return apply(((SExpression) exp));
+		}
+		
 		if(exp instanceof RationalExpression) {
 			return ((RationalExpression) exp).value;
 		} 
 
-		if(exp instanceof SymbolExpression) {
-			String symbol = ((SymbolExpression) exp).name;
-			return getSymbolValue(symbol);
-		} 
-
-		if(exp instanceof SExpression){
-			return apply(((SExpression) exp));
+		if(exp instanceof QuoteExpression) {
+			return ((QuoteExpression) exp).value;
 		}
 		
 		throw new IllegalArgumentException("Unknown expression");
