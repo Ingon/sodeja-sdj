@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.sodeja.collections.CollectionUtils;
 import org.sodeja.scheme.execute.Frame;
 import org.sodeja.scheme.execute.Procedure;
 import org.sodeja.scheme.parse.model.Expression;
@@ -25,8 +26,10 @@ public class LispProcedure implements Procedure {
 		Map<String, Object> paramsMapping = new HashMap<String, Object>() {
 			private static final long serialVersionUID = 7740081972870762415L;
 		{
-			for(int i = 0, n = params.size();i < n;i++) {
-				put(params.get(i), vals[i]);
+			if(! CollectionUtils.isEmpty(params)) {
+				for(int i = 0, n = params.size();i < n;i++) {
+					put(params.get(i), vals[i]);
+				}
 			}
 		}};
 		Frame thisFrame = new Frame(frame, paramsMapping);

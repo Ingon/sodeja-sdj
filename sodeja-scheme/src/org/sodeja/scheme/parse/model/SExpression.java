@@ -25,7 +25,9 @@ public class SExpression implements Expression {
 				sb.append(p.toString());
 				sb.append(" ");
 			}});
-		sb.setLength(sb.length() - 1);
+		if(sb.length() > 1) {
+			sb.setLength(sb.length() - 1);
+		}
 		sb.append(")");
 		return sb.toString();
 	}
