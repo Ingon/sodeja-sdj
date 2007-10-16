@@ -2,3 +2,5 @@
 a
 (set! a (* 5 5))
 a
+(def b 's)
+b
