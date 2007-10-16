@@ -4,7 +4,6 @@ import static org.sodeja.parsec.ParsecUtils.alternative1;
 import static org.sodeja.parsec.ParsecUtils.applyCons;
 import static org.sodeja.parsec.ParsecUtils.thenParser3Cons2;
 import static org.sodeja.parsec.ParsecUtils.zeroOrMoreSep;
-import static org.sodeja.parsec.standart.StandartParsers.justText;
 import static org.sodeja.parsec.standart.StandartParsers.literal;
 import static org.sodeja.parsec.standart.StandartParsers.rational;
 
@@ -26,7 +25,13 @@ import org.sodeja.scheme.parse.model.SymbolExpression;
 
 public class SemanticParser extends AbstractSemanticParser<String, Script>{
 
-	private Parser<String, String> SYMBOL = justText("SYMBOL");
+//	private Parser<String, String> SYMBOL = justText("SYMBOL");
+	private Parser<String, String> SYMBOL = new SatisfiesParser<String>("SYMBOL", new Predicate1<String>() {
+		@Override
+		public Boolean execute(String p) {
+			return ! ")".equals(p);
+		}
+	});
 
 	private Parser<String, Rational> RATIONAL = rational("RATIONAL");
 	
