@@ -9,6 +9,7 @@ import org.sodeja.scheme.execute.form.CondForm;
 import org.sodeja.scheme.execute.form.DefineForm;
 import org.sodeja.scheme.execute.form.IfForm;
 import org.sodeja.scheme.execute.form.LambdaForm;
+import org.sodeja.scheme.execute.form.LetForm;
 import org.sodeja.scheme.execute.primitive.QuitProcedure;
 import org.sodeja.scheme.execute.primitive.aritmetic.DivProcedure;
 import org.sodeja.scheme.execute.primitive.aritmetic.MulProcedure;
@@ -33,6 +34,7 @@ public class LispExecutor {
 		{
 			put("\\", new LambdaForm());
 			put("def", new DefineForm());
+			put("let", new LetForm());
 			put("cond", new CondForm());
 			put("if", new IfForm());
 			put("else", Boolean.TRUE);
