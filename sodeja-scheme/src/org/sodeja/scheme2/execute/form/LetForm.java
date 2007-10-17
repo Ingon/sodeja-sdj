@@ -19,7 +19,8 @@ public class LetForm implements Form {
 			throw new IllegalArgumentException("Expect at least two expressions - var binding and and executed");
 		}
 		
-		Token token = Utils.head(parts);
+		Iterator<Token> tokens = parts.iterator();
+		Token token = tokens.next();
 		if(! (token instanceof Combination)) {
 			throw new IllegalArgumentException("Var bingings part has form ((<var1> <exp1>) (<var1> <exp1>)...)");
 		}
@@ -32,12 +33,7 @@ public class LetForm implements Form {
 		}
 		
 		Frame newFrame = new Frame(frame, objects);
-		
-		Object result = null;
-		for(Token tok : Utils.tail(parts)) {
-			result = newFrame.eval(tok);
-		}
-		return result;
+		return Utils.evalIteratorValue(newFrame, tokens);
 	}
 
 	private void bind(Frame frame, Map<Symbol, Object> objects, Token bindingTok) {

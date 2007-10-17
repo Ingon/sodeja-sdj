@@ -44,8 +44,8 @@ public class CompoundProcedure implements Procedure {
 				}
 			}
 		}};
-		Frame newFrame = new Frame(frame, paramsMapping);
 		
-		return Utils.evalDeque(newFrame, parts).peekLast();
+		Frame newFrame = new Frame(frame, paramsMapping);
+		return Utils.evalDequeValue(newFrame, parts);
 	}
 }

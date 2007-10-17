@@ -1,6 +1,7 @@
 package org.sodeja.scheme2;
 
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.sodeja.collections.CollectionUtils;
@@ -29,6 +30,18 @@ public class Utils {
 			public Object execute(Token p) {
 				return frame.eval(p);
 			}});
+	}
+	
+	public static Object evalDequeValue(final Frame frame, Deque<Token> parts) {
+		return evalIteratorValue(frame, parts.iterator());
+	}
+	
+	public static Object evalIteratorValue(Frame frame, Iterator<Token> parts) {
+		Object value = null;
+		for(;parts.hasNext();) {
+			value = frame.eval(parts.next());
+		}
+		return value;
 	}
 	
 	public static Object unknownToken(Token token) {

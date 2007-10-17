@@ -47,11 +47,7 @@ public class Lexer extends AbstractLexer<String> {
 			tokens.add("(");
 			return;
 		}
-//		if(Character.isDigit(ch) || Character.isLetter(ch)) {
-			LexerHelper.readIdentifierS(this, ch);
-//			return;
-//		}
-//		
-//		tokens.add(String.valueOf(ch));
+		
+		LexerHelper.readIdentifierS(this, ch);
 	}
 }
