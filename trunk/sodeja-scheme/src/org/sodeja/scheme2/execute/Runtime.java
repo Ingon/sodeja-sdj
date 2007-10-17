@@ -7,6 +7,7 @@ import org.sodeja.math.Rational;
 import org.sodeja.scheme2.Utils;
 import org.sodeja.scheme2.execute.form.SicpDialect;
 import org.sodeja.scheme2.execute.procedure.AritmeticLibrary;
+import org.sodeja.scheme2.execute.procedure.PairLibrary;
 import org.sodeja.scheme2.execute.procedure.RelationalLibrary;
 import org.sodeja.scheme2.model.Combination;
 import org.sodeja.scheme2.model.Symbol;
@@ -28,6 +29,7 @@ public class Runtime {
 	}
 	
 	private void loadLibraries() {
+		loadLibrary(new PairLibrary());
 		loadLibrary(new AritmeticLibrary());
 		loadLibrary(new RelationalLibrary());
 	}
