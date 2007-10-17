@@ -20,6 +20,7 @@ public class SicpDialect implements Dialect {
 			
 			put("if", new IfForm());
 			put("cond", new CondForm());
+			put("let", new LetForm());
 		}};
 	}
 	
