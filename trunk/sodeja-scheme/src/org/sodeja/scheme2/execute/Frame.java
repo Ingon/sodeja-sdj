@@ -43,13 +43,6 @@ public class Frame {
 		return parent.getSymbolValue(symbol);
 	}
 	
-	protected boolean containsSymbol(String symbol) {
-		if(objects.containsKey(symbol)) {
-			return true;
-		}
-		return parent.containsSymbol(symbol);
-	}
-
 	public void extend(Symbol symbol, Object value) {
 		if(objects.containsKey(symbol)) {
 			throw new IllegalArgumentException("Not possible to redefine names in this context");
@@ -70,11 +63,6 @@ public class Frame {
 	}
 
 	private static class NullFrame extends Frame {
-		@Override
-		public boolean containsSymbol(String symbol) {
-			return false;
-		}
-
 		@Override
 		public Object getSymbolValue(Symbol symbol) {
 			throw new IllegalArgumentException("Symbol '" + symbol + "' does not exists!");
