@@ -3,6 +3,7 @@ package org.sodeja.scheme2.execute.form;
 import java.util.Deque;
 import java.util.Iterator;
 
+import org.sodeja.scheme2.Utils;
 import org.sodeja.scheme2.execute.Form;
 import org.sodeja.scheme2.execute.Frame;
 import org.sodeja.scheme2.model.Combination;
@@ -28,12 +29,8 @@ public class CondForm implements Form {
 			if(! evalResult.booleanValue()) {
 				continue;
 			}
-			
-			Object result = null;
-			for(;clauseIte.hasNext();) {
-				result = frame.eval(clauseIte.next());
-			}
-			return result;
+
+			return Utils.evalIteratorValue(frame, clauseIte);
 		}
 		
 		throw new RuntimeException("No clause matches!");
