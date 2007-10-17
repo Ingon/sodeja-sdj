@@ -68,6 +68,9 @@ public class StreamParser {
 				Combination theToken = (Combination) stack.peekLast();
 				theToken.addToken(new Symbol(currentPrimitiveToken.toString()));
 				currentPrimitiveToken.setLength(0);
+				if(isQuoteToken(theToken)) {
+					stack.pollLast();
+				}
 				continue;
 			}
 			
