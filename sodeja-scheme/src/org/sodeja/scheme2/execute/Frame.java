@@ -57,9 +57,9 @@ public class Frame {
 		objects.put(symbol, value);
 	}
 	
-	protected void setSymbol(Symbol symbol, Object value) {
+	public void update(Symbol symbol, Object value) {
 		if(! objects.containsKey(symbol)) {
-			parent.setSymbol(symbol, value);
+			parent.update(symbol, value);
 			return;
 		}
 		objects.put(symbol, value);
@@ -81,7 +81,7 @@ public class Frame {
 		}
 
 		@Override
-		public void setSymbol(Symbol symbol, Object value) {
+		public void update(Symbol symbol, Object value) {
 			throw new IllegalArgumentException("Symbol '" + symbol + "' does not exists!");
 		}
 	}

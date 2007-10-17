@@ -21,6 +21,8 @@ public class SicpDialect implements Dialect {
 			put("if", new IfForm());
 			put("cond", new CondForm());
 			put("let", new LetForm());
+			put("quote", new QuoteForm());
+			put("set!", new SetForm());
 		}};
 	}
 	

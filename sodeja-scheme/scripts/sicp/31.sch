@@ -1,11 +1,11 @@
-(def a (* 3 4))
-a
-(set! a (* 5 5))
-a
-(def b 's)
-b
-(def b '(a b))
-
+;(def a (* 3 4))
+;a
+;(set! a (* 5 5))
+;a
+;(def b 's)
+;b
+;(def b '(a b))
+;
 ;(def count 1)
 ;(def (demo x)
 ;  (set! count (+ 1 count))
@@ -35,5 +35,6 @@ b
 (def c2 (make-counter 10))
 
 (c1)
+(c2)
 (c1)
 (c2)
