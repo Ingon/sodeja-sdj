@@ -19,6 +19,7 @@ public class SicpDialect implements Dialect {
 			put("\\", new LambdaForm());
 			
 			put("if", new IfForm());
+			put("cond", new CondForm());
 		}};
 	}
 	
