@@ -12,6 +12,7 @@ b
 (+ a (/ b 5))
 
 ; function definition
+(def squareLambda (\ (x) (* x x)))
 (def (square x) (* x x))
 (square 10)
 (square 1001)
