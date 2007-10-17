@@ -22,7 +22,7 @@ b
 
 ; some other functions
 (def (abs x) (if (< x 0) (- x) x))
-;(def (average x y) (/ (+ x y) 2))
+(def (average x y) (/ (+ x y) 2))
 (def (mean-square x y) (average (square x) (square y)))
 
 ; sqrt plain
@@ -37,5 +37,5 @@ b
   (def (good-enough? guess) (< (abs (- (square guess) x)) 0.001))
   (def (improve guess) (average guess (/ x guess)))
   (def (try guess) (if (good-enough? guess) guess (try (improve guess))))
-  (try 1.0 x))
+  (try 1.0))
 (sqrt 2)
