@@ -1,5 +1,5 @@
 ; cons/car/cdr
-(def a (cons 2 3))
+(define a (cons 2 3))
 (car a)
 (cdr a)
 
@@ -7,23 +7,23 @@
 (let ((z 10)) (+ z z))
 
 ; vectors
-(def (make-vector x y) (cons x y))
-(def (xcor p) (car p))
-(def (ycor p) (cdr p))
+(define (make-vector x y) (cons x y))
+(define (xcor p) (car p))
+(define (ycor p) (cdr p))
 
 ; line segments
-(def (make-seg p q) (cons p q))
-(def (seg-start s) (car s))
-(def (seg-end s) (cdr s))
+(define (make-seg p q) (cons p q))
+(define (seg-start s) (car s))
+(define (seg-end s) (cdr s))
 
-(def (midpoint s)
+(define (midpoint s)
   (let ((a (seg-start s))
         (b (seg-end s)))
     (make-vector
       (average (xcor a) (xcor b))
       (average (ycor a) (ycor b)))))
 
-(def (length s)
+(define (length s)
   (let
     ((dx (- (xcor (seg-end s))
             (xcor (seg-start s))))
@@ -33,14 +33,14 @@
              (square dy)))))
 
 ; cons air
-(def (cons-a a b)
-  (\ (pick)
+(define (cons-a a b)
+  (lambda (pick)
     (cond ((= pick 1) a)
           ((= pick 2) b))))
 
-(def (car-a x) (x 1))
-(def (cdr-a x) (x 2))
+(define (car-a x) (x 1))
+(define (cdr-a x) (x 2))
 
-(def ca (cons-a 5 7))
+(define ca (cons-a 5 7))
 (car-a ca)
 (cdr-a ca)
