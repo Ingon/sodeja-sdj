@@ -11,7 +11,7 @@ public class SchemeFrame extends AbstractFrame<SchemeExpression> {
 		this.parent = new NullSchemeFrame();
 	}
 	
-	public SchemeFrame(Frame<SchemeExpression> parent) {
+	protected SchemeFrame(Frame<SchemeExpression> parent) {
 		this.parent = parent;
 	}
 	
@@ -39,6 +39,10 @@ public class SchemeFrame extends AbstractFrame<SchemeExpression> {
 			return;
 		}
 		super.setObject(expression, value);
+	}
+	
+	public SchemeFrame createChild() {
+		return new SchemeFrame(this);
 	}
 	
 	private class NullSchemeFrame extends SchemeFrame {

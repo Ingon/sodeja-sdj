@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.sodeja.collections.CollectionUtils;
 import org.sodeja.runtime.Evaluator;
-import org.sodeja.runtime.Frame;
 import org.sodeja.runtime.Procedure;
 import org.sodeja.runtime.scheme.SchemeExpression;
 import org.sodeja.runtime.scheme.SchemeFrame;
@@ -15,12 +14,12 @@ import org.sodeja.runtime.scheme.model.Symbol;
 public class CompoundProcedure implements Procedure {
 	
 	private final Evaluator<SchemeExpression> evaluator;
-	private final Frame<SchemeExpression> frame;
+	private final SchemeFrame frame;
 	private final List<Symbol> params;
 	private final List<SchemeExpression> parts;
 	
 	public CompoundProcedure(Evaluator<SchemeExpression> evaluator,
-			Frame<SchemeExpression> frame, List<Symbol> params,
+			SchemeFrame frame, List<Symbol> params,
 			List<SchemeExpression> parts) {
 		
 		this.evaluator = evaluator;
@@ -39,7 +38,7 @@ public class CompoundProcedure implements Procedure {
 			throw new IllegalArgumentException("Too many parameters");
 		}
 
-		SchemeFrame newFrame = new SchemeFrame(frame);		
+		SchemeFrame newFrame = frame.createChild();
 		if (!CollectionUtils.isEmpty(params)) {
 			int index = 0;
 			for (Iterator<Symbol> paramsIte = params.iterator(); paramsIte.hasNext(); index++) {

@@ -5,9 +5,9 @@ import java.util.List;
 import org.sodeja.collections.ListUtils;
 import org.sodeja.functional.Function1;
 import org.sodeja.runtime.Evaluator;
-import org.sodeja.runtime.Frame;
 import org.sodeja.runtime.scheme.SchemeExpression;
 import org.sodeja.runtime.scheme.SchemeForm;
+import org.sodeja.runtime.scheme.SchemeFrame;
 import org.sodeja.runtime.scheme.Utils;
 import org.sodeja.runtime.scheme.model.Combination;
 import org.sodeja.runtime.scheme.model.Symbol;
@@ -15,7 +15,7 @@ import org.sodeja.runtime.scheme.model.Symbol;
 public class LambdaForm extends SchemeForm {
 	@Override
 	protected Object evalDelegate(Evaluator<SchemeExpression> runtime,
-			Frame<SchemeExpression> frame, Combination expression) {
+			SchemeFrame frame, Combination expression) {
 		
 		Combination paramsComb = (Combination) expression.get(1);
 		List<SchemeExpression> parts = Utils.extractParts(expression);
