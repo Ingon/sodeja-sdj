@@ -3,9 +3,9 @@
 's
 '()
 '(1 4)
-(def '() '(3 6))
-(def b 's)
+(define '() '(3 6))
+(define b 's)
 3
-(def b 3)
+(define b 3)
 b
-(def z1 (attach-type 't1 1))
+(define z1 (attach-type 't1 1))

@@ -1,13 +1,13 @@
-;(def a (* 3 4))
+;(define a (* 3 4))
 ;a
 ;(set! a (* 5 5))
 ;a
-;(def b 's)
+;(define b 's)
 ;b
-;(def b '(a b))
+;(define b '(a b))
 ;
-;(def count 1)
-;(def (demo x)
+;(define count 1)
+;(define (demo x)
 ;  (set! count (+ 1 count))
 ;  (+ x count))
 ;  
@@ -15,9 +15,9 @@
 ;
 ;(demo 3)
 ;
-;(def (fact n)
+;(define (fact n)
 ;  (let ((i 1) (m 1))
-;    (def (loop)
+;    (define (loop)
 ;      (cond ((> i n) m)
 ;            (else
 ;              (set! m (* i m))
@@ -28,11 +28,11 @@
 ;(fact 6)
 ;
 
-(def (make-counter n) (\ () (set! n (+ 1 n)) n))
+(define (make-counter n) (lambda () (set! n (+ 1 n)) n))
 
-(def c1 (make-counter 0))
+(define c1 (make-counter 0))
 
-(def c2 (make-counter 10))
+(define c2 (make-counter 10))
 
 (c1)
 (c2)

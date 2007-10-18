@@ -1,15 +1,15 @@
 ; simple staff
-(def (factorialR n)
+(define (factorialR n)
   (if (= n 1)
       1
       (* n (factorialR (- n 1)))))
 
 (factorialR 6)
 
-(def (factorialI n)
+(define (factorialI n)
   (fact-iter 1 1 n))
 
-(def (fact-iter product counter max-count)
+(define (fact-iter product counter max-count)
   (if (> counter max-count)
       product
       (fact-iter (* counter product)
@@ -18,7 +18,7 @@
 
 (factorialI 6)
 
-(def (ackermann x y)
+(define (ackermann x y)
   (cond ((= y 0) 0)
         ((= x 0) (* 2 y))
         ((= y 1) 2)
@@ -27,7 +27,7 @@
 
 (ackermann 1 10)
 
-(def (fibR n)
+(define (fibR n)
   (cond ((= n 0) 0)
         ((= n 1) 1)
         (else (+ (fibR (- n 1))
@@ -35,10 +35,10 @@
 
 (fibR 10)
 
-(def (fibI n)
+(define (fibI n)
   (fib-iter 1 0 n))
 
-(def (fib-iter a b count)
+(define (fib-iter a b count)
   (if (= count 0)
       b
       (fib-iter (+ a b) a (- count 1))))
