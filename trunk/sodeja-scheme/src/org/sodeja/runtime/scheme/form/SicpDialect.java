@@ -12,8 +12,8 @@ import org.sodeja.runtime.scheme.form.sicp.SetForm;
 public class SicpDialect extends SchemeDialect {
 	@Override
 	protected void init() {
-		introduce("def", new DefineForm());
-		introduce("\\", new LambdaForm());
+		introduce("define", new DefineForm());
+		introduce("lambda", new LambdaForm());
 		
 		introduce("if", new IfForm());
 		introduce("cond", new CondForm());
