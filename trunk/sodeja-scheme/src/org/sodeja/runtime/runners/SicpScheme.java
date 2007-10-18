@@ -28,7 +28,10 @@ public class SicpScheme {
 			List<SchemeExpression> expressions = parser.tokenize(new FileReader(arg));
 			for(SchemeExpression expr : expressions) {
 				System.out.println(expr);
-				System.out.println("=>" + runtime.eval(expr));
+				long start = System.currentTimeMillis();
+				Object obj = runtime.eval(expr);
+				long end = System.currentTimeMillis();
+				System.out.println("(" + (end - start) + ")>" + obj);
 			}
 		}
 	}
