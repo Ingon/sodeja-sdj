@@ -11,6 +11,7 @@ import org.sodeja.runtime.scheme.form.SicpDialect;
 import org.sodeja.runtime.scheme.parse.SchemeParser;
 import org.sodeja.runtime.scheme.procedure.ArithmeticLibrary;
 import org.sodeja.runtime.scheme.procedure.BaseLibrary;
+import org.sodeja.runtime.scheme.procedure.LogicalLibrary;
 import org.sodeja.runtime.scheme.procedure.PairLibrary;
 import org.sodeja.runtime.scheme.procedure.RelationalLibrary;
 
@@ -49,6 +50,7 @@ public class SicpScheme {
 	private static Library<SchemeExpression> loadLibraries() {
 		CompoundLibrary<SchemeExpression> library = new CompoundLibrary<SchemeExpression>();
 		library.addLibrary(new BaseLibrary());
+		library.addLibrary(new LogicalLibrary());
 		library.addLibrary(new PairLibrary());
 		library.addLibrary(new ArithmeticLibrary());
 		library.addLibrary(new RelationalLibrary());
