@@ -1,15 +1,15 @@
 package org.sodeja.runtime.scheme.form.sicp;
 
 import org.sodeja.runtime.Evaluator;
-import org.sodeja.runtime.Frame;
 import org.sodeja.runtime.scheme.SchemeExpression;
 import org.sodeja.runtime.scheme.SchemeForm;
+import org.sodeja.runtime.scheme.SchemeFrame;
 import org.sodeja.runtime.scheme.model.Combination;
 
 public class IfForm extends SchemeForm {
 	@Override
 	protected Object evalDelegate(Evaluator<SchemeExpression> evaluator,
-			Frame<SchemeExpression> frame, Combination expression) {
+			SchemeFrame frame, Combination expression) {
 		
 		if (expression.size() != 4) {
 			throw new IllegalArgumentException(

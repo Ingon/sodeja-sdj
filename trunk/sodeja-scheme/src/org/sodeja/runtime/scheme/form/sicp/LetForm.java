@@ -12,7 +12,7 @@ import org.sodeja.runtime.scheme.model.Symbol;
 public class LetForm extends SchemeForm {
 	@Override
 	protected Object evalDelegate(Evaluator<SchemeExpression> evaluator,
-			Frame<SchemeExpression> frame, Combination expression) {
+			SchemeFrame frame, Combination expression) {
 		if (expression.size() < 3) {
 			throw new IllegalArgumentException(
 					"Expect at least two expressions - var binding and and executed");
@@ -22,7 +22,7 @@ public class LetForm extends SchemeForm {
 			throw new IllegalArgumentException("Var bingings part has form ((<var1> <exp1>) (<var1> <exp1>)...)");
 		}
 		
-		SchemeFrame newFrame = new SchemeFrame(frame);
+		SchemeFrame newFrame = frame.createChild();
 		Combination bindings = (Combination) expression.get(1);
 		for(SchemeExpression bindingExpression : bindings.parts) {
 			bind(evaluator, frame, newFrame, bindingExpression);

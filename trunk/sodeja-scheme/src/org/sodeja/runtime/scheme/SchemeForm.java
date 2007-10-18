@@ -9,9 +9,9 @@ public abstract class SchemeForm implements Form<SchemeExpression> {
 	@Override
 	public Object eval(Evaluator<SchemeExpression> runtime,
 			Frame<SchemeExpression> frame, SchemeExpression expression) {
-		return evalDelegate(runtime, frame, (Combination) expression);
+		return evalDelegate(runtime, (SchemeFrame) frame, (Combination) expression);
 	}
 	
 	protected abstract Object evalDelegate(Evaluator<SchemeExpression> evaluator,
-			Frame<SchemeExpression> frame, Combination expression);
+			SchemeFrame frame, Combination expression);
 }

@@ -1,16 +1,16 @@
 package org.sodeja.runtime.scheme.form.sicp;
 
 import org.sodeja.runtime.Evaluator;
-import org.sodeja.runtime.Frame;
 import org.sodeja.runtime.scheme.SchemeExpression;
 import org.sodeja.runtime.scheme.SchemeForm;
+import org.sodeja.runtime.scheme.SchemeFrame;
 import org.sodeja.runtime.scheme.model.Combination;
 import org.sodeja.scheme2.model.Symbol;
 
 public class SetForm extends SchemeForm {
 	@Override
 	protected Object evalDelegate(Evaluator<SchemeExpression> evaluator,
-			Frame<SchemeExpression> frame, Combination expression) {
+			SchemeFrame frame, Combination expression) {
 		if(expression.size() != 2) {
 			throw new IllegalArgumentException("Should give a variable and an expression!");
 		}

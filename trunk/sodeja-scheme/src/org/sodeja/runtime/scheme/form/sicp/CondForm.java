@@ -4,6 +4,7 @@ import org.sodeja.runtime.Evaluator;
 import org.sodeja.runtime.Frame;
 import org.sodeja.runtime.scheme.SchemeExpression;
 import org.sodeja.runtime.scheme.SchemeForm;
+import org.sodeja.runtime.scheme.SchemeFrame;
 import org.sodeja.runtime.scheme.Utils;
 import org.sodeja.runtime.scheme.model.Combination;
 import org.sodeja.runtime.scheme.model.Symbol;
@@ -11,7 +12,7 @@ import org.sodeja.runtime.scheme.model.Symbol;
 public class CondForm extends SchemeForm {
 	@Override
 	public Object evalDelegate(Evaluator<SchemeExpression> evaluator, 
-			Frame<SchemeExpression> frame, Combination expression) {
+			SchemeFrame frame, Combination expression) {
 		
 		for(int i = 1, n = expression.size();i < n;i++) {
 			SchemeExpression clauseExp = expression.get(i);

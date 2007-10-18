@@ -13,9 +13,14 @@ public class SchemeEvaluator extends AbstractEvaluator<SchemeExpression> {
 
 	public SchemeEvaluator(Dialect<SchemeExpression> dialect,
 			Library<SchemeExpression> library) {
-		super(dialect, library, new SchemeFrame());
+		this(dialect, library, new SchemeFrame());
 	}
 
+	public SchemeEvaluator(Dialect<SchemeExpression> dialect,
+			Library<SchemeExpression> library, SchemeFrame rootFrame) {
+		super(dialect, library, rootFrame);
+	}
+	
 	@Override
 	protected boolean isApplication(SchemeExpression expression) {
 		return expression instanceof Combination;
