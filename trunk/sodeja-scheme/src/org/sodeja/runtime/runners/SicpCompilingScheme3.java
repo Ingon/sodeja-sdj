@@ -12,6 +12,7 @@ import org.sodeja.runtime.scheme.model.Symbol;
 import org.sodeja.runtime.scheme3.CompiledSchemeDialect;
 import org.sodeja.runtime.scheme3.CompiledSchemeEvaluator;
 import org.sodeja.runtime.scheme3.CompiledSchemeExpression;
+import org.sodeja.runtime.scheme3.CompiledSchemeFrame;
 import org.sodeja.runtime.scheme3.library.ArithmeticLibrary;
 import org.sodeja.runtime.scheme3.library.BaseLibrary;
 import org.sodeja.runtime.scheme3.library.LogicalLibrary;
@@ -55,7 +56,12 @@ public class SicpCompilingScheme3 {
 		}
 
 		public Object eval(CompiledSchemeExpression expr) {
-			return eval(this.rootFrame, expr);
+			try {
+				return eval(this.rootFrame, expr);
+			} finally {
+				System.out.println("FRAME COUNT: " + CompiledSchemeFrame.frameCount);
+				System.out.println("FRAME LENGTH: " + CompiledSchemeFrame.maxLength);
+			}
 		}
 	}
 
