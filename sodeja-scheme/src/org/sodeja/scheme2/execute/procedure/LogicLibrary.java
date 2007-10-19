@@ -3,8 +3,8 @@ package org.sodeja.scheme2.execute.procedure;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.sodeja.runtime.scheme.procedure.logical.NotProcedure;
 import org.sodeja.scheme2.execute.Library;
-import org.sodeja.scheme2.execute.procedure.logical.NotProcedure;
 
 public class LogicLibrary implements Library {
 	@Override
