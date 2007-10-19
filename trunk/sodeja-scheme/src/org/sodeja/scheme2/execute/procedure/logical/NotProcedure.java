@@ -1,6 +1,6 @@
 package org.sodeja.scheme2.execute.procedure.logical;
 
-import org.sodeja.scheme2.execute.Procedure;
+import org.sodeja.runtime.Procedure;
 
 public class NotProcedure implements Procedure {
 	@Override
