@@ -4,7 +4,7 @@ import org.sodeja.math.Rational;
 
 public class SquareProcedure extends AbstractAritmeticProcedure {
 	@Override
-	public Object execute(Object... vals) {
+	public Object apply(Object... vals) {
 		if(vals.length != 1) {
 			throw new IllegalArgumentException("Wrong number of arguments");
 		}

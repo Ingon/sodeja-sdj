@@ -5,7 +5,7 @@ import org.sodeja.math.Rational;
 
 public class SubProcedure extends AbstractAritmeticProcedure {
 	@Override
-	public Object execute(Object... vals) {
+	public Object apply(Object... vals) {
 		if(ArrayUtils.isEmpty(vals)) {
 			throw new IllegalArgumentException("Should provide at least one param!");
 		}

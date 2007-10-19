@@ -6,7 +6,7 @@ import org.sodeja.scheme.execute.primitive.PrimitiveProcedure;
 
 public abstract class AbstractCompareProcedure implements PrimitiveProcedure {
 	@Override
-	public Object execute(Object... vals) {
+	public Object apply(Object... vals) {
 		if(ArrayUtils.isEmpty(vals) || vals.length != 2) {
 			throw new IllegalArgumentException("Wrong number of arguments!");
 		}
