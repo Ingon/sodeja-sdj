@@ -2,7 +2,7 @@ package org.sodeja.scheme.execute.primitive;
 
 public class EqProcedure implements PrimitiveProcedure {
 	@Override
-	public Object execute(Object... vals) {
+	public Object apply(Object... vals) {
 		if(vals.length != 2) {
 			throw new IllegalArgumentException("Wrong number of arguments");
 		}

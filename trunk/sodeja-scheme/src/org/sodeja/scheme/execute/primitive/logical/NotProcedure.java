@@ -4,7 +4,7 @@ import org.sodeja.scheme.execute.primitive.PrimitiveProcedure;
 
 public class NotProcedure implements PrimitiveProcedure {
 	@Override
-	public Object execute(Object... values) {
+	public Object apply(Object... values) {
 		if(values.length != 1) {
 			throw new IllegalArgumentException("Only one value is expected");
 		}

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.sodeja.collections.ListUtils;
 import org.sodeja.functional.Function1;
+import org.sodeja.runtime.Procedure;
 import org.sodeja.scheme.execute.form.Form;
 import org.sodeja.scheme.parse.model.Expression;
 import org.sodeja.scheme.parse.model.QuoteExpression;
@@ -87,7 +88,7 @@ public class Frame {
 				return eval(p);
 			}});
 		
-		return procedure.execute(args.toArray(new Object[args.size()]));
+		return procedure.apply(args.toArray(new Object[args.size()]));
 	}
 	
 	protected Executable evalExec(final Expression exp) {

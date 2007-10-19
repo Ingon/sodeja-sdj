@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.sodeja.collections.CollectionUtils;
+import org.sodeja.runtime.Procedure;
 import org.sodeja.scheme.execute.Frame;
-import org.sodeja.scheme.execute.Procedure;
 import org.sodeja.scheme.parse.model.Expression;
 
 public class LispProcedure implements Procedure {
@@ -22,7 +22,7 @@ public class LispProcedure implements Procedure {
 	}
 
 	@Override
-	public Object execute(final Object... vals) {
+	public Object apply(final Object... vals) {
 		Map<String, Object> paramsMapping = new HashMap<String, Object>() {
 			private static final long serialVersionUID = 7740081972870762415L;
 		{
