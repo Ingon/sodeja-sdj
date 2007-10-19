@@ -15,6 +15,7 @@ public class Main {
 			return;
 		}
 
+		long execStart = System.currentTimeMillis();
 		StreamParser parser = new StreamParser();
 		for(String arg : args) {
 			Runtime runtime = new Runtime();
@@ -27,6 +28,7 @@ public class Main {
 				System.out.println("(" + (end - start) + ")>" + obj);
 			}
 		}
+		System.out.println("TOTAL: " + (System.currentTimeMillis() - execStart));
 	}
 
 	private static void console() throws IOException {

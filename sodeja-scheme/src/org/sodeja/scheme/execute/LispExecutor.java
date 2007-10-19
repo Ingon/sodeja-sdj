@@ -20,6 +20,7 @@ import org.sodeja.scheme.execute.primitive.aritmetic.SqrtProcedure;
 import org.sodeja.scheme.execute.primitive.aritmetic.SquareProcedure;
 import org.sodeja.scheme.execute.primitive.aritmetic.SubProcedure;
 import org.sodeja.scheme.execute.primitive.aritmetic.SumProcedure;
+import org.sodeja.scheme.execute.primitive.logical.NotProcedure;
 import org.sodeja.scheme.execute.primitive.pair.CarProcedure;
 import org.sodeja.scheme.execute.primitive.pair.CdrProcedure;
 import org.sodeja.scheme.execute.primitive.pair.ConsProcedure;
@@ -37,8 +38,8 @@ public class LispExecutor {
 		final Map<String, Object> procedures = new HashMap<String, Object>() {
 			private static final long serialVersionUID = -6084661181815911365L;
 		{
-			put("\\", new LambdaForm());
-			put("def", new DefineForm());
+			put("lambda", new LambdaForm());
+			put("define", new DefineForm());
 			put("let", new LetForm());
 			put("cond", new CondForm());
 			put("if", new IfForm());
@@ -48,6 +49,7 @@ public class LispExecutor {
 			
 			// Here is an option - add these as libraries or something like this
 			put("eq?", new EqProcedure());
+			put("not", new NotProcedure());
 			put("quit", new QuitProcedure());
 			
 			put("+", new SumProcedure());
@@ -78,9 +80,11 @@ public class LispExecutor {
 		ListUtils.execute(script.expressions, new VFunction1<Expression>() {
 			@Override
 			public void executeV(Expression p) {
-				System.out.println("=> " + p);
-				Object evalResult = frame.eval(p);
-				System.out.println(evalResult);
+				System.out.println(p);
+				long start = System.currentTimeMillis();
+				Object obj = frame.eval(p);
+				long end = System.currentTimeMillis();
+				System.out.println("(" + (end - start) + ")>" + obj);
 			}});
 	}
 }
