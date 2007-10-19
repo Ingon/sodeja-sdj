@@ -13,6 +13,7 @@ import org.sodeja.runtime.procedure.arithmetic.SquareProcedure;
 import org.sodeja.runtime.procedure.arithmetic.SubProcedure;
 import org.sodeja.runtime.procedure.arithmetic.SumProcedure;
 import org.sodeja.runtime.procedure.base.QuitProcedure;
+import org.sodeja.runtime.procedure.logical.EqProcedure;
 import org.sodeja.runtime.procedure.logical.NotProcedure;
 import org.sodeja.runtime.procedure.pair.CarProcedure;
 import org.sodeja.runtime.procedure.pair.CdrProcedure;
@@ -26,7 +27,6 @@ import org.sodeja.scheme.execute.form.IfForm;
 import org.sodeja.scheme.execute.form.LambdaForm;
 import org.sodeja.scheme.execute.form.LetForm;
 import org.sodeja.scheme.execute.form.SetForm;
-import org.sodeja.scheme.execute.primitive.EqProcedure;
 import org.sodeja.scheme.parse.model.Expression;
 import org.sodeja.scheme.parse.model.Script;
 
