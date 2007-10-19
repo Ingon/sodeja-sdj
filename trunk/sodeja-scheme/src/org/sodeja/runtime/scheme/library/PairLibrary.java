@@ -1,4 +1,4 @@
-package org.sodeja.runtime.procedure;
+package org.sodeja.runtime.scheme.library;
 
 import org.sodeja.runtime.Frame;
 import org.sodeja.runtime.procedure.pair.CarProcedure;
