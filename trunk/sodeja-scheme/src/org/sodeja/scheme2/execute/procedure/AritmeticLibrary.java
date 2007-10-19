@@ -3,11 +3,11 @@ package org.sodeja.scheme2.execute.procedure;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.sodeja.runtime.scheme.procedure.arithmetic.DivProcedure;
+import org.sodeja.runtime.scheme.procedure.arithmetic.MulProcedure;
+import org.sodeja.runtime.scheme.procedure.arithmetic.SubProcedure;
+import org.sodeja.runtime.scheme.procedure.arithmetic.SumProcedure;
 import org.sodeja.scheme2.execute.Library;
-import org.sodeja.scheme2.execute.procedure.aritmetic.DivProcedure;
-import org.sodeja.scheme2.execute.procedure.aritmetic.MulProcedure;
-import org.sodeja.scheme2.execute.procedure.aritmetic.SubProcedure;
-import org.sodeja.scheme2.execute.procedure.aritmetic.SumProcedure;
 
 public class AritmeticLibrary implements Library {
 	@Override

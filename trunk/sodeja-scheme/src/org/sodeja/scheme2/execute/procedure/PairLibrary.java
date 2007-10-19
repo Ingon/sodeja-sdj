@@ -3,10 +3,10 @@ package org.sodeja.scheme2.execute.procedure;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.sodeja.runtime.scheme.procedure.pair.CarProcedure;
+import org.sodeja.runtime.scheme.procedure.pair.CdrProcedure;
+import org.sodeja.runtime.scheme.procedure.pair.ConsProcedure;
 import org.sodeja.scheme2.execute.Library;
-import org.sodeja.scheme2.execute.procedure.pair.CarProcedure;
-import org.sodeja.scheme2.execute.procedure.pair.CdrProcedure;
-import org.sodeja.scheme2.execute.procedure.pair.ConsProcedure;
 
 public class PairLibrary implements Library {
 	@Override
