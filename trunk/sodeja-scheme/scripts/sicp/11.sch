@@ -13,6 +13,7 @@ b
 
 ; function defineinition
 (define squareLambda (lambda (x) (* x x)))
+(squareLambda 10)
 (define (square x) (* x x))
 (square 10)
 (square 1001)

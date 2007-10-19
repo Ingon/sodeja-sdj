@@ -25,7 +25,7 @@ public class DefineForm extends SchemeForm {
 			return defineLambda(evaluator, frame, (Combination) exp, Utils.extractParts(expression));
 		}
 		
-		return null;
+		throw new IllegalArgumentException();
 	}
 
 	private Object defineSymbol(Evaluator<SchemeExpression> evaluator,

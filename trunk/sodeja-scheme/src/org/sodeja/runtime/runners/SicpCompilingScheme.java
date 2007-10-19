@@ -6,18 +6,19 @@ import java.util.List;
 import org.sodeja.parser.SchemeParser;
 import org.sodeja.runtime.Library;
 import org.sodeja.runtime.impl.CompoundLibrary;
-import org.sodeja.runtime.scheme.SchemeEvaluator;
 import org.sodeja.runtime.scheme.SchemeExpression;
-import org.sodeja.runtime.scheme.form.SicpDialect;
-import org.sodeja.runtime.scheme.library.ArithmeticLibrary;
-import org.sodeja.runtime.scheme.library.BaseLibrary;
-import org.sodeja.runtime.scheme.library.LogicalLibrary;
-import org.sodeja.runtime.scheme.library.PairLibrary;
-import org.sodeja.runtime.scheme.library.RelationalLibrary;
 import org.sodeja.runtime.scheme.model.Combination;
 import org.sodeja.runtime.scheme.model.Symbol;
+import org.sodeja.runtime.scheme2.CompiledSchemeDialect;
+import org.sodeja.runtime.scheme2.CompiledSchemeEvaluator;
+import org.sodeja.runtime.scheme2.CompiledSchemeExpression;
+import org.sodeja.runtime.scheme2.library.ArithmeticLibrary;
+import org.sodeja.runtime.scheme2.library.BaseLibrary;
+import org.sodeja.runtime.scheme2.library.LogicalLibrary;
+import org.sodeja.runtime.scheme2.library.PairLibrary;
+import org.sodeja.runtime.scheme2.library.RelationalLibrary;
 
-public class SicpScheme {
+public class SicpCompilingScheme {
 	public static void main(String[] args) throws Exception {
 		if(args.length == 0) {
 			console();
@@ -29,10 +30,14 @@ public class SicpScheme {
 		for(String arg : args) {
 			SicpEvaluator runtime = new SicpEvaluator();
 			List<SchemeExpression> expressions = parser.tokenize(new FileReader(arg));
+			
+			CompiledSchemeDialect compilator = new CompiledSchemeDialect();
+			
 			for(SchemeExpression expr : expressions) {
 				System.out.println(expr);
 				long start = System.currentTimeMillis();
-				Object obj = runtime.eval(expr);
+				CompiledSchemeExpression compiledExpr = compilator.compile(expr);
+				Object obj = runtime.eval(compiledExpr);
 				long end = System.currentTimeMillis();
 				System.out.println("(" + (end - start) + ")>" + obj);
 			}
@@ -44,18 +49,18 @@ public class SicpScheme {
 		throw new UnsupportedOperationException();
 	}
 	
-	private static class SicpEvaluator extends SchemeEvaluator {
+	private static class SicpEvaluator extends CompiledSchemeEvaluator {
 		public SicpEvaluator() {
-			super(new SicpDialect(), loadLibraries());
+			super(loadLibraries());
 		}
 
-		public Object eval(SchemeExpression expr) {
+		public Object eval(CompiledSchemeExpression expr) {
 			return eval(this.rootFrame, expr);
 		}
 	}
 
-	private static Library<SchemeExpression> loadLibraries() {
-		CompoundLibrary<SchemeExpression> library = new CompoundLibrary<SchemeExpression>();
+	private static Library<CompiledSchemeExpression> loadLibraries() {
+		CompoundLibrary<CompiledSchemeExpression> library = new CompoundLibrary<CompiledSchemeExpression>();
 		library.addLibrary(new BaseLibrary());
 		library.addLibrary(new LogicalLibrary());
 		library.addLibrary(new PairLibrary());

@@ -67,7 +67,7 @@ public class Frame {
 	}
 	
 	public Object apply(final SExpression exp) {
-		Executable exec = evalExec(ListUtils.head(exp.expressions));
+		Object exec = eval(ListUtils.head(exp.expressions));
 		List<Expression> params = ListUtils.tail(exp.expressions);
 		
 		if(exec instanceof Procedure) {
@@ -89,10 +89,6 @@ public class Frame {
 			}});
 		
 		return procedure.apply(args.toArray(new Object[args.size()]));
-	}
-	
-	protected Executable evalExec(final Expression exp) {
-		return (Executable) eval(exp);
 	}
 	
 	public Object eval(final Expression exp) {
