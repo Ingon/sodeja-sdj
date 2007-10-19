@@ -15,8 +15,8 @@ public class SicpDialect implements Dialect {
 		forms = new HashMap<String, Form>() {
 			private static final long serialVersionUID = -3409936770843206847L;
 		{
-			put("def", new DefineForm());
-			put("\\", new LambdaForm());
+			put("define", new DefineForm());
+			put("lambda", new LambdaForm());
 			
 			put("if", new IfForm());
 			put("cond", new CondForm());

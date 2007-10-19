@@ -8,6 +8,7 @@ import org.sodeja.scheme2.Utils;
 import org.sodeja.scheme2.execute.form.SicpDialect;
 import org.sodeja.scheme2.execute.procedure.AritmeticLibrary;
 import org.sodeja.scheme2.execute.procedure.BaseLibrary;
+import org.sodeja.scheme2.execute.procedure.LogicLibrary;
 import org.sodeja.scheme2.execute.procedure.PairLibrary;
 import org.sodeja.scheme2.execute.procedure.RelationalLibrary;
 import org.sodeja.scheme2.model.Combination;
@@ -31,6 +32,7 @@ public class Runtime {
 	
 	private void loadLibraries() {
 		loadLibrary(new BaseLibrary());
+		loadLibrary(new LogicLibrary());
 		loadLibrary(new PairLibrary());
 		loadLibrary(new AritmeticLibrary());
 		loadLibrary(new RelationalLibrary());
