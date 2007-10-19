@@ -21,7 +21,7 @@ public class ApplicationExpression implements CompiledSchemeExpression {
 
 	@Override
 	public Object eval(final Evaluator<CompiledSchemeExpression> evaluator, final Frame<CompiledSchemeExpression> frame) {
-		Object procedureObject = procedure.eval(evaluator, frame);
+		Object procedureObject = evaluator.eval(frame, procedure);
 		if(! (procedureObject instanceof Procedure)) {
 			throw new IllegalArgumentException("Only procedures can be applied");
 		}
