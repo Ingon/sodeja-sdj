@@ -31,7 +31,7 @@ public class CondForm extends SchemeForm {
 				continue;
 			}
 
-			return Utils.evalSingle(evaluator, frame, clause.parts, 1);
+			return Utils.evalSingle(evaluator, frame, clause, 1);
 		}
 		
 		throw new RuntimeException("No clause matches!");

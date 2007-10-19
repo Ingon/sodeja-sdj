@@ -29,7 +29,7 @@ public class SchemeEvaluator extends AbstractEvaluator<SchemeExpression> {
 	@Override
 	protected Object apply(Frame<SchemeExpression> frame, SchemeExpression expression) {
 		Combination combination = (Combination) expression;
-		if(combination.parts.size() == 0) {
+		if(combination.size() == 0) {
 			throw new IllegalArgumentException("Application without at least procedure given");
 		}
 		

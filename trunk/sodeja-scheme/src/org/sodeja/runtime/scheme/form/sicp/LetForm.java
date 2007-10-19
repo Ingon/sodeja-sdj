@@ -24,11 +24,11 @@ public class LetForm extends SchemeForm {
 		
 		SchemeFrame newFrame = frame.createChild();
 		Combination bindings = (Combination) expression.get(1);
-		for(SchemeExpression bindingExpression : bindings.parts) {
+		for(SchemeExpression bindingExpression : bindings) {
 			bind(evaluator, frame, newFrame, bindingExpression);
 		}
 		
-		return Utils.evalSingle(evaluator, newFrame, expression.parts, 2);
+		return Utils.evalSingle(evaluator, newFrame, expression, 2);
 	}
 
 	private void bind(Evaluator<SchemeExpression> evaluator, Frame<SchemeExpression> frame, 

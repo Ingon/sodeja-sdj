@@ -10,6 +10,6 @@ public class QuoteForm extends SchemeForm {
 	@Override
 	protected Object evalDelegate(Evaluator<SchemeExpression> evaluator,
 			SchemeFrame frame, Combination expression) {
-		return expression.parts.subList(1, expression.size());
+		return expression.subList(1, expression.size());
 	}
 }
