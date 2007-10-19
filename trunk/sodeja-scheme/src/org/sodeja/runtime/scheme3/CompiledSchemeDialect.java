@@ -1,4 +1,4 @@
-package org.sodeja.runtime.scheme2;
+package org.sodeja.runtime.scheme3;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,18 +12,19 @@ import org.sodeja.runtime.compiler.CompilingForm;
 import org.sodeja.runtime.scheme.SchemeExpression;
 import org.sodeja.runtime.scheme.model.Combination;
 import org.sodeja.runtime.scheme.model.Symbol;
-import org.sodeja.runtime.scheme2.form.BeginForm;
-import org.sodeja.runtime.scheme2.form.CondForm;
-import org.sodeja.runtime.scheme2.form.DefineForm;
-import org.sodeja.runtime.scheme2.form.IfForm;
-import org.sodeja.runtime.scheme2.form.LambdaForm;
-import org.sodeja.runtime.scheme2.form.LetForm;
-import org.sodeja.runtime.scheme2.form.QuoteForm;
-import org.sodeja.runtime.scheme2.form.SetForm;
+import org.sodeja.runtime.scheme3.form.BeginForm;
+import org.sodeja.runtime.scheme3.form.CondForm;
+import org.sodeja.runtime.scheme3.form.DefineForm;
+import org.sodeja.runtime.scheme3.form.IfForm;
+import org.sodeja.runtime.scheme3.form.LambdaForm;
+import org.sodeja.runtime.scheme3.form.LetForm;
+import org.sodeja.runtime.scheme3.form.QuoteForm;
+import org.sodeja.runtime.scheme3.form.SetForm;
 
 public class CompiledSchemeDialect implements CompilingDialect<SchemeExpression, CompiledSchemeExpression> {
 	
 	private final Map<Symbol, CompilingForm<SchemeExpression, CompiledSchemeExpression>> forms;
+	private Scope currentScope;
 	
 	public CompiledSchemeDialect() {
 		forms = new HashMap<Symbol, CompilingForm<SchemeExpression,CompiledSchemeExpression>>();
@@ -61,12 +62,26 @@ public class CompiledSchemeDialect implements CompilingDialect<SchemeExpression,
 			}});
 	}
 	
-	private CompiledSchemeExpression compileSymbol(Symbol expression) {
+	private CompiledSchemeExpression compileSymbol(Symbol symbol) {
 		try {
-			return new ValueExpression<Rational>(new Rational(expression.value));
+			return new ValueExpression<Rational>(new Rational(symbol.value));
 		} catch(NumberFormatException exc) {
-			return new VariableExpression(expression);
+			return createVariable(symbol);
 		}
+	}
+
+	private CompiledSchemeExpression createVariable(Symbol symbol) {
+		NameExpression nameExpression = new NameExpression(symbol);
+		if(currentScope == null) {
+			return new FreeVariableExpression(nameExpression);
+		}
+		
+		int scopeIndex = currentScope.find(nameExpression);
+		if(scopeIndex < 0) {
+			return new FreeVariableExpression(nameExpression);
+		}
+		
+		return new BoundVariableExpression(nameExpression, scopeIndex);
 	}
 
 	private CompiledSchemeExpression compileCombination(Combination expression) {
@@ -77,5 +92,23 @@ public class CompiledSchemeDialect implements CompilingDialect<SchemeExpression,
 		
 		List<CompiledSchemeExpression> compiled = compileList(expression);
 		return new ApplicationExpression(ListUtils.head(compiled), ListUtils.tail(compiled));
+	}
+	
+	public Scope addScope(List<NameExpression> expressions) {
+		if(currentScope == null) {
+			currentScope = new Scope(expressions);
+		} else {
+			currentScope = new Scope(currentScope, expressions);
+		}
+		
+		return currentScope;
+	}
+	
+	public Scope currentScope() {
+		return currentScope;
+	}
+	
+	public void removeScope() {
+		currentScope = currentScope.getParent();
 	}
 }

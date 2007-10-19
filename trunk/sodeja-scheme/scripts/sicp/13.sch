@@ -26,31 +26,38 @@
 
 (* 8 (pi-sum 1 300))
 
-(define (average x y) (/ (+ x y) 2))
+(define (iterate n fun)
+  (if (= n 0)
+      '()
+      (begin (fun) (iterate (- n 1) fun))))
 
-(define (sqrt1 x)
-  (fixed-point (lambda (y) (average (/ x y) y)) 1))
+(iterate 100 (lambda () (* 8 (pi-sum 1 300))))
+
+;(define (average x y) (/ (+ x y) 2))
+
+;(define (sqrt1 x)
+;  (fixed-point (lambda (y) (average (/ x y) y)) 1))
   
-(define (abs x) (if (< x 0) (- x) x))
+;(define (abs x) (if (< x 0) (- x) x))
 
-(define (fixed-point f start)
-  (define tolerance 0.00001)
-  (define (close-enuf? u v)
-    (< (abs (- u v)) tolerance))
-  (define (iter old new)
-    (if (close-enuf? old new)
-    new
-    (iter new (f new))))
-  (iter start (f start)))
+;(define (fixed-point f start)
+;  (define tolerance 0.00001)
+;  (define (close-enuf? u v)
+;    (< (abs (- u v)) tolerance))
+;  (define (iter old new)
+;    (if (close-enuf? old new)
+;    new
+;    (iter new (f new))))
+;  (iter start (f start)))
 
-(sqrt1 2)
+;(sqrt1 2)
 
-(define (sqrt x)
-  (fixed-point
-    (average-damp (lambda (y) (/ x y)))
-    1))
+;(define (sqrt x)
+;  (fixed-point
+;    (average-damp (lambda (y) (/ x y)))
+;    1))
 
-(define (average-damp f)
-  (lambda (x) (average (f x) x)))
+;(define (average-damp f)
+;  (lambda (x) (average (f x) x)))
 
-(sqrt 2)
+;(sqrt 2)
