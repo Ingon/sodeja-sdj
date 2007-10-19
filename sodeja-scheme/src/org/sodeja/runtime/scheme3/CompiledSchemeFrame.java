@@ -4,6 +4,9 @@ import org.sodeja.runtime.Frame;
 import org.sodeja.runtime.abs.AbstractFrame;
 
 public class CompiledSchemeFrame extends AbstractFrame<CompiledSchemeExpression> {
+	public static int frameCount;
+	public static int maxLength = 0;
+	
 	private final Frame<CompiledSchemeExpression> parent;
 	private final Object[] actualParameters;
 	
@@ -15,6 +18,13 @@ public class CompiledSchemeFrame extends AbstractFrame<CompiledSchemeExpression>
 	protected CompiledSchemeFrame(Frame<CompiledSchemeExpression> parent, Object[] actualParameters) {
 		this.parent = parent;
 		this.actualParameters = actualParameters;
+		
+		++frameCount;
+		maxLength = Math.max(maxLength, length());
+	}
+	
+	protected int length() {
+		return 1 + ((CompiledSchemeFrame) parent).length();
 	}
 	
 	@Override
@@ -54,6 +64,11 @@ public class CompiledSchemeFrame extends AbstractFrame<CompiledSchemeExpression>
 	private class NullSchemeFrame extends CompiledSchemeFrame {
 		public NullSchemeFrame() {
 			super(null, null);
+		}
+
+		@Override
+		protected int length() {
+			return 0;
 		}
 
 		@Override
