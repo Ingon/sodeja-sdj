@@ -21,7 +21,10 @@ public class Main {
 			Deque<Token> tokens = parser.tokenize(new FileReader(arg));
 			for(Token tok : tokens) {
 				System.out.println(tok);
-				System.out.println("=>" + runtime.evalToken(tok));
+				long start = System.currentTimeMillis();
+				Object obj = runtime.evalToken(tok);
+				long end = System.currentTimeMillis();
+				System.out.println("(" + (end - start) + ")>" + obj);
 			}
 		}
 	}
