@@ -1,4 +1,4 @@
-package org.sodeja.runtime.scheme.procedure.arithmetic;
+package org.sodeja.runtime.procedure.arithmetic;
 
 public class SqrtProcedure extends AbstractAritmeticProcedure {
 	@Override

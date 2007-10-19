@@ -1,12 +1,12 @@
-package org.sodeja.runtime.scheme.procedure;
+package org.sodeja.runtime.procedure;
 
 import org.sodeja.runtime.Frame;
+import org.sodeja.runtime.procedure.relational.BiggerThenProcedure;
+import org.sodeja.runtime.procedure.relational.EqualProcedure;
+import org.sodeja.runtime.procedure.relational.LessThenProcedure;
 import org.sodeja.runtime.scheme.SchemeExpression;
 import org.sodeja.runtime.scheme.SchemeLibrary;
 import org.sodeja.runtime.scheme.model.Symbol;
-import org.sodeja.runtime.scheme.procedure.relational.BiggerThenProcedure;
-import org.sodeja.runtime.scheme.procedure.relational.EqualProcedure;
-import org.sodeja.runtime.scheme.procedure.relational.LessThenProcedure;
 
 public class RelationalLibrary extends SchemeLibrary {
 	@Override

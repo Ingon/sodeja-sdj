@@ -1,4 +1,4 @@
-package org.sodeja.runtime.scheme.procedure.relational;
+package org.sodeja.runtime.procedure.relational;
 
 public class EqualProcedure extends AbstractCompareProcedure {
 	@Override

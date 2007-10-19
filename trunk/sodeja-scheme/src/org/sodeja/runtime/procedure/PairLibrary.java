@@ -1,12 +1,12 @@
-package org.sodeja.runtime.scheme.procedure;
+package org.sodeja.runtime.procedure;
 
 import org.sodeja.runtime.Frame;
+import org.sodeja.runtime.procedure.pair.CarProcedure;
+import org.sodeja.runtime.procedure.pair.CdrProcedure;
+import org.sodeja.runtime.procedure.pair.ConsProcedure;
 import org.sodeja.runtime.scheme.SchemeExpression;
 import org.sodeja.runtime.scheme.SchemeLibrary;
 import org.sodeja.runtime.scheme.model.Symbol;
-import org.sodeja.runtime.scheme.procedure.pair.CarProcedure;
-import org.sodeja.runtime.scheme.procedure.pair.CdrProcedure;
-import org.sodeja.runtime.scheme.procedure.pair.ConsProcedure;
 
 public class PairLibrary extends SchemeLibrary {
 	@Override

@@ -1,4 +1,4 @@
-package org.sodeja.runtime.scheme.procedure.base;
+package org.sodeja.runtime.procedure.base;
 
 import org.sodeja.runtime.Procedure;
 

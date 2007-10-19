@@ -1,4 +1,4 @@
-package org.sodeja.runtime.scheme.procedure.relational;
+package org.sodeja.runtime.procedure.relational;
 
 import org.sodeja.collections.ArrayUtils;
 import org.sodeja.math.Rational;

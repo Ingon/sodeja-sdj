@@ -1,13 +1,13 @@
-package org.sodeja.runtime.scheme.procedure;
+package org.sodeja.runtime.procedure;
 
 import org.sodeja.runtime.Frame;
 import org.sodeja.runtime.scheme.SchemeExpression;
 import org.sodeja.runtime.scheme.SchemeLibrary;
 import org.sodeja.runtime.scheme.model.Symbol;
-import org.sodeja.runtime.scheme.procedure.arithmetic.DivProcedure;
-import org.sodeja.runtime.scheme.procedure.arithmetic.MulProcedure;
-import org.sodeja.runtime.scheme.procedure.arithmetic.SubProcedure;
-import org.sodeja.runtime.scheme.procedure.arithmetic.SumProcedure;
+import org.sodeja.runtime.procedure.arithmetic.DivProcedure;
+import org.sodeja.runtime.procedure.arithmetic.MulProcedure;
+import org.sodeja.runtime.procedure.arithmetic.SubProcedure;
+import org.sodeja.runtime.procedure.arithmetic.SumProcedure;
 
 public class ArithmeticLibrary extends SchemeLibrary {
 	@Override
