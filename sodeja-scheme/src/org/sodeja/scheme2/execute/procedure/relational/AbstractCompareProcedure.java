@@ -2,7 +2,7 @@ package org.sodeja.scheme2.execute.procedure.relational;
 
 import org.sodeja.collections.ArrayUtils;
 import org.sodeja.math.Rational;
-import org.sodeja.scheme2.execute.Procedure;
+import org.sodeja.runtime.Procedure;
 
 public abstract class AbstractCompareProcedure implements Procedure {
 	@Override

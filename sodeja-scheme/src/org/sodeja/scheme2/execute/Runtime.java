@@ -4,6 +4,7 @@ import java.util.Deque;
 import java.util.Map;
 
 import org.sodeja.math.Rational;
+import org.sodeja.runtime.Procedure;
 import org.sodeja.scheme2.Utils;
 import org.sodeja.scheme2.execute.form.SicpDialect;
 import org.sodeja.scheme2.execute.procedure.AritmeticLibrary;

@@ -2,10 +2,10 @@ package org.sodeja.scheme2.execute.form;
 
 import java.util.Deque;
 
+import org.sodeja.runtime.Procedure;
 import org.sodeja.scheme2.Utils;
 import org.sodeja.scheme2.execute.Form;
 import org.sodeja.scheme2.execute.Frame;
-import org.sodeja.scheme2.execute.Procedure;
 import org.sodeja.scheme2.model.Combination;
 import org.sodeja.scheme2.model.Symbol;
 import org.sodeja.scheme2.model.Token;

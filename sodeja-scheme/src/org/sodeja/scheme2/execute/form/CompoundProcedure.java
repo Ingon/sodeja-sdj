@@ -6,9 +6,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.sodeja.collections.CollectionUtils;
+import org.sodeja.runtime.Procedure;
 import org.sodeja.scheme2.Utils;
 import org.sodeja.scheme2.execute.Frame;
-import org.sodeja.scheme2.execute.Procedure;
 import org.sodeja.scheme2.model.Symbol;
 import org.sodeja.scheme2.model.Token;
 

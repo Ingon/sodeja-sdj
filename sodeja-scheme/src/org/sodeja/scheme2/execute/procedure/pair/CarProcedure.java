@@ -1,7 +1,7 @@
 package org.sodeja.scheme2.execute.procedure.pair;
 
 import org.sodeja.functional.Pair;
-import org.sodeja.scheme2.execute.Procedure;
+import org.sodeja.runtime.Procedure;
 
 public class CarProcedure implements Procedure {
 	@SuppressWarnings("unchecked")
