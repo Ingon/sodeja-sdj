@@ -19,10 +19,10 @@ public class Main {
 			return;
 		}
 		
+		long execStart = System.currentTimeMillis();
 		for(String arg : args) {
 			Lexer lex = new Lexer(new FileReader(arg));
 			List<String> tokens = lex.tokenize();
-//			System.out.println(tokens);
 
 			SemanticParser parser = new SemanticParser();
 			Script script = parser.parse(tokens);
@@ -30,6 +30,7 @@ public class Main {
 			LispExecutor executor = new LispExecutor();
 			executor.execute(script);
 		}
+		System.out.println("TOTAL: " + (System.currentTimeMillis() - execStart));
 	}
 
 	private static void console() throws IOException {

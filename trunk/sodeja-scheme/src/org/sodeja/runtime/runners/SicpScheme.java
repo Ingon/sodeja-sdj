@@ -22,6 +22,7 @@ public class SicpScheme {
 			return;
 		}
 
+		long execStart = System.currentTimeMillis();
 		SchemeParser parser = new SchemeParser();
 		for(String arg : args) {
 			SicpEvaluator runtime = new SicpEvaluator();
@@ -34,6 +35,7 @@ public class SicpScheme {
 				System.out.println("(" + (end - start) + ")>" + obj);
 			}
 		}
+		System.out.println("TOTAL: " + (System.currentTimeMillis() - execStart));
 	}
 
 	private static void console() {
