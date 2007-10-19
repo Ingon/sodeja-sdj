@@ -1,8 +1,8 @@
 package org.sodeja.runtime.procedure.base;
 
-import org.sodeja.scheme.execute.primitive.PrimitiveProcedure;
+import org.sodeja.runtime.Procedure;
 
-public class QuitProcedure implements PrimitiveProcedure {
+public class QuitProcedure implements Procedure {
 	@Override
 	public Object apply(Object... vals) {
 		System.exit(0);
