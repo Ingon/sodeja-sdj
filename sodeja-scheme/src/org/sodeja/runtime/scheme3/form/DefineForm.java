@@ -46,6 +46,7 @@ public class DefineForm implements CompilingForm<SchemeExpression, CompiledSchem
 		
 		((CompiledSchemeDialect) dialect).addScope(params);
 		List<CompiledSchemeExpression> compiledBody = dialect.compileList(body);
+		((CompiledSchemeDialect) dialect).removeScope();
 		
 		return new DefineExpression(ListUtils.head(nameAndParams), new LambdaExpression(params, compiledBody));
 	}

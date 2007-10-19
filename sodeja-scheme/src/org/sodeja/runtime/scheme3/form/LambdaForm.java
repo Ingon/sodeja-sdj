@@ -32,7 +32,11 @@ public class LambdaForm implements CompilingForm<SchemeExpression, CompiledSchem
 		
 		((CompiledSchemeDialect) dialect).addScope(params);
 		
-		return new LambdaExpression(params, dialect.compileList(bodyExpressions));
+		try {
+			return new LambdaExpression(params, dialect.compileList(bodyExpressions));
+		} finally {
+			((CompiledSchemeDialect) dialect).removeScope();
+		}
 	}
 	
 	static List<NameExpression> getFormalParameters(Combination params) {
