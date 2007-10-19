@@ -3,6 +3,7 @@ package org.sodeja.runtime.runners;
 import java.io.FileReader;
 import java.util.List;
 
+import org.sodeja.parser.SchemeParser;
 import org.sodeja.runtime.Library;
 import org.sodeja.runtime.abs.CompoundLibrary;
 import org.sodeja.runtime.scheme.SchemeEvaluator;
@@ -13,7 +14,8 @@ import org.sodeja.runtime.scheme.library.BaseLibrary;
 import org.sodeja.runtime.scheme.library.LogicalLibrary;
 import org.sodeja.runtime.scheme.library.PairLibrary;
 import org.sodeja.runtime.scheme.library.RelationalLibrary;
-import org.sodeja.runtime.scheme.parse.SchemeParser;
+import org.sodeja.runtime.scheme.model.Combination;
+import org.sodeja.runtime.scheme.model.Symbol;
 
 public class SicpScheme {
 	public static void main(String[] args) throws Exception {
@@ -23,7 +25,7 @@ public class SicpScheme {
 		}
 
 		long execStart = System.currentTimeMillis();
-		SchemeParser parser = new SchemeParser();
+		SchemeParser<Symbol, Combination> parser = new SchemeParser<Symbol, Combination>(Symbol.class, Combination.class);
 		for(String arg : args) {
 			SicpEvaluator runtime = new SicpEvaluator();
 			List<SchemeExpression> expressions = parser.tokenize(new FileReader(arg));

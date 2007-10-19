@@ -8,7 +8,7 @@ import org.sodeja.runtime.scheme.model.Combination;
 
 public class Utils {
 	public static List<SchemeExpression> extractParts(Combination comb) {
-		return comb.parts.subList(2, comb.parts.size());
+		return comb.subList(2, comb.size());
 	}
 	
 	public static <E extends SchemeExpression> Object[] eval(Evaluator<E> evaluator, Frame<E> frame, List<E> expressions) {

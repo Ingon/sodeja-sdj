@@ -23,7 +23,7 @@ public class LambdaForm extends SchemeForm {
 	}
 	
 	private List<Symbol> getParams(Combination params) {
-		return mapTokenToSymbol(params.parts);
+		return mapTokenToSymbol(params);
 	}
 	
 	protected static List<Symbol> mapTokenToSymbol(List<SchemeExpression> tokens) {

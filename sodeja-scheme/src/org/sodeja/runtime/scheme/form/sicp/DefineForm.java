@@ -41,7 +41,7 @@ public class DefineForm extends SchemeForm {
 			List<SchemeExpression> extractParts) {
 		
 		Symbol symbol = (Symbol) exp.get(0);
-		List<Symbol> params = LambdaForm.mapTokenToSymbol(ListUtils.tail(exp.parts));
+		List<Symbol> params = LambdaForm.mapTokenToSymbol(ListUtils.tail(exp));
 		frame.addObject(symbol, new CompoundProcedure(evaluator, frame, params, extractParts));
 		return symbol;
 	}

@@ -1,4 +1,4 @@
-package org.sodeja.runtime.scheme.parse;
+package org.sodeja.parser;
 
 import java.io.IOException;
 import java.io.PushbackReader;
@@ -7,16 +7,26 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.sodeja.runtime.scheme.SchemeExpression;
-import org.sodeja.runtime.scheme.model.Combination;
-import org.sodeja.runtime.scheme.model.Symbol;
+@SuppressWarnings("unchecked")
+public class SchemeParser<V, C extends List> {
+	
+	private final Class<V> symbolClazz;
+	private final Class<C> combinationClazz;
 
-public class SchemeParser {
-	public List<SchemeExpression> tokenize(Reader baseReader) throws IOException {
+	private final V quote;
+	
+	public SchemeParser(Class<V> symbolClazz, Class<C> combinationClazz) {
+		this.symbolClazz = symbolClazz;
+		this.combinationClazz = combinationClazz;
+		
+		this.quote = createSymbol("quote");
+	}
+	
+	public C tokenize(Reader baseReader) throws IOException {
 		PushbackReader reader = new PushbackReader(baseReader);
 		
-		Deque<SchemeExpression> stack = new LinkedList<SchemeExpression>();
-		stack.offerLast(new Combination());
+		Deque<C> stack = new LinkedList<C>();
+		stack.offerLast(createCombination());
 		
 		StringBuilder currentPrimitiveToken = new StringBuilder();
 		for(Character ch = read(reader);ch != null;ch = read(reader)) {
@@ -39,16 +49,16 @@ public class SchemeParser {
 			}
 			
 			if(ch == '(') {
-				Combination listToken = new Combination();
-				((Combination) stack.peekLast()).add(listToken);
+				C listToken = createCombination();
+				((C) stack.peekLast()).add(listToken);
 				stack.addLast(listToken);
 				continue;
 			} 
 
 			if(ch == ')') {
-				Combination theToken = (Combination) stack.pollLast();
+				C theToken = (C) stack.pollLast();
 				if(currentPrimitiveToken.length() != 0) {
-					theToken.add(new Symbol(currentPrimitiveToken.toString()));
+					theToken.add(createSymbol(currentPrimitiveToken.toString()));
 					currentPrimitiveToken.setLength(0);
 				}
 				
@@ -66,8 +76,8 @@ public class SchemeParser {
 					continue;
 				}
 				
-				Combination theToken = (Combination) stack.peekLast();
-				theToken.add(new Symbol(currentPrimitiveToken.toString()));
+				C theToken = (C) stack.peekLast();
+				theToken.add(createSymbol(currentPrimitiveToken.toString()));
 				currentPrimitiveToken.setLength(0);
 				if(isQuoteToken(theToken)) {
 					stack.pollLast();
@@ -76,10 +86,10 @@ public class SchemeParser {
 			}
 			
 			if(ch == '\'') {
-				Combination listToken = new Combination();
-				listToken.add(new Symbol("quote"));
+				C listToken = createCombination();
+				listToken.add(quote);
 				
-				((Combination) stack.peekLast()).add(listToken);
+				((C) stack.peekLast()).add(listToken);
 				stack.addLast(listToken);
 				continue;
 			}
@@ -88,8 +98,8 @@ public class SchemeParser {
 		}
 		
 		if(currentPrimitiveToken.length() != 0) {
-			Combination theToken = (Combination) stack.peekLast();
-			theToken.add(new Symbol(currentPrimitiveToken.toString()));
+			C theToken = (C) stack.peekLast();
+			theToken.add(createSymbol(currentPrimitiveToken.toString()));
 		}
 		
 		if(stack.isEmpty()) {
@@ -97,13 +107,13 @@ public class SchemeParser {
 		}
 		
 		if(stack.size() == 2) {
-			SchemeExpression last = stack.pollLast();
+			Object last = stack.pollLast();
 			if(! isQuoteToken(last)) {
 				throw new RuntimeException("Unable to parse");
 			}
 		}
 		
-		return (Combination) (stack.pollLast());
+		return (C) (stack.pollLast());
 	}
 	
 	private Character read(PushbackReader reader) throws IOException {
@@ -121,21 +131,37 @@ public class SchemeParser {
 		reader.unread(ch);
 	}
 	
-	private boolean isQuoteToken(SchemeExpression token) {
-		if(! (token instanceof Combination)) {
+	private boolean isQuoteToken(Object token) {
+		if(! combinationClazz.isInstance(token)) {
 			return false;
 		}
 		
-		Combination list = (Combination) token;
+		C list = (C) token;
 		if(list.size() != 2) {
 			return false;
 		}
 		
-		SchemeExpression first = list.get(0);
-		if(! (first instanceof Symbol)) {
+		Object first = list.get(0);
+		if(! (symbolClazz.isInstance(first))) {
 			return false;
 		}
 		
-		return ((Symbol) first).value.equals("quote");
+		return first.equals(quote);
+	}
+	
+	protected V createSymbol(String value) {
+		try {
+			return (V) symbolClazz.getConstructors()[0].newInstance(value);
+		} catch(Exception exc) {
+			throw new RuntimeException(exc);
+		}
+	}
+	
+	protected C createCombination() {
+		try {
+			return (C) combinationClazz.newInstance();
+		} catch(Exception exc) {
+			throw new RuntimeException(exc);
+		}
 	}
 }
