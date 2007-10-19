@@ -3,7 +3,7 @@ package org.sodeja.scheme2.execute.procedure;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.sodeja.runtime.scheme.procedure.logical.NotProcedure;
+import org.sodeja.runtime.procedure.logical.NotProcedure;
 import org.sodeja.scheme2.execute.Library;
 
 public class LogicLibrary implements Library {

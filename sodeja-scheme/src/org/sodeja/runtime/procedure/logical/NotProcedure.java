@@ -1,4 +1,4 @@
-package org.sodeja.runtime.scheme.procedure.logical;
+package org.sodeja.runtime.procedure.logical;
 
 import org.sodeja.runtime.Procedure;
 

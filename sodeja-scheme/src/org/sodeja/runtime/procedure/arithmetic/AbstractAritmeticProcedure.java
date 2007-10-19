@@ -1,4 +1,4 @@
-package org.sodeja.runtime.scheme.procedure.arithmetic;
+package org.sodeja.runtime.procedure.arithmetic;
 
 import org.sodeja.math.Rational;
 import org.sodeja.runtime.Procedure;

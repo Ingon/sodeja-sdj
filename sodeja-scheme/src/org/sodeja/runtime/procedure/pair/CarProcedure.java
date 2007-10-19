@@ -1,4 +1,4 @@
-package org.sodeja.runtime.scheme.procedure.pair;
+package org.sodeja.runtime.procedure.pair;
 
 import org.sodeja.functional.Pair;
 import org.sodeja.runtime.Procedure;

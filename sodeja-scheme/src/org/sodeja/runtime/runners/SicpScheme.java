@@ -9,11 +9,11 @@ import org.sodeja.runtime.scheme.SchemeEvaluator;
 import org.sodeja.runtime.scheme.SchemeExpression;
 import org.sodeja.runtime.scheme.form.SicpDialect;
 import org.sodeja.runtime.scheme.parse.SchemeParser;
-import org.sodeja.runtime.scheme.procedure.ArithmeticLibrary;
-import org.sodeja.runtime.scheme.procedure.BaseLibrary;
-import org.sodeja.runtime.scheme.procedure.LogicalLibrary;
-import org.sodeja.runtime.scheme.procedure.PairLibrary;
-import org.sodeja.runtime.scheme.procedure.RelationalLibrary;
+import org.sodeja.runtime.procedure.ArithmeticLibrary;
+import org.sodeja.runtime.procedure.BaseLibrary;
+import org.sodeja.runtime.procedure.LogicalLibrary;
+import org.sodeja.runtime.procedure.PairLibrary;
+import org.sodeja.runtime.procedure.RelationalLibrary;
 
 public class SicpScheme {
 	public static void main(String[] args) throws Exception {
