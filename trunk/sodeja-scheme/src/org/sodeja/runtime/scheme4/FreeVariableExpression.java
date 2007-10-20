@@ -10,6 +10,7 @@ public class FreeVariableExpression extends VariableExpression {
 
 	@Override
 	public Object eval(Evaluator<CompiledSchemeExpression> evaluator, Frame<CompiledSchemeExpression> frame) {
+		// TODO some notification mechanism		
 		if(temp == null) {
 			temp = frame.findObject(name);
 		}
