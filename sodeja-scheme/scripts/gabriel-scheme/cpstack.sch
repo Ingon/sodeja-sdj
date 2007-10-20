@@ -31,4 +31,6 @@
  
 ;;; call: (cpstak 18 12 6)
  
-(run-benchmark "CPSTAK" (lambda () (cpstak 18 12 6)))
+;(run-benchmark "CPSTAK" (lambda () (cpstak 18 12 6)))
+
+(cpstak 18 12 6)
