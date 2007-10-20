@@ -5,7 +5,7 @@ import org.sodeja.runtime.scheme.SchemeExpression;
 import org.sodeja.runtime.scheme.SchemeForm;
 import org.sodeja.runtime.scheme.SchemeFrame;
 import org.sodeja.runtime.scheme.model.Combination;
-import org.sodeja.scheme2.model.Symbol;
+import org.sodeja.runtime.scheme.model.Symbol;
 
 public class SetForm extends SchemeForm {
 	@Override
