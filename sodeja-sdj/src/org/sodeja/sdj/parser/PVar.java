@@ -1,7 +1,7 @@
 package org.sodeja.sdj.parser;
 
 import org.sodeja.functional.Predicate1;
-import org.sodeja.parsec.SatisfiesParser;
+import org.sodeja.parsec.combinator.SatisfiesParser;
 
 public class PVar extends SatisfiesParser<String> {
 	

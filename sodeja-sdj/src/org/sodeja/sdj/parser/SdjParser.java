@@ -7,8 +7,8 @@ import org.sodeja.functional.Function2;
 import org.sodeja.functional.Function3;
 import org.sodeja.functional.Function4;
 import org.sodeja.functional.Pair;
-import org.sodeja.parsec.DelegateParser;
 import org.sodeja.parsec.Parser;
+import org.sodeja.parsec.combinator.DelegateParser;
 import org.sodeja.parsec.semantic.AbstractSemanticParser;
 import org.sodeja.sdj.expression.Alternative;
 import org.sodeja.sdj.expression.Application;
@@ -26,7 +26,7 @@ import org.sodeja.sdj.expression.Program;
 import org.sodeja.sdj.expression.Supercombinator;
 import org.sodeja.sdj.expression.Variable;
 
-import static org.sodeja.parsec.ParsecUtils.*;
+import static org.sodeja.parsec.combinator.ParsecUtils.*;
 import static org.sodeja.parsec.standart.StandartParsers.*;
 
 public class SdjParser extends AbstractSemanticParser<String, Program<Name>>{

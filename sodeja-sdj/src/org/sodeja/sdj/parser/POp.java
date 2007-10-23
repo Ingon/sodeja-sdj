@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.sodeja.collections.ConsList;
 import org.sodeja.functional.Pair;
-import org.sodeja.parsec.AbstractParser;
+import org.sodeja.parsec.combinator.AbstractParser;
 import org.sodeja.sdj.expression.BinaryOperator;
 
 public class POp extends AbstractParser<String, BinaryOperator> {
