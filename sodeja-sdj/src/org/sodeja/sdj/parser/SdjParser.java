@@ -167,7 +167,7 @@ public class SdjParser extends AbstractSemanticParser<String, Program<Name>>{
 		thenParser3("CONSTRUCTOR_NUM_PARSER", NUMBER_PARSER, literal(","), NUMBER_PARSER, 
 			new Function3<Pair<Number<Name>, Number<Name>>, Number<Name>, String, Number<Name>>() {
 				public Pair<Number<Name>, Number<Name>> execute(Number<Name> p1, String p2, Number<Name> p3) {
-					return new Pair<Number<Name>, Number<Name>>(p1, p3);
+					return Pair.of(p1, p3);
 				}
 			}
 		);
