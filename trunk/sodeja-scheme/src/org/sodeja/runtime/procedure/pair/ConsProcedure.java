@@ -6,6 +6,6 @@ import org.sodeja.runtime.Procedure;
 public class ConsProcedure implements Procedure {
 	@Override
 	public Object apply(Object... values) {
-		return new Pair<Object, Object>(values[0], values[1]);
+		return Pair.of(values[0], values[1]);
 	}
 }

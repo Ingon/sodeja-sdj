@@ -41,7 +41,7 @@ public class CondForm implements CompilingForm<SchemeExpression, CompiledSchemeE
 			}
 			List<CompiledSchemeExpression> consequent = dialect.compileList(clause.subList(1, clause.size()));
 			
-			clauses.add(new Pair<CompiledSchemeExpression, List<CompiledSchemeExpression>>(predicate, consequent));
+			clauses.add(Pair.of(predicate, consequent));
 		}
 		
 		return new CondExpression(clauses);

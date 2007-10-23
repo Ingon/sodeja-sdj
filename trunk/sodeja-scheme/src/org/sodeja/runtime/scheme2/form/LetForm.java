@@ -59,7 +59,6 @@ public class LetForm implements CompilingForm<SchemeExpression, CompiledSchemeEx
 		}
 		
 		Symbol symbol = (Symbol) symbolExpression;
-		bindingsList.add(new Pair<NameExpression, CompiledSchemeExpression>(
-				new NameExpression(symbol), dialect.compile(bindingComb.get(1))));
+		bindingsList.add(Pair.of(new NameExpression(symbol), dialect.compile(bindingComb.get(1))));
 	}
 }
