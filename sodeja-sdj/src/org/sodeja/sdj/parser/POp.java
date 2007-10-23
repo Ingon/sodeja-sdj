@@ -1,10 +1,10 @@
 package org.sodeja.sdj.parser;
 
-import java.util.List;
-
 import org.sodeja.collections.ConsList;
-import org.sodeja.functional.Pair;
 import org.sodeja.parsec.AbstractParser;
+import org.sodeja.parsec.ParseError;
+import org.sodeja.parsec.ParseSuccess;
+import org.sodeja.parsec.ParsingResult;
 import org.sodeja.sdj.expression.BinaryOperator;
 
 public class POp extends AbstractParser<String, BinaryOperator> {
@@ -13,13 +13,13 @@ public class POp extends AbstractParser<String, BinaryOperator> {
 	}
 
 	@Override
-	protected List<Pair<BinaryOperator, ConsList<String>>> executeDelegate(ConsList<String> tokens) {
+	protected ParsingResult<String, BinaryOperator> executeDelegate(ConsList<String> tokens) {
 		for(BinaryOperator op : BinaryOperator.values()) {
 			if(op.text.equals(tokens.get(0))) {
-				return createWithRemove(op, tokens);
+				return new ParseSuccess<String, BinaryOperator>(op, tokens.getTail());
 			}
 		}
 		
-		return EMPTY;
+		return new ParseError<String, BinaryOperator>("Expecting binary operator");
 	}
 }
