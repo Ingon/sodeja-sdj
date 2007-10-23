@@ -26,7 +26,7 @@ import org.sodeja.sdj.expression.Program;
 import org.sodeja.sdj.expression.Supercombinator;
 import org.sodeja.sdj.expression.Variable;
 
-import static org.sodeja.parsec.combinator.ParsecUtils.*;
+import static org.sodeja.parsec.combinator.ParsecCombinators.*;
 import static org.sodeja.parsec.standart.StandartParsers.*;
 
 public class SdjParser extends AbstractSemanticParser<String, Program<Name>>{
