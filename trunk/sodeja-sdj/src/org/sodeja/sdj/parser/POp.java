@@ -16,7 +16,7 @@ public class POp extends AbstractParser<String, BinaryOperator> {
 	protected ParsingResult<String, BinaryOperator> executeDelegate(ConsList<String> tokens) {
 		for(BinaryOperator op : BinaryOperator.values()) {
 			if(op.text.equals(tokens.get(0))) {
-				return new ParseSuccess<String, BinaryOperator>(op, tokens.getTail());
+				return new ParseSuccess<String, BinaryOperator>(op, tokens.tail());
 			}
 		}
 		
