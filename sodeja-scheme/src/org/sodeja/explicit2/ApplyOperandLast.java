@@ -16,6 +16,6 @@ class ApplyOperandLast implements CompiledExpression {
 
 		machine.proc.restore();
 		
-		machine.exp.setValue(ApplyDispatch.instance);
+		machine.exp.setValue(Apply.instance);
 	}
 }
