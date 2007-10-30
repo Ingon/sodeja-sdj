@@ -23,7 +23,7 @@ class Definition implements Executable {
 			Combination lambda = new Combination();
 			lambda.add(new Symbol("lambda"));
 			lambda.add(lambdaParams);
-			lambda.add(comb.get(2));
+			lambda.addAll(comb.subList(2, comb.size()));
 			
 			machine.unev.setValue(ListUtils.asList((SchemeExpression) nameAndLambdaParams.get(0)));
 

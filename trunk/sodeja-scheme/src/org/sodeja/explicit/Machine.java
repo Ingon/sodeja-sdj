@@ -68,7 +68,7 @@ public class Machine {
 			put("ev-begin", new Begin());
 			put("ev-sequence", new Sequence());
 			put("ev-sequence-continue", new SequenceContinue());
-			put("ev-sequence-end", new SequenceEnd());
+			put("ev-sequence-last-exp", new SequenceLast());
 			
 			put("ev-if", new If());
 			put("ev-if-decide", new IfDecide());

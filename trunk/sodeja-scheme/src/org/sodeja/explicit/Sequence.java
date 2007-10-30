@@ -8,11 +8,14 @@ class Sequence implements Executable {
 	@Override
 	public String execute(Machine machine) {
 		List<SchemeExpression> seq = machine.unev.getValue();
-		if(seq.isEmpty()) {
-			return "ev-sequence-end";
-		}
+//		if(seq.isEmpty()) {
+//			return "ev-sequence-end";
+//		}
 		
 		machine.exp.setValue(seq.get(0));
+		if(seq.size() == 1) {
+			return "ev-sequence-last-exp";
+		}
 		
 		machine.unev.save();
 		machine.env.save();

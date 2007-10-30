@@ -1,5 +1,8 @@
 package org.sodeja.explicit;
 
+import java.util.List;
+
+import org.sodeja.runtime.scheme.SchemeExpression;
 import org.sodeja.runtime.scheme.model.Combination;
 
 class Lambda implements Executable {
@@ -8,7 +11,7 @@ class Lambda implements Executable {
 		Combination comb = (Combination) machine.exp.getValue();
 		
 		Combination params = (Combination) comb.get(1);
-		Combination body = (Combination) comb.get(2);
+		List<SchemeExpression> body = comb.subList(2, comb.size());
 		
 		machine.val.setValue(new CompoundProcedure(machine.env.getValue(), params, body));
 		
