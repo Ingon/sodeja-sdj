@@ -22,8 +22,9 @@ class Apply implements CompiledExpression {
 			List<Symbol> params = rproc.params;
 			Enviroment env = rproc.enviroment;
 			
-			Enviroment newEnv = new Enviroment(env);
 			List<Object> argVals = machine.argl.getValue();
+			
+			Enviroment newEnv = new Enviroment(env, argVals);
 			for(int i = 0;i < params.size();i++) {
 				newEnv.define(params.get(i), argVals.get(i));
 			}
