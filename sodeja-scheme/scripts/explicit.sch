@@ -62,6 +62,7 @@ ev-appl-did-operator
   (test (op no-operands?) (reg unev))
   (branch (label apply-dispatch))
   (save proc)
+  (goto (label ev-appl-operand-loop))
 
 ev-appl-operand-loop
   (save argl)
@@ -148,6 +149,7 @@ ev-if-decide
   (restore exp)
   (test (op true?) (reg val))
   (branch (label ev-if-consequent))
+  (goto (label ev-if-alternative))
 
 ev-if-alternative
   (assign exp (op if-alternative) (reg exp))

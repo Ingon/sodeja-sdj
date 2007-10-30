@@ -94,6 +94,20 @@ public class SchemeParser<V, C extends List> {
 				continue;
 			}
 			
+			if(ch == '\"') {
+				StringBuilder sb = new StringBuilder();
+				sb.append(ch);
+				while((ch = read(reader)) != '\"') {
+					sb.append(ch);
+				}
+				sb.append(ch);
+				
+				C theToken = (C) stack.peekLast();
+				theToken.add(createSymbol(sb.toString()));
+				
+				continue;
+			}
+			
 			currentPrimitiveToken.append(ch);
 		}
 		
