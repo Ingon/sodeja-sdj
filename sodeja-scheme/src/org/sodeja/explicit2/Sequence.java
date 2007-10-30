@@ -1,6 +1,6 @@
 package org.sodeja.explicit2;
 
-import java.util.List;
+import org.sodeja.collections.ConsList;
 
 class Sequence implements CompiledExpression {
 	
@@ -11,9 +11,9 @@ class Sequence implements CompiledExpression {
 	
 	@Override
 	public void eval(Machine machine) {
-		List<CompiledExpression> seq = machine.unev.getValue();
+		ConsList<CompiledExpression> seq = (ConsList<CompiledExpression>) machine.unev.getValue();
 		
-		machine.exp.setValue(seq.get(0));
+		machine.exp.setValue(seq.head());
 		if(seq.size() == 1) {
 			machine.cont.restore();
 			return;
