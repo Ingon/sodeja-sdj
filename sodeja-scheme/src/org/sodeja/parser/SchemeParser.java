@@ -178,4 +178,8 @@ public class SchemeParser<V, C extends List> {
 			throw new RuntimeException(exc);
 		}
 	}
+	
+	public static <T, K extends List> SchemeParser<T, K> parser(Class<T> vc, Class<K> cc) {
+		return new SchemeParser<T, K>(vc, cc);
+	}
 }

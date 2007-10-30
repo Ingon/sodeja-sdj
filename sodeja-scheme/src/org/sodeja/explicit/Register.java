@@ -18,7 +18,7 @@ public class Register<T> {
 	}
 	
 	public void save() {
-		vals = new ConsList<T>(null, vals);
+		vals = new ConsList<T>(vals.head(), vals);
 	}
 	
 	public void restore() {
