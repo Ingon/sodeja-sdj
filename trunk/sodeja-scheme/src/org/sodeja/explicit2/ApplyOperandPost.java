@@ -21,6 +21,6 @@ class ApplyOperandPost implements CompiledExpression {
 		ConsList<CompiledExpression> left = (ConsList<CompiledExpression>) machine.unev.getValue();
 		machine.unev.setValue(left.tail());
 		
-		machine.exp.setValue(ApplyOperand.instance);
+		ApplyOperand.instance.eval(machine);
 	}
 }

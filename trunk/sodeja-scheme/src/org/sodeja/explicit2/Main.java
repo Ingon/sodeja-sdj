@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.util.List;
 
 import org.sodeja.parser.SchemeParser;
+import org.sodeja.runtime.Procedure;
 import org.sodeja.runtime.procedure.arithmetic.DivProcedure;
 import org.sodeja.runtime.procedure.arithmetic.MulProcedure;
 import org.sodeja.runtime.procedure.arithmetic.SubProcedure;
@@ -41,18 +42,18 @@ public class Main {
 		enviroment.define(new Symbol("*"), new MulProcedure());
 		enviroment.define(new Symbol("/"), new DivProcedure());
 		
-//		enviroment.define(new Symbol("newline"), new Procedure() {
-//			@Override
-//			public Object apply(Object... values) {
-//				System.out.println();
-//				return null;
-//			}});
-//		enviroment.define(new Symbol("display"), new Procedure() {
-//			@Override
-//			public Object apply(Object... values) {
-//				System.out.println(values[0]);
-//				return null;
-//			}});
+		enviroment.define(new Symbol("newline"), new Procedure() {
+			@Override
+			public Object apply(Object... values) {
+				System.out.println();
+				return null;
+			}});
+		enviroment.define(new Symbol("display"), new Procedure() {
+			@Override
+			public Object apply(Object... values) {
+				System.out.println(values[0]);
+				return null;
+			}});
 		
 		for(SchemeExpression expr : expressions) {
 			System.out.println("->: " + expr);
@@ -63,5 +64,7 @@ public class Main {
 			System.out.println("=>: " + obj);
 			System.out.println("(" + (end - start) + ")");
 		}
+		
+		System.out.println("Enviroments: " + Enviroment.envCount);
 	}
 }

@@ -7,6 +7,8 @@ import org.sodeja.runtime.scheme.model.Symbol;
 
 class Enviroment {
 
+	public static int envCount = 0;
+	
 	private final Map<Symbol, Object> mapping;
 	private final Enviroment parent;
 	
@@ -17,6 +19,8 @@ class Enviroment {
 	public Enviroment(Enviroment parent) {
 		this.mapping = new HashMap<Symbol, Object>();
 		this.parent = parent;
+		
+		envCount++;
 	}
 	
 	public void define(Symbol sym, Object value) {
