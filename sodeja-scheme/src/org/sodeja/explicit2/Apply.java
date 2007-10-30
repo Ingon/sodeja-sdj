@@ -31,7 +31,8 @@ class Apply implements CompiledExpression {
 			machine.env.setValue(newEnv);
 			machine.unev.setValue(rproc.body);
 			
-			machine.exp.setValue(Sequence.instance);
+			Sequence.instance.eval(machine);
+//			machine.exp.setValue(Sequence.instance);
 			return;
 		}
 		
