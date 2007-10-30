@@ -17,4 +17,8 @@ public class Stack {
 	public void push(Object obj) {
 		vals.addFirst(obj);
 	}
+
+	public void clear() {
+		vals.clear();
+	}
 }

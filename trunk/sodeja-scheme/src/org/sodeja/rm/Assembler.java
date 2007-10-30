@@ -55,12 +55,8 @@ public class Assembler {
 			SchemeExpression expr = tokens.get(i);
 			if(expr instanceof Symbol) {
 				Symbol sym = (Symbol) expr;
-				instructions.add(new Instruction() {
-					@Override
-					public void execute() {
-						advancePc();
-					}});
-				labelPositions.put(sym, i + 1);
+				instructions.add(new LabelInstruction(machine, sym.value));
+				labelPositions.put(sym, i);
 			} else {
 				instructions.add(new PreassembledInstruction((Combination) expr));
 			}
@@ -121,26 +117,10 @@ public class Assembler {
 				public InstructionPart execute(SchemeExpression p) {
 					return makeInstructionPart((Combination) p, null);
 				}});
-			return new InstructionPart() {
-				@Override
-				public Object execute() {
-					List<Object> objects = ListUtils.map(instructions, new Function1<Object, InstructionPart>() {
-						@Override
-						public Object execute(InstructionPart p) {
-							return p.execute();
-						}});
-					
-					return machine.findOperation(op.value).invoke(objects);
-				}
-			};
+			return new OpInstructionPart(machine, op.value, instructions);
 		} else if(value.equals("label")) {
 			final Symbol label = (Symbol) comb.get(1);
-			return new InstructionPart() {
-				@Override
-				public Object execute() {
-					return labelPositions.get(label);
-				}
-			};
+			return new LabelInstructionPart(machine, label.value, labelPositions.get(label));
 		} else {
 			throw new IllegalArgumentException();
 		}
