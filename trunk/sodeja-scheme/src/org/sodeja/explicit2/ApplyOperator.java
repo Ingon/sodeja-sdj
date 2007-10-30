@@ -22,7 +22,7 @@ class ApplyOperator implements CompiledExpression {
 		
 		List<CompiledExpression> operands = machine.unev.getValue();
 		if(operands.isEmpty()) {
-			machine.exp.setValue(ApplyDispatch.instance);
+			machine.exp.setValue(Apply.instance);
 			return;
 		}
 		
