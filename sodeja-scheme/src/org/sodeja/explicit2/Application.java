@@ -2,14 +2,16 @@ package org.sodeja.explicit2;
 
 import java.util.List;
 
+import org.sodeja.collections.ConsList;
+
 class Application implements CompiledExpression {
 
 	private final CompiledExpression proc;
-	private final List<CompiledExpression> args;
+	private final ConsList<CompiledExpression> args;
 	
 	public Application(CompiledExpression proc, List<CompiledExpression> args) {
 		this.proc = proc;
-		this.args = args;
+		this.args = ConsList.createList(args);
 	}
 
 	@Override
@@ -22,6 +24,6 @@ class Application implements CompiledExpression {
 		
 		machine.exp.setValue(proc);
 		
-		machine.cont.setValue(ApplicationOperator.instance);
+		machine.cont.setValue(ApplyOperator.instance);
 	}
 }

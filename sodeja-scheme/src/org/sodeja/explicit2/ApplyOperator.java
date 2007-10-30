@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.sodeja.runtime.Procedure;
 
-class ApplicationOperator implements CompiledExpression {
+class ApplyOperator implements CompiledExpression {
 	
-	public static final ApplicationOperator instance = new ApplicationOperator();
+	public static final ApplyOperator instance = new ApplyOperator();
 	
-	private ApplicationOperator() {
+	private ApplyOperator() {
 	}
 	
 	@Override

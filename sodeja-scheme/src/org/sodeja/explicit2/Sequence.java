@@ -12,11 +12,6 @@ class Sequence implements CompiledExpression {
 	@Override
 	public void eval(Machine machine) {
 		List<CompiledExpression> seq = machine.unev.getValue();
-//		if(seq.isEmpty()) {
-//			machine.cont.restore();
-//			machine.exp.setValue(machine.cont.getValue());
-//			return;
-//		}
 		
 		machine.exp.setValue(seq.get(0));
 		if(seq.size() == 1) {

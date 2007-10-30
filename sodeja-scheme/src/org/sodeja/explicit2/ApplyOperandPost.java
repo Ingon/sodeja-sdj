@@ -1,6 +1,6 @@
 package org.sodeja.explicit2;
 
-import java.util.List;
+import org.sodeja.collections.ConsList;
 
 class ApplyOperandPost implements CompiledExpression {
 	
@@ -18,8 +18,8 @@ class ApplyOperandPost implements CompiledExpression {
 		Object value = machine.val.getValue();
 		machine.argl.getValue().add(value);
 		
-		List<CompiledExpression> left = machine.unev.getValue();
-		machine.unev.setValue(left.subList(1, left.size()));
+		ConsList<CompiledExpression> left = (ConsList<CompiledExpression>) machine.unev.getValue();
+		machine.unev.setValue(left.tail());
 		
 		machine.exp.setValue(ApplyOperand.instance);
 	}
