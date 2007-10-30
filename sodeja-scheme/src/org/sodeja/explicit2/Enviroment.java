@@ -1,6 +1,7 @@
 package org.sodeja.explicit2;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.sodeja.runtime.scheme.model.Symbol;
@@ -9,16 +10,19 @@ class Enviroment {
 
 	public static int envCount = 0;
 	
-	private final Map<Symbol, Object> mapping;
 	private final Enviroment parent;
+	private final Map<Symbol, Object> mapping;
+	private final List<Object> lexicalVals;
 	
 	public Enviroment() {
-		this(new NullEnviroment());
+		this(new NullEnviroment(), null);
 	}
 	
-	public Enviroment(Enviroment parent) {
-		this.mapping = new HashMap<Symbol, Object>();
+	public Enviroment(Enviroment parent, List<Object> lexicalVals) {
 		this.parent = parent;
+		
+		this.mapping = new HashMap<Symbol, Object>();
+		this.lexicalVals = lexicalVals;
 		
 		envCount++;
 	}
@@ -40,9 +44,13 @@ class Enviroment {
 		return result;
 	}
 	
+	protected Object getLexicalValue(int index) {
+		return lexicalVals.get(index);
+	}
+	
 	private static class NullEnviroment extends Enviroment {
 		public NullEnviroment() {
-			super(null);
+			super(null, null);
 		}
 
 		@Override
@@ -53,6 +61,11 @@ class Enviroment {
 		@Override
 		public Object lookup(Symbol sym) {
 			throw new IllegalArgumentException("Symbol '" + sym + "' not found!");
+		}
+
+		@Override
+		protected Object getLexicalValue(int index) {
+			throw new UnsupportedOperationException();
 		}
 	}
 }

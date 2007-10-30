@@ -9,6 +9,9 @@ import org.sodeja.runtime.scheme.model.Combination;
 import org.sodeja.runtime.scheme.model.Symbol;
 
 public class Compiler {
+	
+	private LexicalScope currentScope;
+	
 	public CompiledExpression compile(SchemeExpression expr) {
 		if(expr instanceof Symbol) {
 			return compileSymbol((Symbol) expr);
@@ -21,8 +24,21 @@ public class Compiler {
 		try {
 			return new Rational(new org.sodeja.math.Rational(sym.value));
 		} catch(NumberFormatException exc) {
+			return compileVariable(sym);
+		}
+	}
+	
+	private CompiledExpression compileVariable(final Symbol sym) {
+		if(currentScope == null) {
 			return new Variable(sym);
 		}
+		
+		int lexicalIndex = currentScope.find(sym);
+		if(lexicalIndex < 0) {
+			return new Variable(sym);
+		}
+		
+		return new LexicalVariable(sym, lexicalIndex);
 	}
 
 	private CompiledExpression compileCombination(Combination expr) {
@@ -98,15 +114,30 @@ public class Compiler {
 			}});
 		
 		List<SchemeExpression> bodyExpr = comb.subList(2, comb.size());
+		
+		addScope(params);
 		List<CompiledExpression> body = ListUtils.map(bodyExpr, new Function1<CompiledExpression, SchemeExpression>() {
 			@Override
 			public CompiledExpression execute(SchemeExpression p) {
 				return compile(p);
 			}});
+		clearScope();
 		
 		return new Lambda(params, body);
 	}
 
+	private void addScope(List<Symbol> vars) {
+		if(currentScope == null) {
+			currentScope = new LexicalScope(vars);
+		} else {
+			throw new UnsupportedOperationException();
+		}
+	}
+	
+	private void clearScope() {
+		currentScope = currentScope.getParent();
+	}
+	
 	private CompiledExpression compileIf(Combination expr) {
 		CompiledExpression predicate = compile(expr.get(1));
 		CompiledExpression consequent = compile(expr.get(2));
