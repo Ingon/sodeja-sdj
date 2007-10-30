@@ -1,10 +1,11 @@
 package org.sodeja.explicit;
 
-class SequenceEnd implements Executable {
+class SequenceLast implements Executable {
 	@Override
 	public String execute(Machine machine) {
 		machine.cont.restore();
 		
-		return machine.cont.getValue();
+		return "eval-dispatch";
+//		return machine.cont.getValue();
 	}
 }

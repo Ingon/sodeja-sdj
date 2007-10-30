@@ -1,0 +1,27 @@
+package org.sodeja.explicit2;
+
+import java.util.List;
+
+class Application implements CompiledExpression {
+
+	private final CompiledExpression proc;
+	private final List<CompiledExpression> args;
+	
+	public Application(CompiledExpression proc, List<CompiledExpression> args) {
+		this.proc = proc;
+		this.args = args;
+	}
+
+	@Override
+	public void eval(Machine machine) {
+		machine.cont.save();
+		machine.env.save();
+
+		machine.unev.setValue(args);
+		machine.unev.save();
+		
+		machine.exp.setValue(proc);
+		
+		machine.cont.setValue(ApplicationOperator.instance);
+	}
+}

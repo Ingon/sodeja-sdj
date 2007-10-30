@@ -2,7 +2,6 @@ package org.sodeja.explicit;
 
 import java.util.List;
 
-import org.sodeja.collections.ListUtils;
 import org.sodeja.runtime.scheme.SchemeExpression;
 import org.sodeja.runtime.scheme.model.Combination;
 import org.sodeja.runtime.scheme.model.Symbol;
@@ -27,7 +26,7 @@ class ApplyCompound implements Executable {
 		}
 		
 		machine.env.setValue(newEnv);
-		machine.unev.setValue(ListUtils.asList((SchemeExpression) proc.body));
+		machine.unev.setValue(proc.body);
 		
 		return "ev-sequence";
 	}
