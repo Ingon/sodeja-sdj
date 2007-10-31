@@ -3,7 +3,6 @@ package org.sodeja.explicit2;
 import java.util.List;
 
 import org.sodeja.runtime.Procedure;
-import org.sodeja.runtime.scheme.model.Symbol;
 
 class Apply implements CompiledExpression {
 	
@@ -19,21 +18,20 @@ class Apply implements CompiledExpression {
 		if(proc instanceof CompoundProcedure) {
 			CompoundProcedure rproc = (CompoundProcedure) proc;
 			
-			List<Symbol> params = rproc.params;
-			Enviroment env = rproc.enviroment;
-			
 			List<Object> argVals = machine.argl.getValue();
 			
-			Enviroment newEnv = new Enviroment(env, argVals);
-			for(int i = 0;i < params.size();i++) {
-				newEnv.define(params.get(i), argVals.get(i));
+			LexicalEnviroment parent = rproc.lexical;
+			LexicalEnviroment newEnv = null;
+			if(parent != null) {
+				newEnv = new LexicalEnviroment(parent, argVals);
+			} else {
+				newEnv = new LexicalEnviroment(machine.dynamic, argVals);
 			}
 
 			machine.env.setValue(newEnv);
 			machine.unev.setValue(rproc.body);
 			
 			Sequence.instance.eval(machine);
-//			machine.exp.setValue(Sequence.instance);
 			return;
 		}
 		

@@ -8,6 +8,11 @@ class LexicalReference implements Reference {
 	}
 
 	@Override
+	public Object resolveValue(DynamicEnviroment dynamic, LexicalEnviroment lexical) {
+		return lexical.lexicalLookup(index);
+	}
+
+	@Override
 	public String toString() {
 		return "L" + index;
 	}

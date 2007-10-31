@@ -9,8 +9,8 @@ class Variable implements CompiledExpression {
 
 	@Override
 	public void eval(Machine machine) {
-		Enviroment env = machine.env.getValue();
-		machine.val.setValue(env.lookup(ref));
+		LexicalEnviroment env = machine.env.getValue();
+		machine.val.setValue(ref.resolveValue(machine.dynamic, env));
 		machine.exp.setValue(machine.cont.getValue());
 	}
 

@@ -6,8 +6,9 @@ import org.sodeja.explicit.Register;
 import org.sodeja.runtime.Procedure;
 
 public class Machine {
+	protected DynamicEnviroment dynamic;
 	protected Register<CompiledExpression> exp;
-	protected Register<Enviroment> env;
+	protected Register<LexicalEnviroment> env;
 	protected Register<Object> val;
 	protected Register<CompiledExpression> cont;
 	protected Register<Procedure> proc;
@@ -22,7 +23,7 @@ public class Machine {
 	
 	private void clear() {
 		this.exp = new Register<CompiledExpression>();
-		this.env = new Register<Enviroment>();
+		this.env = new Register<LexicalEnviroment>();
 		this.val = new Register<Object>();
 		this.cont = new Register<CompiledExpression>();
 		this.proc = new Register<Procedure>();
@@ -30,11 +31,12 @@ public class Machine {
 		this.unev = new Register<List<CompiledExpression>>();
 	}
 	
-	public Object eval(CompiledExpression expr, Enviroment enviroment) {
+	public Object eval(CompiledExpression expr, DynamicEnviroment dynamic) {
+		this.dynamic = dynamic;
 		clear();
 		
 		this.exp.setValue(expr);
-		this.env.setValue(enviroment);
+//		this.env.setValue(enviroment);
 		this.cont.setValue(new CompiledExpression() {
 			@Override
 			public void eval(Machine machine) {

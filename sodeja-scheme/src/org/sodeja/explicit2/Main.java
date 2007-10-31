@@ -22,14 +22,14 @@ public class Main {
 		SchemeParser<Symbol, Combination> parser = SchemeParser.parser(Symbol.class, Combination.class);
 //		List<SchemeExpression> expressions = parser.tokenize(new StringReader("3"));
 //		List<SchemeExpression> expressions = parser.tokenize(new StringReader("3 (define a 3) a"));
-		List<SchemeExpression> expressions = parser.tokenize(new FileReader("scripts/gabriel-scheme/tak.sch"));
-//		List<SchemeExpression> expressions = parser.tokenize(new FileReader("scripts/gabriel-scheme/cpstack.sch"));
+//		List<SchemeExpression> expressions = parser.tokenize(new FileReader("scripts/gabriel-scheme/tak.sch"));
+		List<SchemeExpression> expressions = parser.tokenize(new FileReader("scripts/gabriel-scheme/cpstack.sch"));
 //		List<SchemeExpression> expressions = parser.tokenize(new FileReader("scripts/sicp/11.sch"));
 //		List<SchemeExpression> expressions = parser.tokenize(new FileReader("scripts/simple.sch"));
 		
 		Machine machine = new Machine();
 		Compiler compiler = new Compiler();
-		Enviroment enviroment = new Enviroment();
+		DynamicEnviroment enviroment = new DynamicEnviroment();
 		enviroment.define(new Symbol("not"), new NotProcedure());
 		enviroment.define(new Symbol("eq?"), new EqProcedure());
 		
@@ -65,6 +65,6 @@ public class Main {
 			System.out.println("(" + (end - start) + ")");
 		}
 		
-		System.out.println("Enviroments: " + Enviroment.envCount);
+		System.out.println("Enviroments: " + LexicalEnviroment.envCount);
 	}
 }
