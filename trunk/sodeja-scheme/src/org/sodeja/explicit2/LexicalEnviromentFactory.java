@@ -25,10 +25,10 @@ class LexicalEnviromentFactory {
 	}
 
 	public void unget(LexicalEnviroment env) {
-		if(env == null) {
+		if(env == null || env.isSealed()) {
 			return;
 		}
-		env.clear();
+		env.clear(this);
 		enviroments.addLast(env);
 	}
 	
