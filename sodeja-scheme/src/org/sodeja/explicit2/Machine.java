@@ -6,7 +6,10 @@ import org.sodeja.explicit.Register;
 import org.sodeja.runtime.Procedure;
 
 public class Machine {
+	
 	protected DynamicEnviroment dynamic;
+	protected LexicalEnviromentFactory lexicalFactory;
+	
 	protected Register<CompiledExpression> exp;
 	protected Register<LexicalEnviroment> env;
 	protected Register<Object> val;
@@ -23,7 +26,7 @@ public class Machine {
 	
 	private void clear() {
 		this.exp = new Register<CompiledExpression>();
-		this.env = new Register<LexicalEnviroment>();
+		this.env = new EnviromentRegister();
 		this.val = new Register<Object>();
 		this.cont = new Register<CompiledExpression>();
 		this.proc = new Register<Procedure>();
@@ -32,11 +35,12 @@ public class Machine {
 	}
 	
 	public Object eval(CompiledExpression expr, DynamicEnviroment dynamic) {
-		this.dynamic = dynamic;
 		clear();
 		
 		this.exp.setValue(expr);
-//		this.env.setValue(enviroment);
+		this.dynamic = dynamic;
+		this.lexicalFactory = new LexicalEnviromentFactory(dynamic);
+
 		this.cont.setValue(new CompiledExpression() {
 			@Override
 			public void eval(Machine machine) {
@@ -59,6 +63,52 @@ public class Machine {
 			
 			expr = cont.getValue();
 			expr.eval(this);
+		}
+	}
+	
+	private class EnviromentRegister extends Register<LexicalEnviroment> {
+		@Override
+		public void restore() {
+			LexicalEnviroment env = this.getValue();
+		
+			super.restore();
+			
+			if(env != null) {
+				env.removeUse();
+				
+				if(env.isFree()) {
+					lexicalFactory.unget(env);
+				}
+			}
+		}
+
+		@Override
+		public void save() {
+			LexicalEnviroment env = this.getValue();
+			
+			super.save();
+			
+			if(env != null) {
+				env.addUse();
+			}
+		}
+
+		@Override
+		public void setValue(LexicalEnviroment value) {
+			LexicalEnviroment env = this.getValue();
+			if(env != null) {
+				env.removeUse();
+				
+				if(env.isFree()) {
+					lexicalFactory.unget(env);
+				}
+			}
+			
+			super.setValue(value);
+			
+			if(value != null) {
+				value.addUse();
+			}
 		}
 	}
 }

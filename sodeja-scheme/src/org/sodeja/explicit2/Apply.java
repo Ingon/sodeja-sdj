@@ -21,12 +21,7 @@ class Apply implements CompiledExpression {
 			List<Object> argVals = machine.argl.getValue();
 			
 			LexicalEnviroment parent = rproc.lexical;
-			LexicalEnviroment newEnv = null;
-			if(parent != null) {
-				newEnv = new LexicalEnviroment(parent, argVals);
-			} else {
-				newEnv = new LexicalEnviroment(machine.dynamic, argVals);
-			}
+			LexicalEnviroment newEnv = machine.lexicalFactory.get(machine, parent, argVals);
 
 			machine.env.setValue(newEnv);
 			machine.unev.setValue(rproc.body);
