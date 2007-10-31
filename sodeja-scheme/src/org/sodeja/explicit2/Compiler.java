@@ -30,15 +30,10 @@ public class Compiler {
 	
 	private CompiledExpression compileVariable(final Symbol sym) {
 		if(currentScope == null) {
-			return new Variable(sym);
+			return new Variable(new DynamicReference(sym));
 		}
 		
-		int lexicalIndex = currentScope.find(sym);
-		if(lexicalIndex < 0) {
-			return new Variable(sym);
-		}
-		
-		return new LexicalVariable(sym, lexicalIndex);
+		return new Variable(currentScope.find(sym));
 	}
 
 	private CompiledExpression compileCombination(Combination expr) {
@@ -130,7 +125,7 @@ public class Compiler {
 		if(currentScope == null) {
 			currentScope = new LexicalScope(vars);
 		} else {
-			throw new UnsupportedOperationException();
+			currentScope = new LexicalScope(currentScope, vars);
 		}
 	}
 	

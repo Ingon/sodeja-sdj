@@ -26,4 +26,15 @@ class Application implements CompiledExpression {
 		
 		machine.cont.setValue(ApplyOperator.instance);
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+		sb.append(proc);
+		sb.append(" ");
+		sb.append(args);
+		sb.append("]");
+		return sb.toString();
+	}
 }
