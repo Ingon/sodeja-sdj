@@ -24,4 +24,15 @@ class Define implements CompiledExpression {
 		
 		machine.cont.setValue(DefineContinue.instance);
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[define ");
+		sb.append(name);
+		sb.append(" ");
+		sb.append(value);
+		sb.append("]");
+		return sb.toString();
+	}
 }

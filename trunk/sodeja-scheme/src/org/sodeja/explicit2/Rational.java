@@ -13,4 +13,9 @@ class Rational implements CompiledExpression {
 		machine.val.setValue(value);
 		machine.exp.setValue(machine.cont.getValue());
 	}
+
+	@Override
+	public String toString() {
+		return value.toString();
+	}
 }

@@ -44,8 +44,16 @@ class Enviroment {
 		return result;
 	}
 	
-	protected Object getLexicalValue(int index) {
-		return lexicalVals.get(index);
+	protected Object lookup(Reference ref) {
+		if(ref instanceof DynamicReference) {
+			return lookup(((DynamicReference) ref).name);
+		}
+		
+		if(ref instanceof ParentLexicalReference) {
+			return parent.lookup(((ParentLexicalReference) ref).parent);
+		}
+		
+		return lexicalVals.get(((LexicalReference) ref).index);
 	}
 	
 	private static class NullEnviroment extends Enviroment {
@@ -64,7 +72,7 @@ class Enviroment {
 		}
 
 		@Override
-		protected Object getLexicalValue(int index) {
+		protected Object lookup(Reference ref) {
 			throw new UnsupportedOperationException();
 		}
 	}

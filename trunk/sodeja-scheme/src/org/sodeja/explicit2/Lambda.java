@@ -20,4 +20,15 @@ class Lambda implements CompiledExpression {
 		
 		machine.exp.setValue(machine.cont.getValue());
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[lambda ");
+		sb.append(params);
+		sb.append(" ");
+		sb.append(body);
+		sb.append("]");
+		return sb.toString();
+	}
 }

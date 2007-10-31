@@ -21,8 +21,21 @@ public class LexicalScope {
 		return parent;
 	}
 
-	public int find(Symbol name) {
-		// TODO but for more than one?
-		return vars.indexOf(name);
+	public Reference find(Symbol name) {
+		int index = vars.indexOf(name);
+		if(index >= 0) {
+			return new LexicalReference(index);
+		}
+		
+		if(parent == null) {
+			return new DynamicReference(name);
+		}
+		
+		Reference parentRef = parent.find(name);
+		if(parentRef instanceof DynamicReference) {
+			return parentRef;
+		}
+		
+		return new ParentLexicalReference(parentRef);
 	}
 }
