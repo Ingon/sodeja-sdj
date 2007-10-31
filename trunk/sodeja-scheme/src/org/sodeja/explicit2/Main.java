@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.util.List;
 
 import org.sodeja.parser.SchemeParser;
+import org.sodeja.runtime.Procedure;
 import org.sodeja.runtime.procedure.arithmetic.DivProcedure;
 import org.sodeja.runtime.procedure.arithmetic.MulProcedure;
 import org.sodeja.runtime.procedure.arithmetic.SubProcedure;
@@ -22,8 +23,8 @@ public class Main {
 		SchemeParser<Symbol, Combination> parser = SchemeParser.parser(Symbol.class, Combination.class);
 //		List<SchemeExpression> expressions = parser.tokenize(new StringReader("3"));
 //		List<SchemeExpression> expressions = parser.tokenize(new StringReader("3 (define a 3) a"));
-//		List<SchemeExpression> expressions = parser.tokenize(new FileReader("scripts/gabriel-scheme/tak.sch"));
-		List<SchemeExpression> expressions = parser.tokenize(new FileReader("scripts/gabriel-scheme/cpstack.sch"));
+		List<SchemeExpression> expressions = parser.tokenize(new FileReader("scripts/gabriel-scheme/tak.sch"));
+//		List<SchemeExpression> expressions = parser.tokenize(new FileReader("scripts/gabriel-scheme/cpstack.sch"));
 //		List<SchemeExpression> expressions = parser.tokenize(new FileReader("scripts/sicp/11.sch"));
 //		List<SchemeExpression> expressions = parser.tokenize(new FileReader("scripts/simple.sch"));
 		
@@ -42,18 +43,18 @@ public class Main {
 		enviroment.define(new Symbol("*"), new MulProcedure());
 		enviroment.define(new Symbol("/"), new DivProcedure());
 		
-//		enviroment.define(new Symbol("newline"), new Procedure() {
-//			@Override
-//			public Object apply(Object... values) {
-//				System.out.println();
-//				return null;
-//			}});
-//		enviroment.define(new Symbol("display"), new Procedure() {
-//			@Override
-//			public Object apply(Object... values) {
-//				System.out.println(values[0]);
-//				return null;
-//			}});
+		enviroment.define(new Symbol("newline"), new Procedure() {
+			@Override
+			public Object apply(Object... values) {
+				System.out.println();
+				return null;
+			}});
+		enviroment.define(new Symbol("display"), new Procedure() {
+			@Override
+			public Object apply(Object... values) {
+				System.out.println(values[0]);
+				return null;
+			}});
 		
 		for(SchemeExpression expr : expressions) {
 			System.out.println("->: " + expr);

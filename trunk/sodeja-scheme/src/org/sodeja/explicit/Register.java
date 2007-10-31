@@ -3,7 +3,7 @@ package org.sodeja.explicit;
 import org.sodeja.collections.ConsList;
 
 public class Register<T> {
-	private ConsList<T> vals;
+	protected ConsList<T> vals;
 	
 	public Register() {
 		vals = new ConsList<T>(null);
@@ -23,5 +23,10 @@ public class Register<T> {
 	
 	public void restore() {
 		vals = vals.tail();
+	}
+
+	@Override
+	public String toString() {
+		return vals.toString();
 	}
 }

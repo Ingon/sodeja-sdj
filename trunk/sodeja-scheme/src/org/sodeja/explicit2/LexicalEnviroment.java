@@ -9,21 +9,32 @@ import org.sodeja.runtime.scheme.model.Symbol;
 class LexicalEnviroment {
 	public static int envCount = 0;
 	
-	private final LexicalEnviroment parent;
+	private final long id;
+	private int usages;
+	private LexicalEnviroment parent;
 	private Map<Symbol, Object> locals;
-	private final List<Object> lexicalVals;
+	private List<Object> lexicalVals;
 	
-	public LexicalEnviroment(DynamicEnviroment dynamic, List<Object> lexicalVals) {
-		this(new NullEnviroment(dynamic), lexicalVals);
-	}
-	
-	public LexicalEnviroment(LexicalEnviroment parent, List<Object> lexicalVals) {
+	protected LexicalEnviroment(LexicalEnviroment parent, List<Object> lexicalVals) {
 		this.parent = parent;
 		
-//		this.locals = new HashMap<Symbol, Object>();
 		this.lexicalVals = lexicalVals;
 		
-		envCount++;
+		this.id = envCount++;
+		this.usages = 0;
+	}
+		
+	protected void init(LexicalEnviroment parent, List<Object> lexicalVals) {
+		this.parent = parent;
+		this.lexicalVals = lexicalVals;
+	}
+	
+	protected void clear() {
+		parent = null;
+		if(locals != null) {
+			locals.clear();
+		}
+		this.lexicalVals = null;
 	}
 	
 	protected LexicalEnviroment getParent() {
@@ -65,7 +76,29 @@ class LexicalEnviroment {
 		return lexicalVals.get(index);
 	}
 
-	private static class NullEnviroment extends LexicalEnviroment {
+	protected void addUse() {
+		usages++;
+	}
+	
+	protected void removeUse() {
+		usages--;
+	}
+	
+	protected boolean isFree() {
+		return usages == 0;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof LexicalEnviroment && id == ((LexicalEnviroment) obj).id;
+	}
+
+//	@Override
+//	public int hashCode() {
+//		return (int) id % 37;
+//	}
+
+	protected static class NullEnviroment extends LexicalEnviroment {
 		private final DynamicEnviroment dynamic;
 		
 		public NullEnviroment(DynamicEnviroment dynamic) {
