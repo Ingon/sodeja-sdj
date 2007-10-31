@@ -25,6 +25,9 @@ class CompoundProcedure implements Procedure {
 	public CompoundProcedure(LexicalEnviroment lexical, List<Symbol> params, List<CompiledExpression> body) {
 		this.dynamic = null;
 		this.lexical = lexical;
+		if(lexical != null) {
+			this.lexical.seal();
+		}
 		
 		this.params = params;
 		this.body = ConsList.createList(body);

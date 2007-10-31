@@ -11,12 +11,19 @@ class LexicalEnviroment {
 	
 	private final long id;
 	private int usages;
+	private boolean sealed = false;
+	
 	private LexicalEnviroment parent;
 	private Map<Symbol, Object> locals;
 	private List<Object> lexicalVals;
 	
 	protected LexicalEnviroment(LexicalEnviroment parent, List<Object> lexicalVals) {
 		this.parent = parent;
+		if(parent != null) {
+			this.parent.addUse();
+		}
+		
+		locals = new HashMap<Symbol, Object>();
 		
 		this.lexicalVals = lexicalVals;
 		
@@ -26,14 +33,23 @@ class LexicalEnviroment {
 		
 	protected void init(LexicalEnviroment parent, List<Object> lexicalVals) {
 		this.parent = parent;
+		this.parent.addUse();
+		
 		this.lexicalVals = lexicalVals;
 	}
 	
-	protected void clear() {
+	protected void clear(LexicalEnviromentFactory factory) {
+		parent.removeUse();
+		if(parent.isFree()) {
+			factory.unget(parent);
+		}
+		
 		parent = null;
+		
 		if(locals != null) {
 			locals.clear();
 		}
+		
 		this.lexicalVals = null;
 	}
 	
@@ -42,15 +58,38 @@ class LexicalEnviroment {
 	}
 	
 	protected Object lookup(Symbol sym) {
-		if(locals == null) {
-			return parent.lookup(sym);
-		}
+		return lookup(this, sym);
+//		if(locals == null) {
+//			return parent.lookup(sym);
+//		}
+//		
+//		Object result = locals.get(sym);
+//		if(result == null) {
+//			return parent.lookup(sym);
+//		}
+//		return result;
+	}
+	
+	protected static Object lookup(LexicalEnviroment env, Symbol sym) {
+		LexicalEnviroment last = null;
+		do {
+			if(env.locals == null) {
+				last = env;
+				env = env.parent;
+				continue;
+			}
+			
+			Object result = env.locals.get(sym);
+			if(result == null) {
+				last = env;
+				env = env.parent;
+				continue;
+			}
+			
+			return result;
+		} while(env != null);
 		
-		Object result = locals.get(sym);
-		if(result == null) {
-			return parent.lookup(sym);
-		}
-		return result;
+		return last.lookup(sym);
 	}
 	
 	protected void define(Symbol sym, Object value) {
@@ -88,15 +127,23 @@ class LexicalEnviroment {
 		return usages == 0;
 	}
 	
+	protected void seal() {
+		this.sealed = true;
+	}
+	
+	protected boolean isSealed() {
+		return this.sealed;
+	}
+	
+	@Override
+	public String toString() {
+		return "ID: " + id + " U: " + usages;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof LexicalEnviroment && id == ((LexicalEnviroment) obj).id;
 	}
-
-//	@Override
-//	public int hashCode() {
-//		return (int) id % 37;
-//	}
 
 	protected static class NullEnviroment extends LexicalEnviroment {
 		private final DynamicEnviroment dynamic;
@@ -124,6 +171,10 @@ class LexicalEnviroment {
 		@Override
 		protected Object lexicalLookup(int index) {
 			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		protected void clear(LexicalEnviromentFactory factory) {
 		}
 	}
 }
