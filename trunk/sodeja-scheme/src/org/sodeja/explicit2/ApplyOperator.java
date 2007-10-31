@@ -22,11 +22,14 @@ class ApplyOperator implements CompiledExpression {
 		
 		List<CompiledExpression> operands = machine.unev.getValue();
 		if(operands.isEmpty()) {
-			machine.exp.setValue(Apply.instance);
+//			machine.exp.setValue(Apply.instance);
+			Apply.instance.eval(machine);
 			return;
 		}
 		
 		machine.proc.save();
-		machine.exp.setValue(ApplyOperand.instance);
+		
+//		machine.exp.setValue(ApplyOperand.instance);
+		ApplyOperand.instance.eval(machine);
 	}
 }

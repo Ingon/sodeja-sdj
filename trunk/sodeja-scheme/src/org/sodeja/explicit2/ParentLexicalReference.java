@@ -8,6 +8,11 @@ class ParentLexicalReference implements Reference {
 	}
 
 	@Override
+	public Object resolveValue(DynamicEnviroment dynamic, LexicalEnviroment lexical) {
+		return parent.resolveValue(dynamic, lexical.getParent());
+	}
+
+	@Override
 	public String toString() {
 		return "PR:" + parent.toString();
 	}
