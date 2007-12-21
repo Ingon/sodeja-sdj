@@ -227,6 +227,36 @@ public class Main {
 			public Object invoke(List<Object> objects) {
 				return objects.get(0) instanceof Triple;
 			}});
+		ops.put("procedure-parameters", new Operation() {
+			@Override
+			public Object invoke(List<Object> objects) {
+				return ((Triple) objects.get(0)).first;
+			}});
+		ops.put("procedure-environment", new Operation() {
+			@Override
+			public Object invoke(List<Object> objects) {
+				return ((Triple) objects.get(0)).third;
+			}});
+		ops.put("extend-environment", new Operation() {
+			@Override
+			public Object invoke(List<Object> objects) {
+				Map<Symbol, Object> env = (Map<Symbol, Object>) objects.get(2);
+				Map<Symbol, Object> nenv = new HashMap<Symbol, Object>(env);
+				
+				List<Symbol> names = (List<Symbol>) objects.get(0);
+				List<Object> values = (List<Object>) objects.get(1);
+				
+				for(int i = 0;i < names.size();i++) {
+					nenv.put(names.get(i), values.get(i));
+				}
+				
+				return nenv;
+			}});
+		ops.put("procedure-body", new Operation() {
+			@Override
+			public Object invoke(List<Object> objects) {
+				return ((Triple) objects.get(0)).second;
+			}});
 	}
 	
 	private static void fillEvDefinition(Map<String, Operation> ops, final Machine machine) {
@@ -264,4 +294,5 @@ public class Main {
 		ops.put("announce-output", ops.get("prompt-for-input"));
 		ops.put("user-print", ops.get("prompt-for-input"));
 	}
+	// (define (factorial n) (if (= n 1) 1 (* (factorial (- n 1)) n)))
 }
