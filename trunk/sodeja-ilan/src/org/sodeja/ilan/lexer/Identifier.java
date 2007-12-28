@@ -1,9 +1,9 @@
 package org.sodeja.ilan.lexer;
 
-public class ILanIdentifier implements ILanToken {
+public class Identifier implements Token {
 	public final String name;
 
-	public ILanIdentifier(String name) {
+	public Identifier(String name) {
 		this.name = name;
 	}
 

@@ -1,6 +1,6 @@
 package org.sodeja.ilan.lexer;
 
-public enum ILanSerparator implements ILanToken {
+public enum Serparator implements Token {
 	LBRACE('('),
 	RBRACE(')'),
 	LCBRACE('{'),
@@ -9,7 +9,7 @@ public enum ILanSerparator implements ILanToken {
 	
 	private final char ch;
 	
-	private ILanSerparator(char ch) {
+	private Serparator(char ch) {
 		this.ch = ch;
 	}
 

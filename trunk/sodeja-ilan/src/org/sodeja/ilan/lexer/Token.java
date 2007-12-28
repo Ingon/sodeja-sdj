@@ -1,5 +1,5 @@
 package org.sodeja.ilan.lexer;
 
-public interface ILanToken {
+public interface Token {
 
 }
