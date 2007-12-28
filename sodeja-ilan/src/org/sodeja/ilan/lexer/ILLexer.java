@@ -14,7 +14,7 @@ import org.sodeja.functional.Maybe;
 import org.sodeja.generator.Generator;
 import org.sodeja.generator.GeneratorFunction;
 
-public class ILexer implements GeneratorFunction<Token> {
+public class ILLexer implements GeneratorFunction<Token> {
 	public static Generator<Token> tokenize(String str) {
 		return tokenize(new StringReader(str));
 	}
@@ -24,12 +24,12 @@ public class ILexer implements GeneratorFunction<Token> {
 	}
 	
 	public static Generator<Token> tokenize(Reader reader) {
-		return new Generator<Token>(new ILexer(reader));
+		return new Generator<Token>(new ILLexer(reader));
 	}
 
 	private PushbackReader reader;
 	
-	private ILexer(Reader reader) {
+	private ILLexer(Reader reader) {
 		this.reader = new PushbackReader(reader);
 	}
 
