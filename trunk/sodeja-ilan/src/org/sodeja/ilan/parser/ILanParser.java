@@ -6,7 +6,10 @@ import java.util.List;
 
 import org.sodeja.collections.ConsList;
 import org.sodeja.functional.Function1;
+import org.sodeja.ilan.idk.IInteger;
+import org.sodeja.ilan.idk.INumber;
 import org.sodeja.ilan.lexer.IdentifierToken;
+import org.sodeja.ilan.lexer.NumberToken;
 import org.sodeja.ilan.lexer.SerparatorToken;
 import org.sodeja.ilan.lexer.Token;
 import org.sodeja.parsec.AbstractParser;
@@ -32,24 +35,24 @@ public class ILanParser extends AbstractSemanticParser<Token, Program> {
 		}
 	};
 		
-	private Parser<Token, org.sodeja.ilan.lexer.NumberToken> NUMBER_DEL = new AbstractParser<Token, org.sodeja.ilan.lexer.NumberToken>("NUMBER_DEL") {
+	private Parser<Token, NumberToken> NUMBER_DEL = new AbstractParser<Token, NumberToken>("NUMBER_DEL") {
 		@Override
-		protected ParsingResult<Token, org.sodeja.ilan.lexer.NumberToken> executeDelegate(ConsList<Token> tokens) {
+		protected ParsingResult<Token, NumberToken> executeDelegate(ConsList<Token> tokens) {
 			Token head = tokens.head();
-			if(! (head instanceof Number)) {
-				return new ParseError<Token, org.sodeja.ilan.lexer.NumberToken>("Not an identifier", tokens);
+			if(! (head instanceof NumberToken)) {
+				return new ParseError<Token, NumberToken>("Not an identifier", tokens);
 			}
-			return success((org.sodeja.ilan.lexer.NumberToken) head, tokens.tail());
+			return success((NumberToken) head, tokens.tail());
 		}
 	};
 	
-//	private Parser<Token, ValueExpression<org.sodeja.ilan.idk.Number>> NUMBER = apply("NUMBER", NUMBER_DEL, new Function1<ValueExpression<Number>, Number>() {
-//		@Override
-//		public ValueExpression<Number> execute(Number p) {
-//			return new ValueExpression<Number>(p);
-//		}});
-		
-	private Parser<Token, IdentifierToken> IDENTIFIER = new AbstractParser<Token, IdentifierToken>("IDENTIFIER") {
+	private Parser<Token, ValueExpression<INumber>> NUMBER = apply("NUMBER", NUMBER_DEL, new Function1<ValueExpression<INumber>, NumberToken>() {
+		@Override
+		public ValueExpression<INumber> execute(NumberToken p) {
+			return new ValueExpression<INumber>(new IInteger(p.value));
+		}});
+	
+	private Parser<Token, IdentifierToken> IDENTIFIER_DEL = new AbstractParser<Token, IdentifierToken>("IDENTIFIER_DEL") {
 		@Override
 		protected ParsingResult<Token, IdentifierToken> executeDelegate(ConsList<Token> tokens) {
 			Token head = tokens.head();
@@ -60,11 +63,17 @@ public class ILanParser extends AbstractSemanticParser<Token, Program> {
 		}
 	};
 	
-//	private Parser<ILanToken, >
-		
-	private Parser<Token, List<IdentifierToken>> IDENTIFIERS = zeroOrMore("IDENTIFIERS", IDENTIFIER);
+	private Parser<Token, VariableExpression> IDENTIFIER = apply("IDENTIFIER", IDENTIFIER_DEL, new Function1<VariableExpression, IdentifierToken>() {
+		@Override
+		public VariableExpression execute(IdentifierToken p) {
+			return new VariableExpression(p.name);
+		}});
 	
-	private Parser<Token, Application> APPLICATION = thenParserCons1("APPLICATION", IDENTIFIERS, SEMI_COLUMN, Application.class);
+	private Parser<Token, SimpleExpression> SIMPLE_EXPRESSION = oneOf1("SIMPLE_EXPRESSION", NUMBER, IDENTIFIER);
+		
+	private Parser<Token, List<SimpleExpression>> SIMPLE_EXPRESSIONS = zeroOrMore("SIMPLE_EXPRESSIONS", SIMPLE_EXPRESSION);
+	
+	private Parser<Token, Application> APPLICATION = thenParserCons1("APPLICATION", SIMPLE_EXPRESSIONS, SEMI_COLUMN, Application.class);
 
 	private Parser<Token, Expression> EXPRESSION = oneOf1("EXPRESSION", APPLICATION);
 
