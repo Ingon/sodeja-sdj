@@ -1,0 +1,9 @@
+program = [expressions];
+expressions = expression, expressions | expression;
+expression = function | application;
+function = literal, '(', parameters, ')', '{', [expressions], '}';
+application = expressions, ';' 
+
+literal = ?literal?;
+string = ?string?;
+number = ?number?;
