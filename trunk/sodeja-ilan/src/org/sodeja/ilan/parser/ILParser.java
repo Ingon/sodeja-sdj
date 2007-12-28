@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.sodeja.collections.ConsList;
 import org.sodeja.functional.Function1;
-import org.sodeja.ilan.idk.IInteger;
-import org.sodeja.ilan.idk.INumber;
+import org.sodeja.ilan.ildk.ILInteger;
+import org.sodeja.ilan.ildk.ILNumber;
 import org.sodeja.ilan.lexer.IdentifierToken;
 import org.sodeja.ilan.lexer.NumberToken;
 import org.sodeja.ilan.lexer.SerparatorToken;
@@ -18,7 +18,7 @@ import org.sodeja.parsec.Parser;
 import org.sodeja.parsec.ParsingResult;
 import org.sodeja.parsec.semantic.AbstractSemanticParser;
 
-public class ILanParser extends AbstractSemanticParser<Token, Program> {
+public class ILParser extends AbstractSemanticParser<Token, Program> {
 	
 	private Parser<Token, SerparatorToken> SEMI_COLUMN = new AbstractParser<Token, SerparatorToken>("SEMI_COLUMN") {
 		@Override
@@ -46,10 +46,10 @@ public class ILanParser extends AbstractSemanticParser<Token, Program> {
 		}
 	};
 	
-	private Parser<Token, ValueExpression<INumber>> NUMBER = apply("NUMBER", NUMBER_DEL, new Function1<ValueExpression<INumber>, NumberToken>() {
+	private Parser<Token, ValueExpression<ILNumber>> NUMBER = apply("NUMBER", NUMBER_DEL, new Function1<ValueExpression<ILNumber>, NumberToken>() {
 		@Override
-		public ValueExpression<INumber> execute(NumberToken p) {
-			return new ValueExpression<INumber>(new IInteger(p.value));
+		public ValueExpression<ILNumber> execute(NumberToken p) {
+			return new ValueExpression<ILNumber>(new ILInteger(p.value));
 		}});
 	
 	private Parser<Token, IdentifierToken> IDENTIFIER_DEL = new AbstractParser<Token, IdentifierToken>("IDENTIFIER_DEL") {
