@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.sodeja.collections.ConsList;
 import org.sodeja.functional.Function1;
-import org.sodeja.ilan.lexer.Identifier;
-import org.sodeja.ilan.lexer.Serparator;
+import org.sodeja.ilan.lexer.IdentifierToken;
+import org.sodeja.ilan.lexer.SerparatorToken;
 import org.sodeja.ilan.lexer.Token;
 import org.sodeja.parsec.AbstractParser;
 import org.sodeja.parsec.ParseError;
@@ -17,29 +17,29 @@ import org.sodeja.parsec.semantic.AbstractSemanticParser;
 
 public class ILanParser extends AbstractSemanticParser<Token, Program> {
 	
-	private Parser<Token, Serparator> SEMI_COLUMN = new AbstractParser<Token, Serparator>("SEMI_COLUMN") {
+	private Parser<Token, SerparatorToken> SEMI_COLUMN = new AbstractParser<Token, SerparatorToken>("SEMI_COLUMN") {
 		@Override
-		protected ParsingResult<Token, Serparator> executeDelegate(ConsList<Token> tokens) {
+		protected ParsingResult<Token, SerparatorToken> executeDelegate(ConsList<Token> tokens) {
 			Token head = tokens.head();
-			if(! (head instanceof Serparator)) {
-				return new ParseError<Token, Serparator>("Not an separator", tokens);
+			if(! (head instanceof SerparatorToken)) {
+				return new ParseError<Token, SerparatorToken>("Not an separator", tokens);
 			}
-			Serparator sep = (Serparator) head;
-			if(sep != Serparator.SEMI_COLON) {
-				return new ParseError<Token, Serparator>("Not semi-column separator", tokens);
+			SerparatorToken sep = (SerparatorToken) head;
+			if(sep != SerparatorToken.SEMI_COLON) {
+				return new ParseError<Token, SerparatorToken>("Not semi-column separator", tokens);
 			}
 			return success(sep, tokens.tail());
 		}
 	};
 		
-	private Parser<Token, org.sodeja.ilan.lexer.Number> NUMBER_DEL = new AbstractParser<Token, org.sodeja.ilan.lexer.Number>("NUMBER_DEL") {
+	private Parser<Token, org.sodeja.ilan.lexer.NumberToken> NUMBER_DEL = new AbstractParser<Token, org.sodeja.ilan.lexer.NumberToken>("NUMBER_DEL") {
 		@Override
-		protected ParsingResult<Token, org.sodeja.ilan.lexer.Number> executeDelegate(ConsList<Token> tokens) {
+		protected ParsingResult<Token, org.sodeja.ilan.lexer.NumberToken> executeDelegate(ConsList<Token> tokens) {
 			Token head = tokens.head();
 			if(! (head instanceof Number)) {
-				return new ParseError<Token, org.sodeja.ilan.lexer.Number>("Not an identifier", tokens);
+				return new ParseError<Token, org.sodeja.ilan.lexer.NumberToken>("Not an identifier", tokens);
 			}
-			return success((org.sodeja.ilan.lexer.Number) head, tokens.tail());
+			return success((org.sodeja.ilan.lexer.NumberToken) head, tokens.tail());
 		}
 	};
 	
@@ -49,20 +49,20 @@ public class ILanParser extends AbstractSemanticParser<Token, Program> {
 //			return new ValueExpression<Number>(p);
 //		}});
 		
-	private Parser<Token, Identifier> IDENTIFIER = new AbstractParser<Token, Identifier>("IDENTIFIER") {
+	private Parser<Token, IdentifierToken> IDENTIFIER = new AbstractParser<Token, IdentifierToken>("IDENTIFIER") {
 		@Override
-		protected ParsingResult<Token, Identifier> executeDelegate(ConsList<Token> tokens) {
+		protected ParsingResult<Token, IdentifierToken> executeDelegate(ConsList<Token> tokens) {
 			Token head = tokens.head();
-			if(! (head instanceof Identifier)) {
-				return new ParseError<Token, Identifier>("Not an identifier", tokens);
+			if(! (head instanceof IdentifierToken)) {
+				return new ParseError<Token, IdentifierToken>("Not an identifier", tokens);
 			}
-			return success((Identifier) head, tokens.tail());
+			return success((IdentifierToken) head, tokens.tail());
 		}
 	};
 	
 //	private Parser<ILanToken, >
 		
-	private Parser<Token, List<Identifier>> IDENTIFIERS = zeroOrMore("IDENTIFIERS", IDENTIFIER);
+	private Parser<Token, List<IdentifierToken>> IDENTIFIERS = zeroOrMore("IDENTIFIERS", IDENTIFIER);
 	
 	private Parser<Token, Application> APPLICATION = thenParserCons1("APPLICATION", IDENTIFIERS, SEMI_COLUMN, Application.class);
 

@@ -1,9 +1,9 @@
 package org.sodeja.ilan.lexer;
 
-public class Identifier implements Token {
+public class IdentifierToken implements Token {
 	public final String name;
 
-	public Identifier(String name) {
+	public IdentifierToken(String name) {
 		this.name = name;
 	}
 

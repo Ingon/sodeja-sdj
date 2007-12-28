@@ -74,8 +74,8 @@ public class ILanLexer implements GeneratorFunction<Token> {
 		return null;
 	}
 	
-	private Serparator readSeparator(Character ch) {
-		for(Serparator sep : Serparator.values()) {
+	private SerparatorToken readSeparator(Character ch) {
+		for(SerparatorToken sep : SerparatorToken.values()) {
 			if(sep.getCh() == ch) {
 				return sep;
 			}
@@ -83,7 +83,7 @@ public class ILanLexer implements GeneratorFunction<Token> {
 		return null;
 	}
 	
-	private Number readNumber(Character initial) {
+	private NumberToken readNumber(Character initial) {
 		// TODO does not performs proper check
 		if(! Character.isDigit(initial)) {
 			return null;
@@ -99,10 +99,10 @@ public class ILanLexer implements GeneratorFunction<Token> {
 		
 		unreadChar(ch);
 		
-		return new Number(new Integer(sb.toString()));
+		return new NumberToken(new Integer(sb.toString()));
 	}
 	
-	private Identifier readIdentifier(Character initial) {
+	private IdentifierToken readIdentifier(Character initial) {
 		if(! isIdentifierStart(initial)) {
 			return null;
 		}
@@ -117,7 +117,7 @@ public class ILanLexer implements GeneratorFunction<Token> {
 		
 		unreadChar(ch);
 		
-		return new Identifier(sb.toString());
+		return new IdentifierToken(sb.toString());
 	}
 	
 	private static boolean isIdentifierStart(char ch) {
