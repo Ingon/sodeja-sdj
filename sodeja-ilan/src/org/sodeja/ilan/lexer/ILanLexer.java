@@ -14,17 +14,17 @@ import org.sodeja.functional.Maybe;
 import org.sodeja.generator.Generator;
 import org.sodeja.generator.GeneratorFunction;
 
-public class ILanLexer implements GeneratorFunction<ILanToken> {
-	public static Generator<ILanToken> tokenize(String str) {
+public class ILanLexer implements GeneratorFunction<Token> {
+	public static Generator<Token> tokenize(String str) {
 		return tokenize(new StringReader(str));
 	}
 	
-	public static Generator<ILanToken> tokenize(InputStream is) {
+	public static Generator<Token> tokenize(InputStream is) {
 		return tokenize(new InputStreamReader(is));
 	}
 	
-	public static Generator<ILanToken> tokenize(Reader reader) {
-		return new Generator<ILanToken>(new ILanLexer(reader));
+	public static Generator<Token> tokenize(Reader reader) {
+		return new Generator<Token>(new ILanLexer(reader));
 	}
 
 	private PushbackReader reader;
@@ -34,7 +34,7 @@ public class ILanLexer implements GeneratorFunction<ILanToken> {
 	}
 
 	@Override
-	public Maybe<ILanToken> execute() {
+	public Maybe<Token> execute() {
 		Character ch = readChar();
 		if(ch == null) {
 			return nothing();
@@ -47,7 +47,7 @@ public class ILanLexer implements GeneratorFunction<ILanToken> {
 			}
 		}
 		
-		ILanToken result = readSeparator(ch);
+		Token result = readSeparator(ch);
 		if(result != null) {
 			return just(result);
 		}
@@ -74,8 +74,8 @@ public class ILanLexer implements GeneratorFunction<ILanToken> {
 		return null;
 	}
 	
-	private ILanSerparator readSeparator(Character ch) {
-		for(ILanSerparator sep : ILanSerparator.values()) {
+	private Serparator readSeparator(Character ch) {
+		for(Serparator sep : Serparator.values()) {
 			if(sep.getCh() == ch) {
 				return sep;
 			}
@@ -83,7 +83,7 @@ public class ILanLexer implements GeneratorFunction<ILanToken> {
 		return null;
 	}
 	
-	private ILanNumber readNumber(Character initial) {
+	private Number readNumber(Character initial) {
 		// TODO does not performs proper check
 		if(! Character.isDigit(initial)) {
 			return null;
@@ -99,10 +99,10 @@ public class ILanLexer implements GeneratorFunction<ILanToken> {
 		
 		unreadChar(ch);
 		
-		return new ILanNumber(new Integer(sb.toString()));
+		return new Number(new Integer(sb.toString()));
 	}
 	
-	private ILanIdentifier readIdentifier(Character initial) {
+	private Identifier readIdentifier(Character initial) {
 		if(! isIdentifierStart(initial)) {
 			return null;
 		}
@@ -117,7 +117,7 @@ public class ILanLexer implements GeneratorFunction<ILanToken> {
 		
 		unreadChar(ch);
 		
-		return new ILanIdentifier(sb.toString());
+		return new Identifier(sb.toString());
 	}
 	
 	private static boolean isIdentifierStart(char ch) {

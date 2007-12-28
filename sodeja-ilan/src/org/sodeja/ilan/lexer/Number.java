@@ -1,9 +1,9 @@
 package org.sodeja.ilan.lexer;
 
-public class ILanNumber implements ILanToken {
+public class Number implements Token {
 	public final Integer value;
 	
-	public ILanNumber(Integer value) {
+	public Number(Integer value) {
 		this.value = value;
 	}
 
