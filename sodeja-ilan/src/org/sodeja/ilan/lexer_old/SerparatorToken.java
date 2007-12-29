@@ -1,4 +1,4 @@
-package org.sodeja.ilan.lexer;
+package org.sodeja.ilan.lexer_old;
 
 public enum SerparatorToken implements Token {
 	LBRACE('('),

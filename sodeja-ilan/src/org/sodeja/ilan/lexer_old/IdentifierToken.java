@@ -1,4 +1,4 @@
-package org.sodeja.ilan.lexer;
+package org.sodeja.ilan.lexer_old;
 
 public class IdentifierToken implements Token {
 	public final String name;
