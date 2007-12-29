@@ -1,5 +1,7 @@
 package org.sodeja.ilan.parser;
 
-public interface Expression {
+import org.sodeja.ilan.runtime.ILFrame;
 
+public interface Expression {
+	Object eval(ILFrame frame);
 }

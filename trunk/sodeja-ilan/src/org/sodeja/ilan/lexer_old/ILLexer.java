@@ -1,4 +1,4 @@
-package org.sodeja.ilan.lexer;
+package org.sodeja.ilan.lexer_old;
 
 import static org.sodeja.functional.Maybe.just;
 import static org.sodeja.functional.Maybe.nothing;
