@@ -6,4 +6,9 @@ public class ILInteger extends ILNumber {
 	public ILInteger(Integer value) {
 		this.value = value;
 	}
+
+	@Override
+	public String toString() {
+		return value.toString();
+	}
 }
