@@ -5,7 +5,7 @@ import java.util.List;
 import org.sodeja.ilan.ildk.ILLambda;
 import org.sodeja.ilan.ildk.ILObject;
 import org.sodeja.ilan.ildk.ILSymbol;
-import org.sodeja.ilan.runtime.IContext;
+import org.sodeja.ilan.runtime.Context;
 
 public class LambdaExpression implements Expression {
 	
@@ -18,7 +18,7 @@ public class LambdaExpression implements Expression {
 	}
 
 	@Override
-	public ILObject eval(IContext context) {
+	public ILObject eval(Context context) {
 		return new ILLambda(context, params, body);
 	}
 
