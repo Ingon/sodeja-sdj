@@ -9,4 +9,5 @@ public interface Context {
 
 	public void def(ILSymbol symbol, ILObject value);
 
+	public Process getProcess();
 }

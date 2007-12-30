@@ -31,4 +31,9 @@ public class ChildContext implements Context {
 		}
 		values.put(symbol, value);
 	}
+
+	@Override
+	public Process getProcess() {
+		return parent.getProcess();
+	}
 }
