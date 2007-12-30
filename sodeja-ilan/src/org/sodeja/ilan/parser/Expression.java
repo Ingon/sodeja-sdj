@@ -1,5 +1,8 @@
 package org.sodeja.ilan.parser;
 
-public interface Expression {
+import org.sodeja.ilan.ildk.ILObject;
+import org.sodeja.ilan.runtime.Context;
 
+public interface Expression {
+	public ILObject eval(Context context);
 }
