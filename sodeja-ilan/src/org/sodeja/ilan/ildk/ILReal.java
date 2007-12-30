@@ -1,5 +1,5 @@
 package org.sodeja.ilan.ildk;
 
-public class ILReal implements ILNumber {
+public class ILReal extends ILNumber {
 
 }
