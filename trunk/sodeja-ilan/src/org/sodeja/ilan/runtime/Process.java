@@ -36,4 +36,9 @@ public class Process implements Context {
 		}
 		values.put(symbol, value);
 	}
+
+	@Override
+	public Process getProcess() {
+		return this;
+	}
 }
