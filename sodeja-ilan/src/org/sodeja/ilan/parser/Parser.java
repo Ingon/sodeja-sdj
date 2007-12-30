@@ -25,11 +25,11 @@ public class Parser {
 		return ListUtils.map(datums, new Function1<Expression, Datum>() {
 			@Override
 			public Expression execute(Datum p) {
-				return parse(p);
+				return parseDatum(p);
 			}});
 	}
 
-	private static Expression parse(Datum datum) {
+	private static Expression parseDatum(Datum datum) {
 		if(datum instanceof LexemeDatum) {
 			return parseLexeme((LexemeDatum<?>) datum);
 		}
@@ -105,7 +105,7 @@ public class Parser {
 			throw new IllegalArgumentException("Wrong def expression");
 		}
 		
-		return new DefExpression(makeSymbol((IdentifierDatum) datum.get(1)), parse(datum.get(2)));
+		return new DefExpression(makeSymbol((IdentifierDatum) datum.get(1)), parseDatum(datum.get(2)));
 	}
 
 	private static Expression parseLambda(ListDatum datum) {
@@ -134,7 +134,7 @@ public class Parser {
 	}
 	
 	private static Expression parseApply(ListDatum datum) {
-		throw new UnsupportedOperationException();
+		return new ApplyExpression(parse(datum));
 	}
 	
 	private static ILSymbol makeSymbol(IdentifierDatum datum) {

@@ -16,7 +16,20 @@ public class ILLambda extends ILObject {
 		this.expressions = expressions;
 	}
 	
-	public Object apply() {
-		throw new UnsupportedOperationException();
+	public ILObject apply(List<ILObject> arguments) {
+		Context newContext = new Context(context);
+		if(params.size() != arguments.size()) {
+			throw new IllegalArgumentException("Wrong number of arguments");
+		}
+		
+		for(int i = 0, n = params.size();i < n;i++) {
+			newContext.def(params.get(i), arguments.get(i));
+		}
+		
+		ILObject result = null;
+		for(Expression expr : expressions) {
+			result = expr.eval(newContext);
+		}
+		return result;
 	}
 }
