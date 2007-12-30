@@ -7,4 +7,8 @@ public class ILBoolean extends ILObject {
 	public ILBoolean(Boolean value) {
 		this.value = value;
 	}
+
+	public boolean isTrue() {
+		return value;
+	}
 }
