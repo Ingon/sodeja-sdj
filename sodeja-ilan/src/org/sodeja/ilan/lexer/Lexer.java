@@ -48,6 +48,14 @@ public class Lexer {
 			}
 		}
 		
+		if(ch == ';') {
+			ch = readComment(pr);
+		}
+		
+		if(ch == '\'' || ch == '`' || ch == ',') {
+			return readAbbrevation(pr, ch);
+		}
+		
 		if(isIdentifierStart(ch)) {
 			return readIdentifier(pr, ch);
 		}
@@ -62,10 +70,6 @@ public class Lexer {
 		
 		if(ch == '(' || ch == '[') {
 			return readList(pr, ch);
-		}
-		
-		if(ch == '\'' || ch == '`' || ch == ',') {
-			return readAbbrevation(pr, ch);
 		}
 		
 		if(ch == '#') {
@@ -223,27 +227,32 @@ public class Lexer {
 		}
 		
 		if(ch == ';') {
-			while((ch = read(pr)) != null) {
-				if(ch == '\n') {
-					break;
-				}
-				
-				if(ch == '\r') {
-					Character next = read(pr);
-					if(next == '\n') {
-						break;
-					}
-					unread(pr, next);
-					break;
-				}
-			}
-			
-			return readWhiteSpaces(pr);
+			return readComment(pr);
 		}
 		
 		return ch;
 	}
 
+	private static Character readComment(PushbackReader pr) throws IOException {
+		Character ch = null;
+		while((ch = read(pr)) != null) {
+			if(ch == '\n') {
+				break;
+			}
+			
+			if(ch == '\r') {
+				Character next = read(pr);
+				if(next == '\n') {
+					break;
+				}
+				unread(pr, next);
+				break;
+			}
+		}
+		
+		return readWhiteSpaces(pr);
+	}
+	
 	private static Character read(PushbackReader reader) throws IOException {
 		int value = reader.read();
 		if(value == -1) {
