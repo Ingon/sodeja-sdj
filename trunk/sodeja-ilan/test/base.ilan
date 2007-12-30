@@ -1,0 +1,12 @@
+test
+#\4
+#t
+"str"
+3
+(a b c)
+[d e f]
+#(g h j)
+;#vu8(5 3 23)
+
+([a v] [c d] [d e])
+([(a v) s] a (e v) d)
