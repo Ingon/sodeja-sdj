@@ -6,7 +6,7 @@ import org.sodeja.collections.ListUtils;
 import org.sodeja.functional.Function1;
 import org.sodeja.ilan.ildk.ILLambda;
 import org.sodeja.ilan.ildk.ILObject;
-import org.sodeja.ilan.runtime.IContext;
+import org.sodeja.ilan.runtime.Context;
 
 public class ApplyExpression implements Expression {
 
@@ -17,7 +17,7 @@ public class ApplyExpression implements Expression {
 	}
 
 	@Override
-	public ILObject eval(final IContext context) {
+	public ILObject eval(final Context context) {
 		Expression expr = expressions.get(0);
 		ILObject obj = expr.eval(context);
 		if(! (obj instanceof ILLambda)) {

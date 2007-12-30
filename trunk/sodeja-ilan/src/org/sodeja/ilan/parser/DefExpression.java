@@ -2,7 +2,7 @@ package org.sodeja.ilan.parser;
 
 import org.sodeja.ilan.ildk.ILObject;
 import org.sodeja.ilan.ildk.ILSymbol;
-import org.sodeja.ilan.runtime.IContext;
+import org.sodeja.ilan.runtime.Context;
 
 public class DefExpression implements Expression {
 	public final ILSymbol name;
@@ -14,7 +14,7 @@ public class DefExpression implements Expression {
 	}
 
 	@Override
-	public ILObject eval(IContext context) {
+	public ILObject eval(Context context) {
 		context.def(name, value.eval(context));
 		return name;
 	}

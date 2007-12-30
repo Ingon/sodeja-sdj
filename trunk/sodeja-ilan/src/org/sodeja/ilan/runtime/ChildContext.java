@@ -6,17 +6,16 @@ import java.util.Map;
 import org.sodeja.ilan.ildk.ILObject;
 import org.sodeja.ilan.ildk.ILSymbol;
 
-public class IContext {
+public class ChildContext implements Context {
 	
-	private Process process;
-	private IContext parent;
+	private Context parent;
 	private Map<ILSymbol, ILObject> values;
 	
-	public IContext() {
+	public ChildContext() {
 		this.values = new HashMap<ILSymbol, ILObject>();
 	}
 
-	public IContext(IContext parent) {
+	public ChildContext(Context parent) {
 		this.values = new HashMap<ILSymbol, ILObject>();
 		this.parent = parent;
 	}
