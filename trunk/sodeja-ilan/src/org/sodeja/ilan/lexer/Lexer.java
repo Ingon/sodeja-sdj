@@ -99,19 +99,21 @@ public class Lexer {
 				return new CharacterDatum(ch);
 			}
 			
-			if(ch == '(') {
-				VectorDatum datum = new VectorDatum();
-				readDatums(pr, datum);
-				
-				Character end = read(pr);
-				if(ch == '(' && end != ')') {
-					throw new RuntimeException("Illeagal lexical structure start with " + ch + " but ends with " + end);
-				} else if(ch == '[' && end != ']') {
-					throw new RuntimeException("Illeagal lexical structure start with " + ch + " but ends with " + end);
-				}
-				
-				return datum;
-			}
+//			if(ch == '(') {
+//				VectorDatum datum = new VectorDatum();
+//				readDatums(pr, datum);
+//				
+//				Character end = read(pr);
+//				if(ch == '(' && end != ')') {
+//					throw new RuntimeException("Illeagal lexical structure start with " + ch + " but ends with " + end);
+//				} else if(ch == '[' && end != ']') {
+//					throw new RuntimeException("Illeagal lexical structure start with " + ch + " but ends with " + end);
+//				}
+//				
+//				return datum;
+//			}
+			
+			throw new UnsupportedOperationException("Not supported");
 		}
 		
 		unread(pr, ch);

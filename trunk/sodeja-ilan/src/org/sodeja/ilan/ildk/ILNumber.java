@@ -1,5 +1,5 @@
 package org.sodeja.ilan.ildk;
 
-public interface ILNumber {
+public class ILNumber extends ILObject {
 
 }
