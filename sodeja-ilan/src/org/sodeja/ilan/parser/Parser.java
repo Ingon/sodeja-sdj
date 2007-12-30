@@ -92,6 +92,8 @@ public class Parser {
 			return parseDef(datum);
 		} else if(value.equals("\\")) {
 			return parseLambda(datum);
+		} else if(value.equals("if")) {
+			return parseIf(datum);
 		}
 		
 		return parseApply(datum);
@@ -99,10 +101,10 @@ public class Parser {
 
 	private static Expression parseDef(ListDatum datum) {
 		if(datum.size() > 3) {
-			throw new IllegalArgumentException("Wrong def expression");
+			throw new RuntimeException("Wrong def expression");
 		}
 		if(! (datum.get(1) instanceof IdentifierDatum)) {
-			throw new IllegalArgumentException("Wrong def expression");
+			throw new RuntimeException("Wrong def expression");
 		}
 		
 		return new DefExpression(makeSymbol((IdentifierDatum) datum.get(1)), parseDatum(datum.get(2)));
@@ -110,18 +112,18 @@ public class Parser {
 
 	private static Expression parseLambda(ListDatum datum) {
 		if(datum.size() < 3) {
-			throw new IllegalArgumentException("Wrong lambda expression");
+			throw new RuntimeException("Wrong lambda expression");
 		}
 		
 		if(! (datum.get(1) instanceof ListDatum)) {
-			throw new IllegalArgumentException("Wrong lambda expression - should have parameters list");
+			throw new RuntimeException("Wrong lambda expression - should have parameters list");
 		}
 		
 		List<ILSymbol> params = ListUtils.map((ListDatum) datum.get(1), new Function1<ILSymbol, Datum>() {
 			@Override
 			public ILSymbol execute(Datum p) {
 				if(! (p instanceof IdentifierDatum)) {
-					throw new IllegalArgumentException("Wrong lambda expression - parameters are olny identifiers");
+					throw new RuntimeException("Wrong lambda expression - parameters are olny identifiers");
 				}
 				
 				return makeSymbol((IdentifierDatum) p);
@@ -131,6 +133,15 @@ public class Parser {
 		List<Expression> body = parse(bodyDatum);
 		
 		return new LambdaExpression(params, body);
+	}
+	
+	private static Expression parseIf(ListDatum datum) {
+		if(datum.size() != 4) {
+			throw new RuntimeException("Wrong if clause");
+		}
+		
+		List<Expression> subexpr = parse(ListUtils.tail(datum));
+		return new IfExpression(subexpr.get(0), subexpr.get(1), subexpr.get(2));
 	}
 	
 	private static Expression parseApply(ListDatum datum) {
