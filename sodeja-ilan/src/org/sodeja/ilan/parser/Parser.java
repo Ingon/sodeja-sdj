@@ -1,25 +1,32 @@
 package org.sodeja.ilan.parser;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.sodeja.collections.ListUtils;
+import org.sodeja.functional.Function1;
+import org.sodeja.ilan.ildk.ILBoolean;
+import org.sodeja.ilan.ildk.ILCharacter;
 import org.sodeja.ilan.ildk.ILInteger;
 import org.sodeja.ilan.ildk.ILNumber;
+import org.sodeja.ilan.ildk.ILString;
 import org.sodeja.ilan.ildk.ILSymbol;
+import org.sodeja.ilan.lexer.BooleanDatum;
+import org.sodeja.ilan.lexer.CharacterDatum;
 import org.sodeja.ilan.lexer.CompoundDatum;
 import org.sodeja.ilan.lexer.Datum;
 import org.sodeja.ilan.lexer.IdentifierDatum;
 import org.sodeja.ilan.lexer.LexemeDatum;
 import org.sodeja.ilan.lexer.ListDatum;
 import org.sodeja.ilan.lexer.NumberDatum;
+import org.sodeja.ilan.lexer.StringDatum;
 
 public class Parser {
 	public static List<Expression> parse(List<Datum> datums) {
-		List<Expression> result = new ArrayList<Expression>();
-		for(Datum datum : datums) {
-			result.add(parse(datum));
-		}
-		return result;
+		return ListUtils.map(datums, new Function1<Expression, Datum>() {
+			@Override
+			public Expression execute(Datum p) {
+				return parse(p);
+			}});
 	}
 
 	private static Expression parse(Datum datum) {
@@ -34,7 +41,7 @@ public class Parser {
 		if(datum instanceof IdentifierDatum) {
 			return new VariableExpression(makeSymbol(((IdentifierDatum) datum)));
 		} else if(datum instanceof NumberDatum) {
-			Number num = ((NumberDatum) datum).value;
+			Number num = (Number) datum.value;
 			ILNumber ilnum = null;
 			if(num instanceof Integer) {
 				ilnum = new ILInteger((Integer) num);
@@ -43,6 +50,15 @@ public class Parser {
 			}
 			
 			return new ValueExpression(ilnum);
+		} else if(datum instanceof BooleanDatum) {
+			Boolean value = (Boolean) datum.value;
+			return new ValueExpression(new ILBoolean(value));
+		} else if(datum instanceof CharacterDatum) {
+			Character value = (Character) datum.value;
+			return new ValueExpression(new ILCharacter(value));
+		} else if(datum instanceof StringDatum) {
+			String value = (String) datum.value;
+			return new ValueExpression(new ILString(value));
 		}
 		
 		throw new UnsupportedOperationException();
@@ -71,8 +87,11 @@ public class Parser {
 
 	private static Expression parseForm(ListDatum datum) {
 		IdentifierDatum name = (IdentifierDatum) datum.get(0);
-		if(name.value.equals("def")) {
+		String value = name.value;
+		if(value.equals("def")) {
 			return parseDef(datum);
+		} else if(value.equals("\\")) {
+			return parseLambda(datum);
 		}
 		
 		return parseApply(datum);
@@ -89,6 +108,31 @@ public class Parser {
 		return new DefExpression(makeSymbol((IdentifierDatum) datum.get(1)), parse(datum.get(2)));
 	}
 
+	private static Expression parseLambda(ListDatum datum) {
+		if(datum.size() < 3) {
+			throw new IllegalArgumentException("Wrong lambda expression");
+		}
+		
+		if(! (datum.get(1) instanceof ListDatum)) {
+			throw new IllegalArgumentException("Wrong lambda expression - should have parameters list");
+		}
+		
+		List<ILSymbol> params = ListUtils.map((ListDatum) datum.get(1), new Function1<ILSymbol, Datum>() {
+			@Override
+			public ILSymbol execute(Datum p) {
+				if(! (p instanceof IdentifierDatum)) {
+					throw new IllegalArgumentException("Wrong lambda expression - parameters are olny identifiers");
+				}
+				
+				return makeSymbol((IdentifierDatum) p);
+			}});
+		
+		List<Datum> bodyDatum = datum.subList(2, datum.size());
+		List<Expression> body = parse(bodyDatum);
+		
+		return new LambdaExpression(params, body);
+	}
+	
 	private static Expression parseApply(ListDatum datum) {
 		throw new UnsupportedOperationException();
 	}
