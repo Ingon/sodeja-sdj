@@ -4,10 +4,10 @@ import org.sodeja.ilan.ildk.ILObject;
 import org.sodeja.ilan.parser.Expression;
 
 public class Process {
-	private Context context;
+	private IContext context;
 
 	public Process() {
-		context = new Context();
+		context = new IContext();
 	}
 	
 	public ILObject eval(Expression expression) {

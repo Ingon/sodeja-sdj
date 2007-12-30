@@ -2,7 +2,7 @@ package org.sodeja.ilan.parser;
 
 import org.sodeja.ilan.ildk.ILObject;
 import org.sodeja.ilan.ildk.ILSymbol;
-import org.sodeja.ilan.runtime.Context;
+import org.sodeja.ilan.runtime.IContext;
 
 public class VariableExpression implements Expression {
 	public final ILSymbol symbol;
@@ -12,7 +12,7 @@ public class VariableExpression implements Expression {
 	}
 
 	@Override
-	public ILObject eval(Context context) {
+	public ILObject eval(IContext context) {
 		return context.get(symbol);
 	}
 

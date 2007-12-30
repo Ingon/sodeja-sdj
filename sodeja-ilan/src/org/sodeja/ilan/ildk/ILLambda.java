@@ -3,21 +3,21 @@ package org.sodeja.ilan.ildk;
 import java.util.List;
 
 import org.sodeja.ilan.parser.Expression;
-import org.sodeja.ilan.runtime.Context;
+import org.sodeja.ilan.runtime.IContext;
 
 public class ILLambda extends ILObject {
-	public final Context context;
+	public final IContext context;
 	public final List<ILSymbol> params;
 	public final List<Expression> expressions;
 	
-	public ILLambda(Context context, List<ILSymbol> params, List<Expression> expressions) {
+	public ILLambda(IContext context, List<ILSymbol> params, List<Expression> expressions) {
 		this.context = context;
 		this.params = params;
 		this.expressions = expressions;
 	}
 	
 	public ILObject apply(List<ILObject> arguments) {
-		Context newContext = new Context(context);
+		IContext newContext = new IContext(context);
 		if(params.size() != arguments.size()) {
 			throw new IllegalArgumentException("Wrong number of arguments");
 		}
