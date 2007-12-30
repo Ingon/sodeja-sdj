@@ -11,10 +11,6 @@ public class ChildContext implements Context {
 	private Context parent;
 	private Map<ILSymbol, ILObject> values;
 	
-	public ChildContext() {
-		this.values = new HashMap<ILSymbol, ILObject>();
-	}
-
 	public ChildContext(Context parent) {
 		this.values = new HashMap<ILSymbol, ILObject>();
 		this.parent = parent;
@@ -23,10 +19,7 @@ public class ChildContext implements Context {
 	public ILObject get(ILSymbol symbol) {
 		ILObject object = values.get(symbol);
 		if(object == null) {
-			if(parent != null) {
-				return parent.get(symbol);
-			}
-			throw new RuntimeException("Unknown value: " + symbol);
+			return parent.get(symbol);
 		}
 		return object;
 	}
