@@ -9,7 +9,7 @@ import org.sodeja.ilan.lexer.Lexer;
 
 public class ILan {
 	public static void main(String[] args) throws IOException {
-		List<Datum> datums = Lexer.tokenize(new FileReader("test/base.ilan"));
+		List<Datum> datums = Lexer.tokenize(new FileReader("test/lexer.ilan"));
 		System.out.println("Datums: " + datums);
 		
 //		Generator<Token> tokens = ILLexer.tokenize("4 + 3;");
