@@ -11,4 +11,9 @@ public class ILBoolean extends ILObject {
 	public boolean isTrue() {
 		return value;
 	}
+
+	@Override
+	protected ILSymbol getILClassName() {
+		return new ILSymbol("ILBoolean");
+	}
 }

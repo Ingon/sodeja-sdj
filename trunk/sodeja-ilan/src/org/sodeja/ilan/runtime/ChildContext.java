@@ -8,8 +8,8 @@ import org.sodeja.ilan.ildk.ILSymbol;
 
 public class ChildContext implements Context {
 	
-	private Context parent;
-	private Map<ILSymbol, ILObject> values;
+	protected Context parent;
+	protected Map<ILSymbol, ILObject> values;
 	
 	public ChildContext(Context parent) {
 		this.values = new HashMap<ILSymbol, ILObject>();

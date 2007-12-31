@@ -154,7 +154,12 @@ public class Lexer {
 			sb.append(ch);
 		}
 		
-		return new NumberDatum(Integer.parseInt(sb.toString()));
+		String val = sb.toString();
+		if(val.contains(".")) {
+			return new NumberDatum(Double.parseDouble(val));
+		}
+		
+		return new NumberDatum(Long.parseLong(sb.toString()));
 	}
 
 	private static Datum readString(PushbackReader pr, Character initial) throws IOException {
