@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.sodeja.collections.ListUtils;
 import org.sodeja.functional.Function1;
-import org.sodeja.functional.Predicate1;
 import org.sodeja.ilan.ildk.ILBoolean;
 import org.sodeja.ilan.ildk.ILCharacter;
 import org.sodeja.ilan.ildk.ILInteger;
@@ -100,8 +99,6 @@ public class Parser {
 			return parseDefun(datum);
 		} else if(value.equals("if")) {
 			return parseIf(datum);
-		} else if(value.equals("defclass")) {
-			return parseClass(datum);
 		}
 		
 		return parseApply(datum);
@@ -166,78 +163,6 @@ public class Parser {
 		
 		List<Expression> subexpr = parse(ListUtils.tail(datum));
 		return new IfExpression(subexpr.get(0), subexpr.get(1), subexpr.get(2));
-	}
-	
-	private static Expression parseClass(ListDatum datum) {
-		if(datum.size() != 4) {
-			throw new RuntimeException("Wrong class expression");
-		}
-		
-		if(! (datum.get(1) instanceof IdentifierDatum)) {
-			throw new RuntimeException("Wrong class expression - first should be identifier");
-		}
-		
-		ILSymbol className = getSymbol(datum.get(1));
-
-		if(! (datum.get(2) instanceof ListDatum)) {
-			throw new RuntimeException("Wrong class expression");
-		}
-		
-		if(((ListDatum) datum.get(2)).size() != 0) {
-			throw new RuntimeException("Hierarchy not supported");
-		}
-		
-		if(! (datum.get(3) instanceof ListDatum)) {
-			throw new RuntimeException("Wrong class expression");
-		}
-		ListDatum body = (ListDatum) datum.get(3);
-		
-		List<Expression> news = ListUtils.map(ListUtils.filter(body, new FilterList("defnew")), 
-				new Function1<Expression, Datum>() {
-					@Override
-					public Expression execute(Datum p) {
-						return parseNew((ListDatum) p);
-					}});
-
-		List<Expression> methods = ListUtils.map(ListUtils.filter(body, new FilterList("defmethod")), 
-				new Function1<Expression, Datum>() {
-					@Override
-					public Expression execute(Datum p) {
-						return parseMethod((ListDatum) p);
-					}});
-		
-		return new DefclassExpression(className, null, news, methods);
-	}
-	
-	private static class FilterList implements Predicate1<Datum> {
-		
-		private final String what;
-		
-		public FilterList(String what) {
-			this.what = what;
-		}
-
-		@Override
-		public Boolean execute(Datum p) {
-			if(! (p instanceof ListDatum)) {
-				throw new RuntimeException("Should be lists only");
-			}
-			
-			Datum fst = ((ListDatum)p).get(0);
-			if(! (fst instanceof IdentifierDatum)) {
-				throw new RuntimeException();
-			}
-			
-			return (((IdentifierDatum) fst).value.equals(what));
-		}
-	}
-	
-	private static Expression parseNew(ListDatum datum) {
-		return parseLambda(datum);
-	}
-	
-	private static Expression parseMethod(ListDatum datum) {
-		return parseDefun(datum);
 	}
 	
 	private static Expression parseApply(ListDatum datum) {
