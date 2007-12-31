@@ -1,11 +1,13 @@
-;3
-(def a 6)
-a
+3
+;(def a 6)
+;a
+;(defun z () 3)
 ;(def z (\ () 3))
 ;z
 ;(z)
-;(def t (\ (a b) a b))
+;(defun t (a b) a b)
 ;(t 3 5)
-;(def r (\ () (t 4 6)))
+;(defun r () (t 4 6))
 ;(r)
-(a.+ 5)
+;(+ a 5.4)
+
