@@ -7,4 +7,9 @@ public class ILString extends ILObject {
 	public ILString(String value) {
 		this.value = value;
 	}
+
+	@Override
+	protected ILSymbol getILClassName() {
+		return new ILSymbol("ILString");
+	}
 }

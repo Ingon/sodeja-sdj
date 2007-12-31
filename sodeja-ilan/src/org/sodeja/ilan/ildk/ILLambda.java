@@ -3,8 +3,8 @@ package org.sodeja.ilan.ildk;
 import java.util.List;
 
 import org.sodeja.ilan.parser.Expression;
-import org.sodeja.ilan.runtime.Context;
 import org.sodeja.ilan.runtime.ChildContext;
+import org.sodeja.ilan.runtime.Context;
 
 public class ILLambda extends ILObject {
 	public final Context context;
@@ -32,5 +32,10 @@ public class ILLambda extends ILObject {
 			result = expr.eval(newContext);
 		}
 		return result;
+	}
+
+	@Override
+	protected ILSymbol getILClassName() {
+		return new ILSymbol("ILLambda");
 	}
 }

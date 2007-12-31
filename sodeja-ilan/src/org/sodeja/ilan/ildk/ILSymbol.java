@@ -25,4 +25,9 @@ public class ILSymbol extends ILObject {
 	public String toString() {
 		return value;
 	}
+
+	@Override
+	protected ILSymbol getILClassName() {
+		return new ILSymbol("ILSymbol");
+	}
 }

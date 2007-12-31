@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.sodeja.collections.ListUtils;
 import org.sodeja.functional.Function1;
+import org.sodeja.functional.Predicate1;
 import org.sodeja.ilan.ildk.ILBoolean;
 import org.sodeja.ilan.ildk.ILCharacter;
 import org.sodeja.ilan.ildk.ILInteger;
 import org.sodeja.ilan.ildk.ILNumber;
+import org.sodeja.ilan.ildk.ILReal;
 import org.sodeja.ilan.ildk.ILString;
 import org.sodeja.ilan.ildk.ILSymbol;
 import org.sodeja.ilan.lexer.BooleanDatum;
@@ -39,12 +41,14 @@ public class Parser {
 
 	private static Expression parseLexeme(LexemeDatum<?> datum) {
 		if(datum instanceof IdentifierDatum) {
-			return new VariableExpression(makeSymbol(((IdentifierDatum) datum)));
+			return new VariableExpression(getSymbol(datum));
 		} else if(datum instanceof NumberDatum) {
 			Number num = (Number) datum.value;
 			ILNumber ilnum = null;
-			if(num instanceof Integer) {
-				ilnum = new ILInteger((Integer) num);
+			if(num instanceof Long) {
+				ilnum = new ILInteger((Long) num);
+			} else if(num instanceof Double) {
+				ilnum = new ILReal((Double) num);
 			} else {
 				throw new UnsupportedOperationException();
 			}
@@ -92,8 +96,12 @@ public class Parser {
 			return parseDef(datum);
 		} else if(value.equals("\\")) {
 			return parseLambda(datum);
+		} else if(value.equals("defun")) {
+			return parseDefun(datum);
 		} else if(value.equals("if")) {
 			return parseIf(datum);
+		} else if(value.equals("defclass")) {
+			return parseClass(datum);
 		}
 		
 		return parseApply(datum);
@@ -107,7 +115,7 @@ public class Parser {
 			throw new RuntimeException("Wrong def expression");
 		}
 		
-		return new DefExpression(makeSymbol((IdentifierDatum) datum.get(1)), parseDatum(datum.get(2)));
+		return new DefExpression(getSymbol(datum.get(1)), parseDatum(datum.get(2)));
 	}
 
 	private static Expression parseLambda(ListDatum datum) {
@@ -126,7 +134,7 @@ public class Parser {
 					throw new RuntimeException("Wrong lambda expression - parameters are olny identifiers");
 				}
 				
-				return makeSymbol((IdentifierDatum) p);
+				return getSymbol(p);
 			}});
 		
 		List<Datum> bodyDatum = datum.subList(2, datum.size());
@@ -135,6 +143,22 @@ public class Parser {
 		return new LambdaExpression(params, body);
 	}
 	
+	private static Expression parseDefun(ListDatum datum) {
+		if(datum.size() < 4) {
+			throw new RuntimeException("Wrong defun expression");
+		}
+		
+		if(! (datum.get(1) instanceof IdentifierDatum)) {
+			throw new RuntimeException("Wrong def expression");
+		}
+		
+		ListDatum rest = new ListDatum();
+		rest.addAll(datum);
+		rest.remove(0);
+		
+		return new DefExpression(getSymbol(datum.get(1)), parseLambda(rest));
+	}
+
 	private static Expression parseIf(ListDatum datum) {
 		if(datum.size() != 4) {
 			throw new RuntimeException("Wrong if clause");
@@ -144,8 +168,84 @@ public class Parser {
 		return new IfExpression(subexpr.get(0), subexpr.get(1), subexpr.get(2));
 	}
 	
+	private static Expression parseClass(ListDatum datum) {
+		if(datum.size() != 4) {
+			throw new RuntimeException("Wrong class expression");
+		}
+		
+		if(! (datum.get(1) instanceof IdentifierDatum)) {
+			throw new RuntimeException("Wrong class expression - first should be identifier");
+		}
+		
+		ILSymbol className = getSymbol(datum.get(1));
+
+		if(! (datum.get(2) instanceof ListDatum)) {
+			throw new RuntimeException("Wrong class expression");
+		}
+		
+		if(((ListDatum) datum.get(2)).size() != 0) {
+			throw new RuntimeException("Hierarchy not supported");
+		}
+		
+		if(! (datum.get(3) instanceof ListDatum)) {
+			throw new RuntimeException("Wrong class expression");
+		}
+		ListDatum body = (ListDatum) datum.get(3);
+		
+		List<Expression> news = ListUtils.map(ListUtils.filter(body, new FilterList("defnew")), 
+				new Function1<Expression, Datum>() {
+					@Override
+					public Expression execute(Datum p) {
+						return parseNew((ListDatum) p);
+					}});
+
+		List<Expression> methods = ListUtils.map(ListUtils.filter(body, new FilterList("defmethod")), 
+				new Function1<Expression, Datum>() {
+					@Override
+					public Expression execute(Datum p) {
+						return parseMethod((ListDatum) p);
+					}});
+		
+		return new DefclassExpression(className, null, news, methods);
+	}
+	
+	private static class FilterList implements Predicate1<Datum> {
+		
+		private final String what;
+		
+		public FilterList(String what) {
+			this.what = what;
+		}
+
+		@Override
+		public Boolean execute(Datum p) {
+			if(! (p instanceof ListDatum)) {
+				throw new RuntimeException("Should be lists only");
+			}
+			
+			Datum fst = ((ListDatum)p).get(0);
+			if(! (fst instanceof IdentifierDatum)) {
+				throw new RuntimeException();
+			}
+			
+			return (((IdentifierDatum) fst).value.equals(what));
+		}
+	}
+	
+	private static Expression parseNew(ListDatum datum) {
+		return parseLambda(datum);
+	}
+	
+	private static Expression parseMethod(ListDatum datum) {
+		return parseDefun(datum);
+	}
+	
 	private static Expression parseApply(ListDatum datum) {
 		return new ApplyExpression(parse(datum));
+	}
+	
+	private static ILSymbol getSymbol(Datum datum) {
+		return makeSymbol((IdentifierDatum) datum);
 	}
 	
 	private static ILSymbol makeSymbol(IdentifierDatum datum) {
