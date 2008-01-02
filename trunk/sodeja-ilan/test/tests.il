@@ -1,25 +1,25 @@
 class Pair {
-	Pair f s = {
+	def Pair f s = {
 		@f = f
 		@s = s
 	}
 
-	first = @f
+	def first = @f
 	
-	second = @s
+	def second = @s
 }
 
 class Rational {
-	Rational num den = {
+	def Rational num den = {
 		@num = num
 		@den = den
-		@+ other = {
+		def @+ other = {
 			tnum = (@num + other den) + (@den + other num)
 			tden = @den * other num
 		}
 	}
 	
-	* other = {
+	def * other = {
 		tnum = @num * other num
 		tden = @den * other den
 		Rational new tnum tden
@@ -31,7 +31,7 @@ s = Rational new 2 3
 f * s
 
 class Rational {
-	/ other = {
+	def / other = {
 		tnum = @num * other den
 		tden = @den * other num
 		Rational new tnum tden
@@ -40,13 +40,12 @@ class Rational {
 
 3 + 5
 
-+ a b = a + b
+def + a b = a + b
 
-* a b = a * b
+def * a b = a * b
 	
 + 6 8
 
 * 4 8
 
-;t = (1 to 10) map (\ m = m + 2)
 

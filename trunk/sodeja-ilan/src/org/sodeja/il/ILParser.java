@@ -7,11 +7,13 @@ import java.util.List;
 
 import org.sodeja.collections.ConsList;
 import org.sodeja.functional.Function1;
+import org.sodeja.functional.FunctionN;
 import org.sodeja.parsec.AbstractParser;
 import org.sodeja.parsec.ParseError;
 import org.sodeja.parsec.Parser;
 import org.sodeja.parsec.ParsingResult;
 import org.sodeja.parsec.combinator.DelegateParser;
+import org.sodeja.parsec.combinator.ThenParserN;
 import org.sodeja.parsec.semantic.AbstractSemanticParser;
 
 public class ILParser extends AbstractSemanticParser<String, Program> {
@@ -56,17 +58,26 @@ public class ILParser extends AbstractSemanticParser<String, Program> {
 	
 	private final Parser<String, ApplyExpression> APPLY = thenParserCons1("APPLY", APPLY_BODYS , EOL, ApplyExpression.class);
 	
+	private final Parser<String, SetExpression> SET = thenParser3Cons13("SET", IDENTIFIER, literal("="), APPLY, SetExpression.class);
+	
 	private final Parser<String, BlockExpression> BLOCK = thenParser3Cons2("BLOCK", literal("{"), EXPRESSIONS_DEL, literal("}"), BlockExpression.class);
 	
 	private final Parser<String, Expression> FUNCTION_BODY = oneOf1("FUNCTION_BODY", BLOCK, APPLY);
 	
-	private final Parser<String, FunctionExpression> FUNCTION = thenParser3Cons13("FUNCTION", IDENTIFIERS, literal("="), FUNCTION_BODY, FunctionExpression.class);
+	@SuppressWarnings("unchecked")
+	private final Parser<String, FunctionExpression> FUNCTION = new ThenParserN<String, FunctionExpression>("FUNCTION",
+			new FunctionN<FunctionExpression, Object>() {
+				@Override
+				public FunctionExpression execute(Object... obj) {
+					return new FunctionExpression((VariableExpression) obj[1], (List<VariableExpression>) obj[2], (Expression) obj[4]);
+				}}, 
+		literal("def"), IDENTIFIER, IDENTIFIERS, literal("="), FUNCTION_BODY);
 	
 	private final Parser<String, ClassExpression> CLASS = thenParser3Cons23("CLASS", literal("class"), IDENTIFIER, BLOCK, ClassExpression.class);
 
-	private final Parser<String, Expression> EXPRESSION = oneOf1("EXPRESSION", CLASS, BLOCK, FUNCTION, APPLY, EOL);
+	private final Parser<String, Expression> EXPRESSION = oneOf1("EXPRESSION", CLASS, BLOCK, FUNCTION, SET, APPLY, EOL);
 	
-	private final Parser<String, List<Expression>> EXPRESSIONS = zeroOrMore("EXPRESSIONS", EXPRESSION);
+	private final Parser<String, List<Expression>> EXPRESSIONS = oneOrMore("EXPRESSIONS", EXPRESSION);
 	
 	private final Parser<String, Program> PROGRAM = applyCons("PROGRAM", EXPRESSIONS, Program.class);
 	
