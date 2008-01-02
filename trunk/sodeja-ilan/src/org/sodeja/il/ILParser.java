@@ -18,6 +18,8 @@ import org.sodeja.parsec.semantic.AbstractSemanticParser;
 
 public class ILParser extends AbstractSemanticParser<String, Program> {
 
+	private final DelegateParser<String, Expression> EXPRESSION_DEL = new DelegateParser<String, Expression>("EXPRESSION_DEL");
+
 	private final DelegateParser<String, List<Expression>> EXPRESSIONS_DEL = new DelegateParser<String, List<Expression>>("EXPRESSIONS_DEL");
 	
 	private final Parser<String, VariableExpression> IDENTIFIER = new AbstractParser<String, VariableExpression>("IDENTIFIER") {
@@ -48,21 +50,23 @@ public class ILParser extends AbstractSemanticParser<String, Program> {
 	
 	private final Parser<String, List<VariableExpression>> IDENTIFIERS = zeroOrMore("IDENTIFIERS", IDENTIFIER);
 
+	private final Parser<String, BlockExpression> BLOCK = thenParser3Cons2("BLOCK", literal("{"), EXPRESSIONS_DEL, literal("}"), BlockExpression.class);
+	
+	private final Parser<String, Expression> FUNCTION_BODY = oneOf1("FUNCTION_BODY", BLOCK, EXPRESSION_DEL);
+	
+	private final Parser<String, LambdaExpression> LAMBDA = thenParser4Cons24("", literal("\\"), IDENTIFIERS, literal("="), FUNCTION_BODY, LambdaExpression.class);
+	
 	private final DelegateParser<String, List<Expression>> APPLY_BODYS_DEL = new DelegateParser<String, List<Expression>>("APPLY_BODY_DEL");
 	
 	private final Parser<String, PrecedenceExpression> PRECEDENSE = thenParser3Cons2("PRECEDENCE", literal("("), APPLY_BODYS_DEL, literal(")"), PrecedenceExpression.class);
 	
-	private final Parser<String, Expression> APPLY_BODY = alternative1("APPLY_BODY", PRECEDENSE, IDENTIFIER);
+	private final Parser<String, Expression> APPLY_BODY = oneOf1("APPLY_BODY", PRECEDENSE, IDENTIFIER, LAMBDA);
 
 	private final Parser<String, List<Expression>> APPLY_BODYS = oneOrMore("APPLY_BODYS", APPLY_BODY);
 	
 	private final Parser<String, ApplyExpression> APPLY = thenParserCons1("APPLY", APPLY_BODYS , EOL, ApplyExpression.class);
 	
 	private final Parser<String, SetExpression> SET = thenParser3Cons13("SET", IDENTIFIER, literal("="), APPLY, SetExpression.class);
-	
-	private final Parser<String, BlockExpression> BLOCK = thenParser3Cons2("BLOCK", literal("{"), EXPRESSIONS_DEL, literal("}"), BlockExpression.class);
-	
-	private final Parser<String, Expression> FUNCTION_BODY = oneOf1("FUNCTION_BODY", BLOCK, APPLY);
 	
 	@SuppressWarnings("unchecked")
 	private final Parser<String, FunctionExpression> FUNCTION = new ThenParserN<String, FunctionExpression>("FUNCTION",
@@ -73,15 +77,17 @@ public class ILParser extends AbstractSemanticParser<String, Program> {
 				}}, 
 		literal("def"), IDENTIFIER, IDENTIFIERS, literal("="), FUNCTION_BODY);
 	
+	
 	private final Parser<String, ClassExpression> CLASS = thenParser3Cons23("CLASS", literal("class"), IDENTIFIER, BLOCK, ClassExpression.class);
 
-	private final Parser<String, Expression> EXPRESSION = oneOf1("EXPRESSION", CLASS, BLOCK, FUNCTION, SET, APPLY, EOL);
+	private final Parser<String, Expression> EXPRESSION = oneOf1("EXPRESSION", CLASS, FUNCTION, SET, APPLY, EOL);
 	
 	private final Parser<String, List<Expression>> EXPRESSIONS = oneOrMore("EXPRESSIONS", EXPRESSION);
 	
 	private final Parser<String, Program> PROGRAM = applyCons("PROGRAM", EXPRESSIONS, Program.class);
 	
 	public ILParser() {
+		EXPRESSION_DEL.delegate = EXPRESSION;
 		EXPRESSIONS_DEL.delegate = EXPRESSIONS;
 		APPLY_BODYS_DEL.delegate = APPLY_BODYS;
 	}
