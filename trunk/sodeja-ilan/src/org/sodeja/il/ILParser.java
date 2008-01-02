@@ -6,6 +6,7 @@ import static org.sodeja.parsec.standart.StandartParsers.*;
 import java.util.List;
 
 import org.sodeja.collections.ConsList;
+import org.sodeja.functional.Function1;
 import org.sodeja.parsec.AbstractParser;
 import org.sodeja.parsec.ParseError;
 import org.sodeja.parsec.Parser;
@@ -17,25 +18,43 @@ public class ILParser extends AbstractSemanticParser<String, Program> {
 
 	private final DelegateParser<String, List<Expression>> EXPRESSIONS_DEL = new DelegateParser<String, List<Expression>>("EXPRESSIONS_DEL");
 	
-	private final Parser<String, String> IDENTIFIER = new AbstractParser<String, String>("IDENTIFIER") {
+	private final Parser<String, VariableExpression> IDENTIFIER = new AbstractParser<String, VariableExpression>("IDENTIFIER") {
 		@Override
-		protected ParsingResult<String, String> executeDelegate(ConsList<String> tokens) {
+		protected ParsingResult<String, VariableExpression> executeDelegate(ConsList<String> tokens) {
 			String head = tokens.head();
+			if(head == ILLexer.CRLF) {
+				return new ParseError<String, VariableExpression>("Expecting identifier", tokens);
+			}
+			
 			if(head.length() > 1) {
-				return success(head, tokens.tail());
+				return success(new VariableExpression(head), tokens.tail());
 			}
 			
 			char ch = head.charAt(0);
 			if(ILLexer.isDivider(ch)) {
-				return new ParseError<String, String>("Expecting identifier", tokens);
+				return new ParseError<String, VariableExpression>("Expecting identifier", tokens);
 			}
 			
-			return success(head, tokens.tail());
+			return success(new VariableExpression(head), tokens.tail());
 		}};
 	
-	private final Parser<String, List<String>> IDENTIFIERS = zeroOrMore("IDENTIFIERS", IDENTIFIER);
+	private final Parser<String, NOPExpression> EOL = apply("EOL_EXPRESSION", literal(ILLexer.CRLF), new Function1<NOPExpression, String>() {
+		@Override
+		public NOPExpression execute(String p) {
+			return NOPExpression.instance;
+		}});
 	
-	private final Parser<String, ApplyExpression> APPLY = thenParserCons1("APPLY", IDENTIFIERS, literal(";"), ApplyExpression.class);
+	private final Parser<String, List<VariableExpression>> IDENTIFIERS = zeroOrMore("IDENTIFIERS", IDENTIFIER);
+
+	private final DelegateParser<String, List<Expression>> APPLY_BODYS_DEL = new DelegateParser<String, List<Expression>>("APPLY_BODY_DEL");
+	
+	private final Parser<String, PrecedenceExpression> PRECEDENSE = thenParser3Cons2("PRECEDENCE", literal("("), APPLY_BODYS_DEL, literal(")"), PrecedenceExpression.class);
+	
+	private final Parser<String, Expression> APPLY_BODY = alternative1("APPLY_BODY", PRECEDENSE, IDENTIFIER);
+
+	private final Parser<String, List<Expression>> APPLY_BODYS = oneOrMore("APPLY_BODYS", APPLY_BODY);
+	
+	private final Parser<String, ApplyExpression> APPLY = thenParserCons1("APPLY", APPLY_BODYS , EOL, ApplyExpression.class);
 	
 	private final Parser<String, BlockExpression> BLOCK = thenParser3Cons2("BLOCK", literal("{"), EXPRESSIONS_DEL, literal("}"), BlockExpression.class);
 	
@@ -45,7 +64,7 @@ public class ILParser extends AbstractSemanticParser<String, Program> {
 	
 	private final Parser<String, ClassExpression> CLASS = thenParser3Cons23("CLASS", literal("class"), IDENTIFIER, BLOCK, ClassExpression.class);
 
-	private final Parser<String, Expression> EXPRESSION = oneOf1("EXPRESSION", CLASS, BLOCK, FUNCTION, APPLY);
+	private final Parser<String, Expression> EXPRESSION = oneOf1("EXPRESSION", CLASS, BLOCK, FUNCTION, APPLY, EOL);
 	
 	private final Parser<String, List<Expression>> EXPRESSIONS = zeroOrMore("EXPRESSIONS", EXPRESSION);
 	
@@ -53,6 +72,7 @@ public class ILParser extends AbstractSemanticParser<String, Program> {
 	
 	public ILParser() {
 		EXPRESSIONS_DEL.delegate = EXPRESSIONS;
+		APPLY_BODYS_DEL.delegate = APPLY_BODYS;
 	}
 	
 	@Override

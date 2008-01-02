@@ -17,6 +17,8 @@ public class ILLexer extends AbstractLexer<String> {
 		}
 		return false;
 	}
+	
+	public static final String CRLF = "\r\n";
 
 	public ILLexer(Reader originalReader) {
 		super(originalReader);
@@ -30,6 +32,11 @@ public class ILLexer extends AbstractLexer<String> {
 	@Override
 	protected void tokenizeDelegate(char ch) {
 		if(Character.isWhitespace(ch)) {
+			if(LexerHelper.readEOL(this, ch)) {
+				if(tokens.get(tokens.size() - 1) != CRLF) {
+					tokens.add(CRLF);
+				}
+			}
 			return;
 		}
 		
@@ -45,6 +52,11 @@ public class ILLexer extends AbstractLexer<String> {
 		
 		if(ch == '\'') {
 			LexerHelper.readQString(this, ch);
+			return;
+		}
+		
+		if(ch == ';') {
+			LexerHelper.readTillEOL(this);
 			return;
 		}
 		

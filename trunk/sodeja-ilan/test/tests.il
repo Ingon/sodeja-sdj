@@ -1,49 +1,52 @@
-3 + 5;
-
-+ a b = a + b;
-
-* a b = a * b;
-	
-+ 6 8; 
-
-* 4 8;
-
 class Pair {
 	Pair f s = {
-		@f = f;
-		@s = s;
+		@f = f
+		@s = s
 	}
+
+	first = @f
 	
-	first = @f;
-	
-	second = @s;
+	second = @s
 }
 
 class Rational {
 	Rational num den = {
-		@num = num;
-		@den = den;
+		@num = num
+		@den = den
 		@+ other = {
-			tnum = (@num + other den) + (@den + other num);
-			tden = @den * other num;
+			tnum = (@num + other den) + (@den + other num)
+			tden = @den * other num
 		}
 	}
 	
 	* other = {
-		tnum = @num * other num;
-		tden = @den * other den;
-		Rational new tnum tden;
+		tnum = @num * other num
+		tden = @den * other den
+		Rational new tnum tden
 	}
 }
 
-f = Rational new 1 2;
-s = Rational new 2 3;
-f * s;
+f = Rational new 1 2
+s = Rational new 2 3
+f * s
 
 class Rational {
 	/ other = {
-		tnum = @num * other den;
-		tden = @den * other num;
-		Rational new tnum tden;
+		tnum = @num * other den
+		tden = @den * other num
+		Rational new tnum tden
 	}
 }
+
+3 + 5
+
++ a b = a + b
+
+* a b = a * b
+	
++ 6 8
+
+* 4 8
+
+;t = (1 to 10) map (\ m = m + 2)
+
