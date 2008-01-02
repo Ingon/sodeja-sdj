@@ -13,16 +13,17 @@ class Rational {
 	def Rational num den = {
 		@num = num
 		@den = den
-		def @+ other = {
-			tnum = (@num + other den) + (@den + other num)
-			tden = @den * other num
-		}
 	}
 	
 	def * other = {
 		tnum = @num * other num
 		tden = @den * other den
 		Rational new tnum tden
+	}
+
+	def + other = {
+		tnum = (@num + other den) + (@den + other num)
+		tden = @den * other num
 	}
 }
 
