@@ -12,6 +12,6 @@ public class PrecedenceExpression implements Expression {
 
 	@Override
 	public ILObject eval(Context ctx) {
-		throw new UnsupportedOperationException();
+		return expression.eval(ctx);
 	}
 }
