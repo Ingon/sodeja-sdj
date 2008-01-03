@@ -6,6 +6,15 @@ import static org.sodeja.parsec.standart.StandartParsers.*;
 import java.util.List;
 
 import org.sodeja.collections.ConsList;
+import org.sodeja.il.model.ApplyExpression;
+import org.sodeja.il.model.BlockExpression;
+import org.sodeja.il.model.ClassExpression;
+import org.sodeja.il.model.Expression;
+import org.sodeja.il.model.FunctionExpression;
+import org.sodeja.il.model.LambdaExpression;
+import org.sodeja.il.model.PrecedenceExpression;
+import org.sodeja.il.model.SetExpression;
+import org.sodeja.il.model.VariableExpression;
 import org.sodeja.parsec.AbstractParser;
 import org.sodeja.parsec.ParseError;
 import org.sodeja.parsec.Parser;

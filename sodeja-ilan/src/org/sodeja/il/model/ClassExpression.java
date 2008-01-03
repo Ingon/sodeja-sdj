@@ -1,4 +1,4 @@
-package org.sodeja.il;
+package org.sodeja.il.model;
 
 public class ClassExpression implements Expression {
 	public final VariableExpression name;
