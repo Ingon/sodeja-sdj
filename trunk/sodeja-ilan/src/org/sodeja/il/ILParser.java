@@ -6,6 +6,7 @@ import static org.sodeja.parsec.standart.StandartParsers.*;
 import java.util.List;
 
 import org.sodeja.collections.ConsList;
+import org.sodeja.functional.Function1;
 import org.sodeja.il.model.ApplyExpression;
 import org.sodeja.il.model.BlockExpression;
 import org.sodeja.il.model.ClassExpression;
@@ -13,6 +14,7 @@ import org.sodeja.il.model.Expression;
 import org.sodeja.il.model.LambdaExpression;
 import org.sodeja.il.model.PrecedenceExpression;
 import org.sodeja.il.model.SetExpression;
+import org.sodeja.il.model.ValueExpression;
 import org.sodeja.il.model.VariableExpression;
 import org.sodeja.parsec.AbstractParser;
 import org.sodeja.parsec.ParseError;
@@ -51,6 +53,14 @@ public class ILParser extends AbstractSemanticParser<String, List<Expression>> {
 	
 	private final Parser<String, List<VariableExpression>> IDENTIFIERS = zeroOrMore("IDENTIFIERS", IDENTIFIER);
 	
+	private final Parser<String, ValueExpression<Integer>> INTEGER_VALUE = apply("INTEGER_VALUE", simpleIntegerParser("NUMBER"), new Function1<ValueExpression<Integer>, Integer>() {
+		@Override
+		public ValueExpression<Integer> execute(Integer p) {
+			return new ValueExpression<Integer>("ILInteger", p);
+		}});
+	
+	private final Parser<String, ValueExpression<?>> VALUE = oneOf1("VALUE", INTEGER_VALUE);
+	
 	private final Parser<String, String> CURLY_OPEN = thenParserJust1("CURLY_OPEN", literal("{"), literal(ILLexer.CRLF));
 
 	private final Parser<String, String> CURLY_CLOSE = thenParserJust1("CURLY_OPEN", literal(ILLexer.CRLF), literal("}"));
@@ -71,9 +81,9 @@ public class ILParser extends AbstractSemanticParser<String, List<Expression>> {
 	
 	private final Parser<String, ClassExpression> CLASS = thenParser3Cons23("CLASS", literal("class"), IDENTIFIER, BLOCK, ClassExpression.class);
 
-	private final Parser<String, Expression> SIMPLE_EXPRESSION = oneOf1("EXPRESSION", LAMBDA, PRECEDENSE, IDENTIFIER);
+	private final Parser<String, Expression> SIMPLE_EXPRESSION = oneOf1("EXPRESSION", LAMBDA, PRECEDENSE, VALUE, IDENTIFIER);
 	
-	private final Parser<String, List<Expression>> APPLY_BODY = nOrMore("SIMPLE_EXPRESSIONS", SIMPLE_EXPRESSION, 2);
+	private final Parser<String, List<Expression>> APPLY_BODY = oneOrMore("SIMPLE_EXPRESSIONS", SIMPLE_EXPRESSION);
 	
 	private final Parser<String, ApplyExpression> APPLY = applyCons("APPLY", APPLY_BODY, ApplyExpression.class);
 	

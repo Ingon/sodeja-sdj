@@ -1,29 +1,20 @@
 package org.sodeja.il.model;
 
 import org.sodeja.il.runtime.Context;
+import org.sodeja.il.runtime.ILClass;
+import org.sodeja.il.runtime.ILObject;
 
 public class VariableExpression implements Expression {
 	public final String name;
 
-	// TODO ugly hack, should be done on parse time :)
-	private Integer intVal;
-	
 	public VariableExpression(String name) {
 		this.name = name;
-		
-		try {
-			intVal = Integer.parseInt(name);
-		} catch(NumberFormatException exc) {
-			intVal = null;
-		}
 	}
 
 	@Override
-	public Object eval(Context ctx) {
-		if(intVal != null) {
-			return intVal;
-		}
-		return ctx.get(name);
+	public ILObject eval(Context ctx) {
+		ILClass clazz = ctx.getRoot().getClassByName("ILSymbol");
+		return clazz.makeInstance(name);
 	}
 	
 	@Override
