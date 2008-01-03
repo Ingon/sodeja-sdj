@@ -1,5 +1,7 @@
 package org.sodeja.il.model;
 
-public interface Expression {
+import org.sodeja.il.runtime.Context;
 
+public interface Expression {
+	public Object eval(Context ctx);
 }
