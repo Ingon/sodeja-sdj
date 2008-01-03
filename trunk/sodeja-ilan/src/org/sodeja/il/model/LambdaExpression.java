@@ -1,4 +1,4 @@
-package org.sodeja.il;
+package org.sodeja.il.model;
 
 import java.util.List;
 
