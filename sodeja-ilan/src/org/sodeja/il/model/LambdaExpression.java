@@ -3,6 +3,7 @@ package org.sodeja.il.model;
 import java.util.List;
 
 import org.sodeja.il.runtime.Context;
+import org.sodeja.il.runtime.ILObject;
 
 public class LambdaExpression implements Expression {
 	public final List<VariableExpression> params;
@@ -14,7 +15,7 @@ public class LambdaExpression implements Expression {
 	}
 
 	@Override
-	public Object eval(Context ctx) {
+	public ILObject eval(Context ctx) {
 		throw new UnsupportedOperationException();
 	}
 }

@@ -3,6 +3,7 @@ package org.sodeja.il.model;
 import java.util.List;
 
 import org.sodeja.il.runtime.Context;
+import org.sodeja.il.runtime.ILObject;
 
 public class BlockExpression implements Expression {
 	public final List<Expression> expressions;
@@ -12,7 +13,7 @@ public class BlockExpression implements Expression {
 	}
 
 	@Override
-	public Object eval(Context ctx) {
+	public ILObject eval(Context ctx) {
 		throw new UnsupportedOperationException();
 	}
 }
