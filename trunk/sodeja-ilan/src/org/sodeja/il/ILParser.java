@@ -52,8 +52,6 @@ public class ILParser extends AbstractSemanticParser<String, List<Expression>> {
 	
 	private final Parser<String, List<VariableExpression>> IDENTIFIERS = oneOrMore("IDENTIFIERS", IDENTIFIER);
 	
-//	private final Parser<String, Boolean> OPTIONAL_EOL = zeroOrOneBoolean("OPTIONAL_EOL", literal(ILLexer.CRLF));
-	
 	private final Parser<String, String> CURLY_OPEN = thenParserJust1("CURLY_OPEN", literal("{"), literal(ILLexer.CRLF));
 
 	private final Parser<String, String> CURLY_CLOSE = thenParserJust1("CURLY_OPEN", literal(ILLexer.CRLF), literal("}"));
