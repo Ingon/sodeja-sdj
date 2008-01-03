@@ -12,7 +12,7 @@ public class IL {
 		System.out.println(tokens);
 		
 		ILParser parser = new ILParser();
-		Program prog = parser.parse(tokens);
+		List<Expression> prog = parser.parse(tokens);
 		System.out.println(prog);
 	}
 }

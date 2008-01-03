@@ -3,9 +3,9 @@ package org.sodeja.il;
 import java.util.List;
 
 public class ApplyExpression implements Expression {
-	public final List<String> symbols;
+	public final List<Expression> expressions;
 
-	public ApplyExpression(List<String> symbols) {
-		this.symbols = symbols;
+	public ApplyExpression(List<Expression> expressions) {
+		this.expressions = expressions;
 	}
 }

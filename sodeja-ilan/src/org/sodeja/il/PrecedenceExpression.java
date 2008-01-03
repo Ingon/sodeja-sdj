@@ -1,11 +1,9 @@
 package org.sodeja.il;
 
-import java.util.List;
-
 public class PrecedenceExpression implements Expression {
-	public final List<Expression> expressions;
+	public final Expression expression;
 
-	public PrecedenceExpression(List<Expression> expressions) {
-		this.expressions = expressions;
+	public PrecedenceExpression(Expression expression) {
+		this.expression = expression;
 	}
 }

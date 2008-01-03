@@ -2,15 +2,14 @@ package org.sodeja.il;
 
 import java.util.List;
 
-public class FunctionExpression implements Expression {
+import org.sodeja.collections.ListUtils;
+
+public class FunctionExpression extends LambdaExpression {
 	public final VariableExpression name;
-	public final List<VariableExpression> params;
-	public final Expression expression;
 	
-	public FunctionExpression(VariableExpression name, List<VariableExpression> params, 
+	public FunctionExpression(List<VariableExpression> params, 
 			Expression expression) {
-		this.name = name;
-		this.params = params;
-		this.expression = expression;
+		super(ListUtils.tail(params), expression);
+		this.name = ListUtils.head(params);
 	}
 }
