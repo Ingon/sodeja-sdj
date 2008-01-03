@@ -10,7 +10,6 @@ import org.sodeja.il.model.ApplyExpression;
 import org.sodeja.il.model.BlockExpression;
 import org.sodeja.il.model.ClassExpression;
 import org.sodeja.il.model.Expression;
-import org.sodeja.il.model.FunctionExpression;
 import org.sodeja.il.model.LambdaExpression;
 import org.sodeja.il.model.PrecedenceExpression;
 import org.sodeja.il.model.SetExpression;
@@ -50,7 +49,7 @@ public class ILParser extends AbstractSemanticParser<String, List<Expression>> {
 			return success(new VariableExpression(head), tokens.tail());
 		}};
 	
-	private final Parser<String, List<VariableExpression>> IDENTIFIERS = oneOrMore("IDENTIFIERS", IDENTIFIER);
+	private final Parser<String, List<VariableExpression>> IDENTIFIERS = zeroOrMore("IDENTIFIERS", IDENTIFIER);
 	
 	private final Parser<String, String> CURLY_OPEN = thenParserJust1("CURLY_OPEN", literal("{"), literal(ILLexer.CRLF));
 
@@ -60,13 +59,15 @@ public class ILParser extends AbstractSemanticParser<String, List<Expression>> {
 	
 	private final Parser<String, Expression> LAMBDA_BODY = oneOf1("LAMBDA_BODY", BLOCK, EXPRESSION_DEL);
 	
-	private final Parser<String, LambdaExpression> LAMBDA = thenParser4Cons24("LAMBDA", literal("\\"), IDENTIFIERS, literal("="), LAMBDA_BODY, LambdaExpression.class);
+	private final Parser<String, LambdaExpression> LAMBDA_REST = thenParser3Cons13("LAMBDA_REST", IDENTIFIERS, literal("="), LAMBDA_BODY, LambdaExpression.class);
+	
+	private final Parser<String, LambdaExpression> LAMBDA = thenParserJust2("LAMBDA", literal("\\"), LAMBDA_REST);
 	
 	private final Parser<String, PrecedenceExpression> PRECEDENSE = thenParser3Cons2("PRECEDENCE", literal("("), EXPRESSION_DEL, literal(")"), PrecedenceExpression.class);
 
 	private final Parser<String, SetExpression> SET = thenParser3Cons13("SET", IDENTIFIER, literal("="), EXPRESSION_DEL, SetExpression.class);
 	
-	private final Parser<String, FunctionExpression> FUNCTION = thenParser4Cons24("FUNCTION", literal("fun"), IDENTIFIERS, literal("="), LAMBDA_BODY, FunctionExpression.class);
+	private final Parser<String, SetExpression> FUNCTION = thenParser3Cons23("FUNCTION", literal("fun"), IDENTIFIER, LAMBDA_REST, SetExpression.class);
 	
 	private final Parser<String, ClassExpression> CLASS = thenParser3Cons23("CLASS", literal("class"), IDENTIFIER, BLOCK, ClassExpression.class);
 
