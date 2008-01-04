@@ -14,11 +14,6 @@ public class ILJavaClass extends ILClass {
 	}
 
 	@Override
-	public ILObject makeInstance(Object... values) {
-		return new ILJavaObject(this, values[0]);
-	}
-
-	@Override
 	public ILObject newInstance(List<ILObject> values) {
 		if(values.size() != 0) {
 			throw new UnsupportedOperationException();
