@@ -1,7 +1,10 @@
 package org.sodeja.il.model;
 
+import org.sodeja.il.runtime.ClassContext;
 import org.sodeja.il.runtime.Context;
+import org.sodeja.il.runtime.ILClass;
 import org.sodeja.il.runtime.ILObject;
+import org.sodeja.il.runtime.SDK;
 
 public class ClassExpression implements Expression {
 	public final VariableExpression name;
@@ -14,6 +17,17 @@ public class ClassExpression implements Expression {
 
 	@Override
 	public ILObject eval(Context ctx) {
-		throw new UnsupportedOperationException();
+		ILClass clazz = null;
+		if(ctx.exists(name.name)) {
+			clazz = (ILClass) ctx.get(name.name);
+		} else {
+			clazz = new ILClass(name.name, SDK.getInstance().getRootType());
+			ctx.define(name.name, clazz);
+		}
+
+		Context newContext = new ClassContext(ctx, clazz);
+		block.eval(newContext);
+		
+		return clazz;
 	}
 }

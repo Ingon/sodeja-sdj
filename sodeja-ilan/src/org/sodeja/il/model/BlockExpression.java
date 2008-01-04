@@ -14,6 +14,11 @@ public class BlockExpression implements Expression {
 
 	@Override
 	public ILObject eval(Context ctx) {
-		throw new UnsupportedOperationException();
+		// TODO maybe return a list?
+		ILObject result = null;
+		for(Expression expr : expressions) {
+			result = expr.eval(ctx);
+		}
+		return result;
 	}
 }

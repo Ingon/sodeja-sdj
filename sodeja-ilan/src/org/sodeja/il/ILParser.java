@@ -53,13 +53,13 @@ public class ILParser extends AbstractSemanticParser<String, List<Expression>> {
 	
 	private final Parser<String, List<VariableExpression>> IDENTIFIERS = zeroOrMore("IDENTIFIERS", IDENTIFIER);
 	
-	private final Parser<String, ValueExpression<Integer>> INTEGER_VALUE = apply("INTEGER_VALUE", simpleIntegerParser("NUMBER"), new Function1<ValueExpression<Integer>, Integer>() {
+	private final Parser<String, ValueExpression> INTEGER_VALUE = apply("INTEGER_VALUE", simpleIntegerParser("NUMBER"), new Function1<ValueExpression, Integer>() {
 		@Override
-		public ValueExpression<Integer> execute(Integer p) {
-			return new ValueExpression<Integer>("ILInteger", p);
+		public ValueExpression execute(Integer p) {
+			return new ValueExpression("ILInteger", p);
 		}});
 	
-	private final Parser<String, ValueExpression<?>> VALUE = oneOf1("VALUE", INTEGER_VALUE);
+	private final Parser<String, ValueExpression> VALUE = oneOf1("VALUE", INTEGER_VALUE);
 	
 	private final Parser<String, String> CURLY_OPEN = thenParserJust1("CURLY_OPEN", literal("{"), literal(ILLexer.CRLF));
 

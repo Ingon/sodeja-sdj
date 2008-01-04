@@ -5,7 +5,7 @@ import java.util.Map;
 
 abstract class AbstractContext implements Context {
 
-	private final Map<ILSymbol, ILObject> values;
+	protected final Map<ILSymbol, ILObject> values;
 	
 	public AbstractContext() {
 		this.values = new HashMap<ILSymbol, ILObject>();
@@ -19,5 +19,10 @@ abstract class AbstractContext implements Context {
 	@Override
 	public ILObject get(ILSymbol name) {
 		return values.get(name);
+	}
+
+	@Override
+	public boolean exists(ILSymbol symbol) {
+		return values.containsKey(symbol);
 	}
 }

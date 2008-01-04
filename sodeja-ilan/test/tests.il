@@ -23,6 +23,10 @@ class Pair {
 	fun second = @s
 }
 
+v = Pair new 1 2
+v first
+v second
+
 class Rational {
 	fun Rational num den = {
 		@num = num
@@ -30,8 +34,8 @@ class Rational {
 	}
 	
 	fun * other = {
-		tnum = @num * other num
-		tden = @den * other den
+		tnum = @num * (other num)
+		tden = @den * (other den)
 		Rational new tnum tden
 	}
 
@@ -39,6 +43,10 @@ class Rational {
 		tnum = (@num + other den) + (@den + other num)
 		tden = @den * other num
 	}
+	
+	fun num = @num
+	
+	fun den = @den
 }
 
 f = Rational new 1 2
