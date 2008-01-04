@@ -25,4 +25,9 @@ public class ILDefaultObject implements ILObject {
 	public ILObject get(ILSymbol symbol) {
 		return values.get(symbol);
 	}
+
+	@Override
+	public String toString() {
+		return type + "" + values;
+	}
 }
