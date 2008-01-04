@@ -8,8 +8,8 @@ public class ValueExpression implements Expression {
 
 	public final ILObject value;
 	
-	public ValueExpression(String valueClass, Object value) {
-		this.value = SDK.getInstance().makeInstance(valueClass, value);
+	public ValueExpression(Object value) {
+		this.value = SDK.getInstance().makeInstance(value.getClass().getName(), value);
 	}
 
 	@Override
