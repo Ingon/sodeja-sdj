@@ -19,10 +19,6 @@ public class ILClass implements ILObject {
 		this.methods = new HashMap<ILSymbol, ILClassLambda>();
 	}
 	
-	public ILObject makeInstance(Object... values) {
-		throw new UnsupportedOperationException();
-	}
-
 	public void defineLambda(ILSymbol name, ILClassLambda value) {
 		if(this.name.equals(name)) {
 			if(constructor != null) {

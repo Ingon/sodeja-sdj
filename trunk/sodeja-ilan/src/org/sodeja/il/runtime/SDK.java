@@ -49,12 +49,12 @@ public class SDK {
 	}
 
 	public ILSymbol makeSymbol(String name) {
-		return (ILSymbol) symbolType.makeInstance(name);
+		return new ILSymbol(symbolType, name);
 	}
 	
 	public ILObject makeInstance(String name, Object value) {
-		ILClass type = types.get(makeSymbol(name));
-		return type.makeInstance(value);
+		ILJavaClass type = (ILJavaClass) types.get(makeSymbol(name));
+		return new ILJavaObject(type, value);
 	}
 
 	private ILClass makeIntegerType() {
