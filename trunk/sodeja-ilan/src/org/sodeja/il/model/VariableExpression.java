@@ -1,9 +1,9 @@
 package org.sodeja.il.model;
 
 import org.sodeja.il.runtime.Context;
-import org.sodeja.il.runtime.ILObject;
-import org.sodeja.il.runtime.ILSymbol;
 import org.sodeja.il.runtime.SDK;
+import org.sodeja.il.sdk.ILObject;
+import org.sodeja.il.sdk.ILSymbol;
 
 public class VariableExpression implements Expression {
 	public final ILSymbol name;

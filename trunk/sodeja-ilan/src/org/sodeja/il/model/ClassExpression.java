@@ -2,9 +2,9 @@ package org.sodeja.il.model;
 
 import org.sodeja.il.runtime.ClassContext;
 import org.sodeja.il.runtime.Context;
-import org.sodeja.il.runtime.ILClass;
-import org.sodeja.il.runtime.ILObject;
 import org.sodeja.il.runtime.SDK;
+import org.sodeja.il.sdk.ILClass;
+import org.sodeja.il.sdk.ILObject;
 
 public class ClassExpression implements Expression {
 	public final VariableExpression name;

@@ -6,10 +6,10 @@ import org.sodeja.collections.ListUtils;
 import org.sodeja.functional.Function1;
 import org.sodeja.il.runtime.ClassContext;
 import org.sodeja.il.runtime.Context;
-import org.sodeja.il.runtime.ILDefaultClassLambda;
-import org.sodeja.il.runtime.ILObject;
-import org.sodeja.il.runtime.ILDefaultFreeLambda;
-import org.sodeja.il.runtime.ILSymbol;
+import org.sodeja.il.sdk.ILDefaultClassLambda;
+import org.sodeja.il.sdk.ILDefaultFreeLambda;
+import org.sodeja.il.sdk.ILObject;
+import org.sodeja.il.sdk.ILSymbol;
 
 public class LambdaExpression implements Expression {
 	public final List<VariableExpression> params;

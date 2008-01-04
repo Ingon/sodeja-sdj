@@ -1,4 +1,4 @@
-package org.sodeja.il.runtime;
+package org.sodeja.il.sdk;
 
 public class ILJavaObjectClass extends ILClass {
 	public ILJavaObjectClass(ILSymbol name, ILClass parent) {

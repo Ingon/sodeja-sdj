@@ -1,8 +1,11 @@
-package org.sodeja.il.runtime;
+package org.sodeja.il.sdk;
 
 import java.util.List;
 
 import org.sodeja.il.model.Expression;
+import org.sodeja.il.runtime.Context;
+import org.sodeja.il.runtime.FunctionContext;
+import org.sodeja.il.runtime.ObjectContext;
 
 public class ILDefaultClassLambda implements ILClassLambda {
 	private final Context context;

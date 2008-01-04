@@ -4,6 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.sodeja.il.sdk.ILClass;
+import org.sodeja.il.sdk.ILClassLambda;
+import org.sodeja.il.sdk.ILDefaultObject;
+import org.sodeja.il.sdk.ILJavaObject;
+import org.sodeja.il.sdk.ILJavaObjectClass;
+import org.sodeja.il.sdk.ILObject;
+import org.sodeja.il.sdk.ILSymbol;
+import org.sodeja.il.sdk.ILSymbolClass;
+
 public class SDK {
 	private static final SDK instance = new SDK();
 	
@@ -58,8 +67,8 @@ public class SDK {
 				if(values.size() != 1) {
 					throw new RuntimeException();
 				}
-				Integer primValue = (Integer) ((ILJavaObject) value).value;
-				Integer secValue = (Integer) ((ILJavaObject) values.get(0)).value;
+				Integer primValue = (Integer) ((ILJavaObject) value).getValue();
+				Integer secValue = (Integer) ((ILJavaObject) values.get(0)).getValue();
 				return makeInstance("ILInteger", primValue + secValue);
 			}
 
@@ -76,8 +85,8 @@ public class SDK {
 				if(values.size() != 1) {
 					throw new RuntimeException();
 				}
-				Integer primValue = (Integer) ((ILJavaObject) value).value;
-				Integer secValue = (Integer) ((ILJavaObject) values.get(0)).value;
+				Integer primValue = (Integer) ((ILJavaObject) value).getValue();
+				Integer secValue = (Integer) ((ILJavaObject) values.get(0)).getValue();
 				return makeInstance("ILInteger", primValue * secValue);
 			}
 
@@ -106,8 +115,8 @@ public class SDK {
 			ILObject obj = new ILDefaultObject(type);
 			
 			// Invoke constructor
-			if(type.constructor != null) {
-				type.constructor.applyObject(obj, values);
+			if(type.getConstructorLambda() != null) {
+				type.getConstructorLambda().applyObject(obj, values);
 			}
 			
 			return obj;

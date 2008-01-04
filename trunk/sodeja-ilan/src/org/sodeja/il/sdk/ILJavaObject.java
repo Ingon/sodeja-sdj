@@ -1,4 +1,4 @@
-package org.sodeja.il.runtime;
+package org.sodeja.il.sdk;
 
 public class ILJavaObject<T> implements ILObject {
 	
@@ -8,6 +8,10 @@ public class ILJavaObject<T> implements ILObject {
 	public ILJavaObject(ILJavaObjectClass type, T value) {
 		this.type = type;
 		this.value = value;
+	}
+
+	public T getValue() {
+		return value;
 	}
 
 	@Override
