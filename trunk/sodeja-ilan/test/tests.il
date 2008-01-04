@@ -13,6 +13,7 @@ class Rational {
 	fun + other = {
 		tnum = (@num + other den) + (@den + other num)
 		tden = @den * other num
+		Rational new tnum tden
 	}
 	
 	fun num = @num

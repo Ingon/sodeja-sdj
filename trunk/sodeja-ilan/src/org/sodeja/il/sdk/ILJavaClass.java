@@ -1,7 +1,7 @@
 package org.sodeja.il.sdk;
 
-public class ILJavaObjectClass extends ILClass {
-	public ILJavaObjectClass(ILSymbol name, ILClass parent) {
+public class ILJavaClass extends ILClass {
+	public ILJavaClass(ILSymbol name, ILClass parent) {
 		super(name, parent);
 	}
 

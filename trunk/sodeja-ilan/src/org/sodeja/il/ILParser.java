@@ -11,6 +11,7 @@ import org.sodeja.il.model.ApplyExpression;
 import org.sodeja.il.model.BlockExpression;
 import org.sodeja.il.model.ClassExpression;
 import org.sodeja.il.model.Expression;
+import org.sodeja.il.model.ImportExpression;
 import org.sodeja.il.model.LambdaExpression;
 import org.sodeja.il.model.PrecedenceExpression;
 import org.sodeja.il.model.SetExpression;
@@ -56,7 +57,7 @@ public class ILParser extends AbstractSemanticParser<String, List<Expression>> {
 	private final Parser<String, ValueExpression> INTEGER_VALUE = apply("INTEGER_VALUE", simpleIntegerParser("NUMBER"), new Function1<ValueExpression, Integer>() {
 		@Override
 		public ValueExpression execute(Integer p) {
-			return new ValueExpression("ILInteger", p);
+			return new ValueExpression(p);
 		}});
 	
 	private final Parser<String, ValueExpression> VALUE = oneOf1("VALUE", INTEGER_VALUE);
@@ -77,6 +78,8 @@ public class ILParser extends AbstractSemanticParser<String, List<Expression>> {
 
 	private final Parser<String, SetExpression> SET = thenParser3Cons13("SET", IDENTIFIER, literal("="), EXPRESSION_DEL, SetExpression.class);
 	
+	private final Parser<String, ImportExpression> IMPORT = thenParserCons2("IMPORT", literal("import"), IDENTIFIER, ImportExpression.class);
+	
 	private final Parser<String, SetExpression> FUNCTION = thenParser3Cons23("FUNCTION", literal("fun"), IDENTIFIER, LAMBDA_REST, SetExpression.class);
 	
 	private final Parser<String, ClassExpression> CLASS = thenParser3Cons23("CLASS", literal("class"), IDENTIFIER, BLOCK, ClassExpression.class);
@@ -89,7 +92,7 @@ public class ILParser extends AbstractSemanticParser<String, List<Expression>> {
 	
 	private final Parser<String, Expression> EXPRESSION = oneOf1("EXPRESSION", APPLY, SIMPLE_EXPRESSION);
 	
-	private final Parser<String, Expression> ROOT_EXPRESSION = oneOf1("ROOT_EXPRESSION", CLASS, FUNCTION, BLOCK, SET, EXPRESSION);
+	private final Parser<String, Expression> ROOT_EXPRESSION = oneOf1("ROOT_EXPRESSION", CLASS, FUNCTION, IMPORT, BLOCK, SET, EXPRESSION);
 	 
 	private final Parser<String, List<Expression>> ROOT_EXPRESSIONS = oneOrMoreSep("ROOT_EXPRESSIONS", ROOT_EXPRESSION, literal(ILLexer.CRLF));	
 	

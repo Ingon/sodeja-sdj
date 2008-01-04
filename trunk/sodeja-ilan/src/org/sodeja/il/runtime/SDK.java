@@ -1,17 +1,21 @@
 package org.sodeja.il.runtime;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.sodeja.collections.ListUtils;
+import org.sodeja.functional.Function1;
 import org.sodeja.il.sdk.ILClass;
 import org.sodeja.il.sdk.ILClassLambda;
 import org.sodeja.il.sdk.ILDefaultObject;
 import org.sodeja.il.sdk.ILJavaObject;
-import org.sodeja.il.sdk.ILJavaObjectClass;
+import org.sodeja.il.sdk.ILJavaClass;
 import org.sodeja.il.sdk.ILObject;
 import org.sodeja.il.sdk.ILSymbol;
 import org.sodeja.il.sdk.ILSymbolClass;
+import org.sodeja.lang.reflect.ReflectUtils;
 
 public class SDK {
 	private static final SDK instance = new SDK();
@@ -35,7 +39,8 @@ public class SDK {
 		types = new HashMap<ILSymbol, ILClass>();
 		types.put(makeSymbol("ILObject"), rootType);
 		types.put(makeSymbol("ILSymbol"), symbolType);
-		types.put(makeSymbol("ILInteger"), makeIntegerType());
+		
+		makeIntegerType();
 
 		initMetaType();
 	}
@@ -54,7 +59,8 @@ public class SDK {
 	}
 
 	private ILClass makeIntegerType() {
-		ILJavaObjectClass type = new ILJavaObjectClass(makeSymbol("ILInteger"), rootType);
+		registerJavaClass("java.lang.Integer");
+		ILClass type = getJavaClass("java.lang.Integer");
 		type.defineLambda(makeSymbol("+"), getIntegerAddLambda());
 		type.defineLambda(makeSymbol("*"), getIntegerMulLambda());
 		return type;
@@ -67,9 +73,9 @@ public class SDK {
 				if(values.size() != 1) {
 					throw new RuntimeException();
 				}
-				Integer primValue = (Integer) ((ILJavaObject) value).getValue();
-				Integer secValue = (Integer) ((ILJavaObject) values.get(0)).getValue();
-				return makeInstance("ILInteger", primValue + secValue);
+				Integer primValue = ((ILJavaObject<Integer>) value).getValue();
+				Integer secValue = ((ILJavaObject<Integer>) values.get(0)).getValue();
+				return makeInstance("java.lang.Integer", primValue + secValue);
 			}
 
 			@Override
@@ -85,9 +91,9 @@ public class SDK {
 				if(values.size() != 1) {
 					throw new RuntimeException();
 				}
-				Integer primValue = (Integer) ((ILJavaObject) value).getValue();
-				Integer secValue = (Integer) ((ILJavaObject) values.get(0)).getValue();
-				return makeInstance("ILInteger", primValue * secValue);
+				Integer primValue = ((ILJavaObject<Integer>) value).getValue();
+				Integer secValue = ((ILJavaObject<Integer>) values.get(0)).getValue();
+				return makeInstance("java.lang.Integer", primValue * secValue);
 			}
 
 			@Override
@@ -126,5 +132,32 @@ public class SDK {
 		public ILClass getType() {
 			throw new UnsupportedOperationException();
 		}
+	}
+
+	public void registerJavaClass(String value) {
+		Class clazz = ReflectUtils.resolveClass(value);
+		List<Class> hierarhy = ReflectUtils.loadHierarchy(clazz);
+		List<ILSymbol> names = ListUtils.map(hierarhy, new Function1<ILSymbol, Class>() {
+			@Override
+			public ILSymbol execute(Class p) {
+				return makeSymbol(p.getName());
+			}});
+		
+		for(int i = 1, n = hierarhy.size();i < n;i++) {
+			Class tempClass = hierarhy.get(i);
+			ILSymbol symbol = names.get(i);
+			
+			ILClass symbolClass = types.get(symbol);
+			if(symbolClass != null) {
+				continue;
+			}
+			
+			symbolClass = new ILJavaClass(symbol, types.get(names.get(i - 1)));
+			types.put(symbol, symbolClass);
+		}
+	}
+
+	public ILClass getJavaClass(String val) {
+		return types.get(makeSymbol(val));
 	}
 }

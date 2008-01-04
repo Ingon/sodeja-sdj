@@ -2,10 +2,10 @@ package org.sodeja.il.sdk;
 
 public class ILJavaObject<T> implements ILObject {
 	
-	protected final ILJavaObjectClass type;
+	protected final ILJavaClass type;
 	protected final T value;
 	
-	public ILJavaObject(ILJavaObjectClass type, T value) {
+	public ILJavaObject(ILJavaClass type, T value) {
 		this.type = type;
 		this.value = value;
 	}
