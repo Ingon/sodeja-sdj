@@ -1,4 +1,4 @@
-package org.sodeja.il.runtime;
+package org.sodeja.il.sdk;
 
 import java.util.List;
 

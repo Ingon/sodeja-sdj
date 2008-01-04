@@ -1,5 +1,12 @@
 package org.sodeja.il.runtime;
 
+import org.sodeja.il.sdk.ILClass;
+import org.sodeja.il.sdk.ILClassLambda;
+import org.sodeja.il.sdk.ILLambda;
+import org.sodeja.il.sdk.ILNotFoundLambda;
+import org.sodeja.il.sdk.ILObject;
+import org.sodeja.il.sdk.ILSymbol;
+
 public class ClassContext implements Context {
 
 	private final Context parent;

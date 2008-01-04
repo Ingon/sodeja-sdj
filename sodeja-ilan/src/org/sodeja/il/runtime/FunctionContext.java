@@ -2,6 +2,9 @@ package org.sodeja.il.runtime;
 
 import java.util.List;
 
+import org.sodeja.il.sdk.ILObject;
+import org.sodeja.il.sdk.ILSymbol;
+
 public class FunctionContext extends AbstractContext {
 
 	private final Context parent;
@@ -20,7 +23,7 @@ public class FunctionContext extends AbstractContext {
 
 	@Override
 	public void define(ILSymbol name, ILObject value) {
-		if(name.value.startsWith("@")) {
+		if(name.getValue().startsWith("@")) {
 			parent.define(name, value);
 		}
 		super.define(name, value);

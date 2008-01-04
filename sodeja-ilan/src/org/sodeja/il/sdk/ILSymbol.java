@@ -1,4 +1,4 @@
-package org.sodeja.il.runtime;
+package org.sodeja.il.sdk;
 
 public class ILSymbol extends ILJavaObject<String> {
 	public ILSymbol(ILJavaObjectClass type, String value) {

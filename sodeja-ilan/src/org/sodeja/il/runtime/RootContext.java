@@ -1,5 +1,8 @@
 package org.sodeja.il.runtime;
 
+import org.sodeja.il.sdk.ILObject;
+import org.sodeja.il.sdk.ILSymbol;
+
 public class RootContext extends AbstractContext {
 	
 	public RootContext() {

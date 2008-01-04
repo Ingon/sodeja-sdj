@@ -3,6 +3,9 @@ package org.sodeja.il.runtime;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.sodeja.il.sdk.ILObject;
+import org.sodeja.il.sdk.ILSymbol;
+
 abstract class AbstractContext implements Context {
 
 	protected final Map<ILSymbol, ILObject> values;

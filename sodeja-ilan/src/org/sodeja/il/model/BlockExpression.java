@@ -3,7 +3,7 @@ package org.sodeja.il.model;
 import java.util.List;
 
 import org.sodeja.il.runtime.Context;
-import org.sodeja.il.runtime.ILObject;
+import org.sodeja.il.sdk.ILObject;
 
 public class BlockExpression implements Expression {
 	public final List<Expression> expressions;

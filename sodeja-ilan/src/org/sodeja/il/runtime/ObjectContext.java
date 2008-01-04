@@ -1,5 +1,9 @@
 package org.sodeja.il.runtime;
 
+import org.sodeja.il.sdk.ILDefaultObject;
+import org.sodeja.il.sdk.ILObject;
+import org.sodeja.il.sdk.ILSymbol;
+
 public class ObjectContext implements Context {
 
 	private final Context parent;
@@ -12,7 +16,7 @@ public class ObjectContext implements Context {
 
 	@Override
 	public void define(ILSymbol symbol, ILObject value) {
-		if(! symbol.value.startsWith("@")) {
+		if(! symbol.getValue().startsWith("@")) {
 			parent.define(symbol, value);
 			return;
 		}
@@ -20,7 +24,7 @@ public class ObjectContext implements Context {
 		if(! (obj instanceof ILDefaultObject)) {
 			throw new UnsupportedOperationException();
 		}
-		ILSymbol varSymbol = SDK.getInstance().makeSymbol(symbol.value.substring(1));
+		ILSymbol varSymbol = SDK.getInstance().makeSymbol(symbol.getValue().substring(1));
 		((ILDefaultObject) obj).set(varSymbol, value);
 	}
 
@@ -31,7 +35,7 @@ public class ObjectContext implements Context {
 
 	@Override
 	public ILObject get(ILSymbol symbol) {
-		if(! symbol.value.startsWith("@")) {
+		if(! symbol.getValue().startsWith("@")) {
 			return parent.get(symbol);
 		}
 		
@@ -39,7 +43,7 @@ public class ObjectContext implements Context {
 			throw new UnsupportedOperationException();
 		}
 		
-		ILSymbol varSymbol = SDK.getInstance().makeSymbol(symbol.value.substring(1));
+		ILSymbol varSymbol = SDK.getInstance().makeSymbol(symbol.getValue().substring(1));
 		return ((ILDefaultObject) obj).get(varSymbol);
 	}
 }

@@ -5,10 +5,10 @@ import java.util.List;
 import org.sodeja.collections.ListUtils;
 import org.sodeja.functional.Function1;
 import org.sodeja.il.runtime.Context;
-import org.sodeja.il.runtime.ILClass;
-import org.sodeja.il.runtime.ILClassLambda;
-import org.sodeja.il.runtime.ILFreeLambda;
-import org.sodeja.il.runtime.ILObject;
+import org.sodeja.il.sdk.ILClass;
+import org.sodeja.il.sdk.ILClassLambda;
+import org.sodeja.il.sdk.ILFreeLambda;
+import org.sodeja.il.sdk.ILObject;
 
 public class ApplyExpression implements Expression {
 	public final List<Expression> expressions;

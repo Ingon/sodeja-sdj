@@ -1,7 +1,7 @@
 package org.sodeja.il.model;
 
 import org.sodeja.il.runtime.Context;
-import org.sodeja.il.runtime.ILObject;
+import org.sodeja.il.sdk.ILObject;
 
 public class SetExpression implements Expression {
 	public final VariableExpression name;

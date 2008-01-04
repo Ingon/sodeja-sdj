@@ -1,7 +1,9 @@
-package org.sodeja.il.runtime;
+package org.sodeja.il.sdk;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.sodeja.il.runtime.SDK;
 
 public class ILClass implements ILObject {
 	protected final ILSymbol name;
@@ -30,6 +32,10 @@ public class ILClass implements ILObject {
 			return;
 		}
 		methods.put(name, value);
+	}
+	
+	public ILClassLambda getConstructorLambda() {
+		return constructor;
 	}
 	
 	public ILClassLambda getLambda(ILSymbol symbol) {

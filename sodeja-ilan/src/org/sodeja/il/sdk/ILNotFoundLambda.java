@@ -1,6 +1,8 @@
-package org.sodeja.il.runtime;
+package org.sodeja.il.sdk;
 
 import java.util.List;
+
+import org.sodeja.il.runtime.SDK;
 
 public class ILNotFoundLambda implements ILClassLambda {
 
