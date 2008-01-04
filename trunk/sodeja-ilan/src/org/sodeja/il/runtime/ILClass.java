@@ -6,6 +6,8 @@ import java.util.Map;
 public class ILClass implements ILObject {
 	protected final ILSymbol name;
 	protected final ILClass parent;
+	
+	protected ILClassLambda constructor;
 	protected final Map<ILSymbol, ILClassLambda> methods;
 	
 	public ILClass(ILSymbol name, ILClass parent) {
@@ -19,6 +21,14 @@ public class ILClass implements ILObject {
 	}
 
 	public void defineLambda(ILSymbol name, ILClassLambda value) {
+		if(this.name.equals(name)) {
+			if(constructor != null) {
+				throw new UnsupportedOperationException();
+			}
+			
+			constructor = value;
+			return;
+		}
 		methods.put(name, value);
 	}
 	

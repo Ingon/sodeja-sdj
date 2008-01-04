@@ -106,8 +106,9 @@ public class SDK {
 			ILObject obj = new ILDefaultObject(type);
 			
 			// Invoke constructor
-			ILClassLambda lambda = type.getLambda(type.name);
-			lambda.applyObject(obj, values);
+			if(type.constructor != null) {
+				type.constructor.applyObject(obj, values);
+			}
 			
 			return obj;
 		}

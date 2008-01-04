@@ -21,7 +21,11 @@ public class ClassContext implements Context {
 
 	@Override
 	public ILObject get(ILSymbol name) {
-		return type.getLambda(name);
+		ILLambda lambda = type.getLambda(name);
+		if(! (lambda instanceof ILNotFoundLambda)) {
+			return lambda;
+		}
+		return parent.get(name);
 	}
 
 	@Override
