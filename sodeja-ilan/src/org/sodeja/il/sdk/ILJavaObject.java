@@ -20,20 +20,6 @@ public class ILJavaObject<T> implements ILObject {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if(! (obj instanceof ILSymbol)) {
-			return false;
-		}
-		
-		return value.equals(((ILJavaObject) obj).value);
-	}
-
-	@Override
-	public int hashCode() {
-		return value.hashCode();
-	}
-
-	@Override
 	public String toString() {
 		return "<" + value.getClass().getName() + "> " + value;
 	}

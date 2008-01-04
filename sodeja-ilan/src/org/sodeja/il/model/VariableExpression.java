@@ -1,7 +1,6 @@
 package org.sodeja.il.model;
 
 import org.sodeja.il.runtime.Context;
-import org.sodeja.il.runtime.SDK;
 import org.sodeja.il.sdk.ILObject;
 import org.sodeja.il.sdk.ILSymbol;
 
@@ -9,7 +8,7 @@ public class VariableExpression implements Expression {
 	public final ILSymbol name;
 
 	public VariableExpression(String name) {
-		this.name = SDK.getInstance().makeSymbol(name);
+		this.name = new ILSymbol(name);
 	}
 
 	@Override

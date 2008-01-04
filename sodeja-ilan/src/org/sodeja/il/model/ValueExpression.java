@@ -9,7 +9,7 @@ public class ValueExpression implements Expression {
 	public final ILObject value;
 	
 	public ValueExpression(Object value) {
-		this.value = SDK.getInstance().makeInstance(value.getClass().getName(), value);
+		this.value = SDK.getInstance().makeInstance(value);
 	}
 
 	@Override
