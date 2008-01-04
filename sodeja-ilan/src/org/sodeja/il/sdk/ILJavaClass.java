@@ -88,13 +88,22 @@ public class ILJavaClass extends ILClass {
 				vals = defaultMap(values);
 			} else {
 				Class paramType = realMethod.getParameterTypes()[0];
-				if(! paramType.isInterface()) {
+				if(! paramType.isInterface() || paramType.getDeclaredMethods().length != 1) {
+					vals = defaultMap(values);
+				} else if(! (values.get(0) instanceof ILFreeLambda)) {
 					vals = defaultMap(values);
 				} else {
+					final ILFreeLambda lambda = (ILFreeLambda) values.get(0);
 					vals = new ArrayList<Object>();
 					Object localObj = Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {paramType}, new InvocationHandler() {
 						@Override
 						public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+							List<Object> vals = ListUtils.asList(args);
+							lambda.apply(ListUtils.map(vals, new Function1<ILObject, Object>() {
+								@Override
+								public ILObject execute(Object p) {
+									return SDK.getInstance().makeInstance(p);
+								}}));
 							return null;
 						}});
 					vals.add(localObj);
