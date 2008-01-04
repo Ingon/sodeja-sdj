@@ -1,6 +1,5 @@
 package org.sodeja.il.runtime;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,9 +8,8 @@ import org.sodeja.collections.ListUtils;
 import org.sodeja.functional.Function1;
 import org.sodeja.il.sdk.ILClass;
 import org.sodeja.il.sdk.ILClassLambda;
-import org.sodeja.il.sdk.ILDefaultObject;
-import org.sodeja.il.sdk.ILJavaObject;
 import org.sodeja.il.sdk.ILJavaClass;
+import org.sodeja.il.sdk.ILJavaObject;
 import org.sodeja.il.sdk.ILObject;
 import org.sodeja.il.sdk.ILSymbol;
 import org.sodeja.il.sdk.ILSymbolClass;
@@ -41,6 +39,7 @@ public class SDK {
 		types.put(makeSymbol("ILSymbol"), symbolType);
 		
 		makeIntegerType();
+		registerJavaClass("java.lang.Boolean");
 
 		initMetaType();
 	}
@@ -118,14 +117,7 @@ public class SDK {
 			}
 			
 			ILClass type = (ILClass) value;
-			ILObject obj = new ILDefaultObject(type);
-			
-			// Invoke constructor
-			if(type.getConstructorLambda() != null) {
-				type.getConstructorLambda().applyObject(obj, values);
-			}
-			
-			return obj;
+			return type.newInstance(values);
 		}
 
 		@Override
@@ -152,7 +144,7 @@ public class SDK {
 				continue;
 			}
 			
-			symbolClass = new ILJavaClass(symbol, types.get(names.get(i - 1)));
+			symbolClass = new ILJavaClass(symbol, types.get(names.get(i - 1)), tempClass);
 			types.put(symbol, symbolClass);
 		}
 	}

@@ -1,6 +1,7 @@
 package org.sodeja.il.sdk;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.sodeja.il.runtime.SDK;
@@ -75,5 +76,16 @@ public class ILClass implements ILObject {
 	@Override
 	public String toString() {
 		return "<" + name + ">";
+	}
+
+	public ILObject newInstance(List<ILObject> values) {
+		ILObject obj = new ILDefaultObject(this);
+		
+		// Invoke constructor
+		if(getConstructorLambda() != null) {
+			getConstructorLambda().applyObject(obj, values);
+		}
+		
+		return obj;
 	}
 }

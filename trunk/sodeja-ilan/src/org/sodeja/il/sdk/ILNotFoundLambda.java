@@ -16,7 +16,7 @@ public class ILNotFoundLambda implements ILClassLambda {
 	
 	@Override
 	public ILObject applyObject(ILObject value, List<ILObject> values) {
-		throw new UnsupportedOperationException("Method is missing: " + name);
+		throw new RuntimeException("Method is missing: " + name);
 	}
 
 	@Override

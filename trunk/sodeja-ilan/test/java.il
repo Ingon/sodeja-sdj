@@ -1,3 +1,4 @@
-import javax.swing.JPanel
+import javax.swing.JFrame
 
-pnl = JPanel new
+frame = JFrame new
+frame setVisible true
