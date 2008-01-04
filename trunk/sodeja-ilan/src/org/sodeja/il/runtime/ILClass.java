@@ -3,30 +3,61 @@ package org.sodeja.il.runtime;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ILClass {
-	private final ILClass parent;
-	private final Class primitiveClass;
-	private final Map<String, ILLambda> methods;
+public class ILClass implements ILObject {
+	protected final ILSymbol name;
+	protected final ILClass parent;
+	protected final Map<ILSymbol, ILClassLambda> methods;
 	
-	public ILClass(ILClass parent) {
-		this(parent, null);
+	public ILClass(ILSymbol name, ILClass parent) {
+		this.name = name;
+		this.parent = parent;
+		this.methods = new HashMap<ILSymbol, ILClassLambda>();
 	}
 	
-	public ILClass(ILClass parent, Class primitiveClass) {
-		this.parent = parent;
-		this.primitiveClass = primitiveClass;
-		
-		this.methods = new HashMap<String, ILLambda>();
+	public ILObject makeInstance(Object... values) {
+		throw new UnsupportedOperationException();
 	}
 
-	public ILObject makeInstance(Object value) {
-		if(primitiveClass == null) {
-			throw new RuntimeException("Trying to make primitive without primitive ?");
+	public void defineLambda(ILSymbol name, ILClassLambda value) {
+		methods.put(name, value);
+	}
+	
+	public ILClassLambda getLambda(ILSymbol symbol) {
+		ILClassLambda lambda = methods.get(symbol);
+		if(lambda != null) {
+			return lambda;
 		}
-		try {
-			return (ILObject) primitiveClass.getConstructors()[0].newInstance(this, value);
-		} catch (Exception exc) {
-			throw new RuntimeException(exc);
+		
+		if(parent != null) {
+			lambda = parent.getLambda(symbol);
+			if(lambda != null) {
+				return lambda;
+			}
 		}
+		
+		return getMethodMissing(symbol);
+	}
+	
+	protected ILClassLambda getMethodMissing(ILSymbol symbol) {
+		ILClassLambda lambda = methods.get(ILNotFoundLambda.NAME);
+		if(lambda != null) {
+			return lambda;
+		}
+		
+		if(parent != null) {
+			return parent.getMethodMissing(symbol);
+		}
+		
+		return new ILNotFoundLambda(symbol);
+	}
+
+	@Override
+	public ILClass getType() {
+		return SDK.getInstance().getMetaType();
+	}
+
+	@Override
+	public String toString() {
+		return "<" + name + ">";
 	}
 }

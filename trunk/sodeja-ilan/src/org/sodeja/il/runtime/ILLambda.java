@@ -1,5 +1,4 @@
 package org.sodeja.il.runtime;
 
-public interface ILLambda {
-
+public interface ILLambda extends ILObject {
 }

@@ -5,7 +5,9 @@ import java.util.List;
 import org.sodeja.collections.ListUtils;
 import org.sodeja.functional.Function1;
 import org.sodeja.il.runtime.Context;
-import org.sodeja.il.runtime.ILLambda;
+import org.sodeja.il.runtime.ILClass;
+import org.sodeja.il.runtime.ILClassLambda;
+import org.sodeja.il.runtime.ILFreeLambda;
 import org.sodeja.il.runtime.ILObject;
 
 public class ApplyExpression implements Expression {
@@ -17,20 +19,32 @@ public class ApplyExpression implements Expression {
 
 	@Override
 	public ILObject eval(final Context ctx) {
-		Object value = ListUtils.head(expressions).eval(ctx);
-		if(value instanceof ILLambda) {
-			return applyLambda(ctx, (ILLambda) value, ListUtils.tail(expressions));
+		ILObject value = ListUtils.head(expressions).eval(ctx);
+		if(value instanceof ILFreeLambda) {
+			return applyLambda(ctx, (ILFreeLambda) value, ListUtils.tail(expressions));
 		}
 		
 		return applyMethod(ctx, value, ListUtils.tail(expressions));
 	}
 
-	private ILObject applyLambda(Context ctx, ILLambda value, List<Expression> tail) {
-		throw new UnsupportedOperationException();
+	private ILObject applyLambda(Context ctx, ILFreeLambda lambda, List<Expression> tail) {
+		return lambda.apply(eval(ctx, tail));
 	}
 	
-	private ILObject applyMethod(Context ctx, Object value, List<Expression> tail) {
-		throw new UnsupportedOperationException();
+	private ILObject applyMethod(Context ctx, ILObject value, List<Expression> tail) {
+		if(tail.isEmpty()) {
+			return value;
+		}
+		
+		if(! (ListUtils.head(tail) instanceof VariableExpression)) {
+			throw new RuntimeException("Should be a variable");
+		}
+		
+		VariableExpression varName = (VariableExpression) ListUtils.head(tail);
+		
+		ILClass type = value.getType();
+		ILClassLambda lambda = type.getLambda(varName.name);
+		return lambda.applyObject(value, eval(ctx, ListUtils.tail(tail)));
 	}
 	
 	private List<ILObject> eval(final Context ctx, List<Expression> exprs) {

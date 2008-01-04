@@ -1,20 +1,20 @@
 package org.sodeja.il.model;
 
 import org.sodeja.il.runtime.Context;
-import org.sodeja.il.runtime.ILClass;
 import org.sodeja.il.runtime.ILObject;
+import org.sodeja.il.runtime.ILSymbol;
+import org.sodeja.il.runtime.SDK;
 
 public class VariableExpression implements Expression {
-	public final String name;
+	public final ILSymbol name;
 
 	public VariableExpression(String name) {
-		this.name = name;
+		this.name = SDK.getInstance().makeSymbol(name);
 	}
 
 	@Override
 	public ILObject eval(Context ctx) {
-		ILClass clazz = ctx.getRoot().getClassByName("ILSymbol");
-		return clazz.makeInstance(name);
+		return ctx.get(name);
 	}
 	
 	@Override

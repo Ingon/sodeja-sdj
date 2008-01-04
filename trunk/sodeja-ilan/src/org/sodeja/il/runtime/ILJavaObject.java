@@ -1,12 +1,18 @@
 package org.sodeja.il.runtime;
 
-public class ILJavaObject<T> extends ILObject {
+public class ILJavaObject<T> implements ILObject {
 	
-	private final Object value;
+	protected final ILJavaObjectClass type;
+	protected final T value;
 	
-	public ILJavaObject(ILClass type, Object value) {
-		super(type);
+	public ILJavaObject(ILJavaObjectClass type, T value) {
+		this.type = type;
 		this.value = value;
+	}
+
+	@Override
+	public ILClass getType() {
+		return type;
 	}
 
 	@Override
@@ -25,6 +31,6 @@ public class ILJavaObject<T> extends ILObject {
 
 	@Override
 	public String toString() {
-		return ":" + value;
+		return "<" + value.getClass().getName() + "> " + value;
 	}
 }
