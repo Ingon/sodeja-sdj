@@ -60,7 +60,21 @@ public class ILParser extends AbstractSemanticParser<String, List<Expression>> {
 			return new ValueExpression(p);
 		}});
 	
-	private final Parser<String, ValueExpression> VALUE = oneOf1("VALUE", INTEGER_VALUE);
+	private final Parser<String, ValueExpression> BOOLEAN_VALUE = new AbstractParser<String, ValueExpression>("BOOLEAN_VALUE") {
+		@Override
+		protected ParsingResult<String, ValueExpression> executeDelegate(ConsList<String> tokens) {
+			String head = tokens.head();
+			if(head.equals("true")) {
+				return success(new ValueExpression(Boolean.TRUE), tokens.tail());
+			} else if(head.equals("false")) {
+				return success(new ValueExpression(Boolean.FALSE), tokens.tail());
+			}
+			
+			return new ParseError<String, ValueExpression>("Expecting true or false", tokens);
+		}
+	};
+	
+	private final Parser<String, ValueExpression> VALUE = oneOf1("VALUE", INTEGER_VALUE, BOOLEAN_VALUE);
 	
 	private final Parser<String, String> CURLY_OPEN = thenParserJust1("CURLY_OPEN", literal("{"), literal(ILLexer.CRLF));
 
