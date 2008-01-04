@@ -2,11 +2,9 @@ package org.sodeja.il.sdk;
 
 import java.util.List;
 
-import org.sodeja.il.runtime.SDK;
-
 public class ILNotFoundLambda implements ILClassLambda {
 
-	public static final ILSymbol NAME = SDK.getInstance().makeSymbol("methodMissing");
+	public static final ILSymbol NAME = new ILSymbol("methodMissing");
 	
 	private final ILSymbol name;
 	

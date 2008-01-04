@@ -24,7 +24,7 @@ public class ObjectContext implements Context {
 		if(! (obj instanceof ILDefaultObject)) {
 			throw new UnsupportedOperationException();
 		}
-		ILSymbol varSymbol = SDK.getInstance().makeSymbol(symbol.getValue().substring(1));
+		ILSymbol varSymbol = new ILSymbol(symbol.getValue().substring(1));
 		((ILDefaultObject) obj).set(varSymbol, value);
 	}
 
@@ -43,7 +43,7 @@ public class ObjectContext implements Context {
 			throw new UnsupportedOperationException();
 		}
 		
-		ILSymbol varSymbol = SDK.getInstance().makeSymbol(symbol.getValue().substring(1));
+		ILSymbol varSymbol = new ILSymbol(symbol.getValue().substring(1));
 		return ((ILDefaultObject) obj).get(varSymbol);
 	}
 }

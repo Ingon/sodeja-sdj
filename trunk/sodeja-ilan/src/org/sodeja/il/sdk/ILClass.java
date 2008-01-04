@@ -28,6 +28,9 @@ public class ILClass implements ILObject {
 			constructor = value;
 			return;
 		}
+		if(methods.get(name) != null) {
+			throw new UnsupportedOperationException();
+		}
 		methods.put(name, value);
 	}
 	

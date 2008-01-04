@@ -2,16 +2,18 @@ package org.sodeja.il.model;
 
 import org.sodeja.il.runtime.Context;
 import org.sodeja.il.runtime.SDK;
+import org.sodeja.il.sdk.ILClass;
 import org.sodeja.il.sdk.ILObject;
 import org.sodeja.il.sdk.ILSymbol;
 
 public class ImportExpression implements Expression {
 	public final VariableExpression name;
+	public final ILClass type;
 	
 	public ImportExpression(VariableExpression name) {
 		this.name = name;
 		
-		SDK.getInstance().registerJavaClass(name.name.getValue());
+		type = SDK.getInstance().registerJavaClass(name.name.getValue());
 	}
 
 	@Override
@@ -19,8 +21,8 @@ public class ImportExpression implements Expression {
 		String val = name.name.getValue();
 		String rname = val.substring(val.lastIndexOf(".") + 1);
 		
-		ILSymbol importName = SDK.getInstance().makeSymbol(rname);
-		ctx.define(importName, SDK.getInstance().getJavaClass(val));
+		ILSymbol importName = new ILSymbol(rname);
+		ctx.define(importName, type);
 		return importName;
 	}
 }

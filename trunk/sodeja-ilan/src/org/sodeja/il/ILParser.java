@@ -74,7 +74,9 @@ public class ILParser extends AbstractSemanticParser<String, List<Expression>> {
 		}
 	};
 	
-	private final Parser<String, ValueExpression> VALUE = oneOf1("VALUE", INTEGER_VALUE, BOOLEAN_VALUE);
+	private final Parser<String, ValueExpression> STRING_VALUE = applyCons("STRING_VALUE", justString("STRING"), ValueExpression.class);
+	
+	private final Parser<String, ValueExpression> VALUE = oneOf1("VALUE", INTEGER_VALUE, BOOLEAN_VALUE, STRING_VALUE);
 	
 	private final Parser<String, String> CURLY_OPEN = thenParserJust1("CURLY_OPEN", literal("{"), literal(ILLexer.CRLF));
 
