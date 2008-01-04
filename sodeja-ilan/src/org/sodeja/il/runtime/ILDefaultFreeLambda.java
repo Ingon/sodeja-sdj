@@ -18,6 +18,11 @@ public class ILDefaultFreeLambda implements ILFreeLambda {
 
 	@Override
 	public ILObject apply(List<ILObject> values) {
+		if(arguments.size() > values.size()) {
+			List<ILSymbol> partialApplyArgumentsList = arguments.subList(0, values.size());
+			List<ILSymbol> partialApplyRestList = arguments.subList(values.size(), arguments.size());
+			return new ILDefaultFreeLambda(new FunctionContext(context, partialApplyArgumentsList, values), partialApplyRestList, body);
+		}
 		return body.eval(new FunctionContext(context, arguments, values));
 	}
 
