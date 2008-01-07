@@ -23,7 +23,7 @@ public class LambdaExpression implements Expression {
 	@Override
 	public ILObject eval(Context ctx) {
 		if(ctx instanceof ClassContext) {
-			return new ILDefaultClassLambda(ctx, mapToSymbols(), expression);
+			return new ILDefaultClassLambda((ClassContext) ctx, mapToSymbols(), expression);
 		}
 		return new ILDefaultFreeLambda(ctx, mapToSymbols(), expression);
 	}

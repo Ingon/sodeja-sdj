@@ -10,8 +10,6 @@ import org.sodeja.functional.Function1;
 import org.sodeja.il.sdk.ILClass;
 import org.sodeja.il.sdk.ILFreeLambda;
 import org.sodeja.il.sdk.ILJavaClass;
-import org.sodeja.il.sdk.ILJavaObject;
-import org.sodeja.il.sdk.ILLambda;
 import org.sodeja.il.sdk.ILObject;
 import org.sodeja.il.sdk.ILSymbol;
 
@@ -57,19 +55,6 @@ public class RootContext extends AbstractContext {
 			public ILClass getType() {
 				throw new UnsupportedOperationException();
 			}});
-//		define(new ILSymbol("makeAsDelegate"), new ILFreeLambda() {
-//			@Override
-//			public ILObject apply(List<ILObject> values) {
-//				ILJavaClass ilClazz = (ILJavaClass) values.get(0);
-//				ILJavaObject<String> val = (ILJavaObject<String>) values.get(1);
-//				
-//				
-//			}
-//
-//			@Override
-//			public ILClass getType() {
-//				throw new UnsupportedOperationException();
-//			}});
 	}
 	
 	@Override
