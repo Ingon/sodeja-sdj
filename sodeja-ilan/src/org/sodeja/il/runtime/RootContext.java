@@ -22,6 +22,11 @@ public class RootContext extends AbstractContext {
 			@Override
 			public ILClass getType() {
 				throw new UnsupportedOperationException();
+			}
+
+			@Override
+			public int getArgumentsCount() {
+				return 1;
 			}});
 	}
 	
