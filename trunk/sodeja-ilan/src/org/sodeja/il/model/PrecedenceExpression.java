@@ -14,4 +14,9 @@ public class PrecedenceExpression implements Expression {
 	public ILObject eval(Context ctx) {
 		return expression.eval(ctx);
 	}
+
+	@Override
+	public String toString() {
+		return "(" + expression.toString() + ")";
+	}
 }
