@@ -1,21 +1,35 @@
 import javax.swing.JFrame
-import java.beans.PropertyChangeListener
+import javax.swing.JButton
 
-class Frame {
-	fun Frame = {
-		@frame = JFrame new
-	} 
-	
-	fun title str = @frame setTitle str
-	
-	fun addPropertyChangeListener pcl = {
-		@frame addPropertyChangeListener (promoteTo PropertyChangeListener pcl)
-	}
-	
-	fun show = @frame setVisible true
+import java.beans.PropertyChangeListener
+import java.awt.event.ActionListener
+
+f = JFrame new
+f addPropertyChangeListener (promoteTo PropertyChangeListener \ pce = print ("Prop: " concat (pce getPropertyName)))
+f setTitle "Alabala 12"
+
+b = JButton new
+b setText "Test"
+b addActionListener (promoteTo ActionListener \ ae = exit 0)
+
+f add b
+f setBounds 100 100 200 200
+if (f isVisible) {
+	print "11"
+} else {
+	print "12"
 }
 
-f = Frame new
-f addPropertyChangeListener \ pce = print ("Prop: " concat (pce getPropertyName))
-f title "Alabala 12"
-f show
+f setVisible true
+if (f isVisible) {
+	print "21"
+} else {
+	print "22"
+}
+
+fun t k = {
+	print (k toString)
+	t (k + 1)
+}
+
+;t 0

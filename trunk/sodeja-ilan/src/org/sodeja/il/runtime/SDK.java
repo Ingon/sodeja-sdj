@@ -30,6 +30,7 @@ public class SDK {
 	
 	private SDK() {
 		metaType = new ILClass(new ILSymbol("ILMetaObject"), null);
+		initMetaType();
 		
 		rootType = new ILClass(new ILSymbol("ILObject"), null);
 		symbolType = new ILSymbolClass();
@@ -40,8 +41,6 @@ public class SDK {
 		
 		makeIntegerType();
 		registerJavaClass("java.lang.Boolean");
-
-		initMetaType();
 	}
 	
 	private void initMetaType() {
