@@ -2,12 +2,12 @@ import javax.swing.JFrame
 
 fun printValue pce = {
 	value = (pce getNewValue) toString
-	print ("Value: " concat value)
+	print "Value: " concat value
 }
 
 printName = \ pce = {
 	name = pce getPropertyName
-	print ("Property: " concat name)
+	print "Property: " concat name
 }
 
 frame = JFrame new

@@ -19,6 +19,16 @@ public class ApplyExpression implements Expression {
 
 	@Override
 	public ILObject eval(final Context ctx) {
+//		ILObject value = ListUtils.head(expressions).eval(ctx);
+//		if(value instanceof ILFreeLambda) {
+//			return applyLambda(ctx, (ILFreeLambda) value, ListUtils.tail(expressions));
+//		}
+//		
+//		return applyMethod(ctx, value, ListUtils.tail(expressions));
+		return eval(ctx, expressions);
+	}
+
+	private ILObject eval(Context ctx, List<Expression> expressions) {
 		ILObject value = ListUtils.head(expressions).eval(ctx);
 		if(value instanceof ILFreeLambda) {
 			return applyLambda(ctx, (ILFreeLambda) value, ListUtils.tail(expressions));
@@ -26,9 +36,18 @@ public class ApplyExpression implements Expression {
 		
 		return applyMethod(ctx, value, ListUtils.tail(expressions));
 	}
-
+	
 	private ILObject applyLambda(Context ctx, ILFreeLambda lambda, List<Expression> tail) {
-		return lambda.apply(eval(ctx, tail));
+		if(lambda.getArgumentsCount() < tail.size()) {
+			List<Expression> main = tail.subList(0, lambda.getArgumentsCount());
+			List<Expression> rest = tail.subList(lambda.getArgumentsCount() - 1, tail.size());
+			
+			List<ILObject> values = evalList(ctx, main);
+			values.add(eval(ctx, rest));
+			
+			return lambda.apply(values);
+		}
+		return lambda.apply(evalList(ctx, tail));
 	}
 	
 	private ILObject applyMethod(Context ctx, ILObject value, List<Expression> tail) {
@@ -44,10 +63,10 @@ public class ApplyExpression implements Expression {
 		
 		ILClass type = value.getType();
 		ILClassLambda lambda = type.getLambda(varName.name);
-		return lambda.applyObject(value, eval(ctx, ListUtils.tail(tail)));
+		return lambda.applyObject(value, evalList(ctx, ListUtils.tail(tail)));
 	}
 	
-	private List<ILObject> eval(final Context ctx, List<Expression> exprs) {
+	private List<ILObject> evalList(final Context ctx, List<Expression> exprs) {
 		return ListUtils.map(exprs, new Function1<ILObject, Expression>() {
 			@Override
 			public ILObject execute(Expression p) {
