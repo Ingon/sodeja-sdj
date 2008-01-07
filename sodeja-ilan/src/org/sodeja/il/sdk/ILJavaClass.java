@@ -84,7 +84,7 @@ public class ILJavaClass extends ILClass {
 			
 			final Method realMethod = candidates.get(0);
 			List<Object> vals = null;
-			if(realMethod.getParameterTypes().length > 1) {
+			if(realMethod.getParameterTypes().length != 1) {
 				vals = defaultMap(values);
 			} else {
 				Class paramType = realMethod.getParameterTypes()[0];
@@ -98,12 +98,13 @@ public class ILJavaClass extends ILClass {
 					Object localObj = Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {paramType}, new InvocationHandler() {
 						@Override
 						public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-							List<Object> vals = ListUtils.asList(args);
-							lambda.apply(ListUtils.map(vals, new Function1<ILObject, Object>() {
+							List<Object> values = ListUtils.asList(args);
+							List<ILObject> promotedValues = ListUtils.map(values, new Function1<ILObject, Object>() {
 								@Override
 								public ILObject execute(Object p) {
 									return SDK.getInstance().makeInstance(p);
-								}}));
+								}});
+							lambda.apply(promotedValues);
 							return null;
 						}});
 					vals.add(localObj);

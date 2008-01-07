@@ -51,7 +51,7 @@ public class SDK {
 	public ILObject makeInstance(Object value) {
 		Class clazz = value.getClass();
 		ILJavaClass type = (ILJavaClass) types.get(new ILSymbol(clazz.getName()));
-		if(type != null) {
+		if(type == null) {
 			type = registerJavaClass(clazz);
 		}
 		
