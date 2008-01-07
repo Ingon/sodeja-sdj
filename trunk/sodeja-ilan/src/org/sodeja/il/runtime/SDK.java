@@ -144,7 +144,7 @@ public class SDK {
 			}});
 		
 		ILJavaClass symbolClass = null;
-		for(int i = 1, n = hierarhy.size();i < n;i++) {
+		for(int i = 0, n = hierarhy.size();i < n;i++) {
 			Class tempClass = hierarhy.get(i);
 			ILSymbol symbol = names.get(i);
 			
@@ -153,7 +153,14 @@ public class SDK {
 				continue;
 			}
 			
-			symbolClass = new ILJavaClass(symbol, types.get(names.get(i - 1)), tempClass);
+			ILClass parent = null;
+			if(i == 0) {
+				parent = rootType;
+			} else {
+				parent = types.get(names.get(i - 1));
+			}
+			
+			symbolClass = new ILJavaClass(symbol, parent, tempClass);
 			types.put(symbol, symbolClass);
 		}
 		return symbolClass;

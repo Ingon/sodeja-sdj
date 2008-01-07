@@ -9,6 +9,7 @@ import org.sodeja.il.sdk.ILClass;
 import org.sodeja.il.sdk.ILClassLambda;
 import org.sodeja.il.sdk.ILFreeLambda;
 import org.sodeja.il.sdk.ILObject;
+import org.sodeja.lang.StringUtils;
 
 public class ApplyExpression implements Expression {
 	public final List<Expression> expressions;
@@ -32,15 +33,6 @@ public class ApplyExpression implements Expression {
 	}
 	
 	private ILObject applyLambda(Context ctx, ILFreeLambda lambda, List<Expression> tail) {
-		if(lambda.getArgumentsCount() < tail.size()) {
-			List<Expression> main = tail.subList(0, lambda.getArgumentsCount());
-			List<Expression> rest = tail.subList(lambda.getArgumentsCount() - 1, tail.size());
-			
-			List<ILObject> values = evalList(ctx, main);
-			values.add(eval(ctx, rest));
-			
-			return lambda.apply(values);
-		}
 		return lambda.apply(evalList(ctx, tail));
 	}
 	
@@ -66,5 +58,10 @@ public class ApplyExpression implements Expression {
 			public ILObject execute(Expression p) {
 				return p.eval(ctx);
 			}});
+	}
+
+	@Override
+	public String toString() {
+		return StringUtils.appendWithSeparatorToString(expressions, " ");
 	}
 }
