@@ -35,4 +35,9 @@ public class LambdaExpression implements Expression {
 				return p.name;
 			}});
 	}
+
+	@Override
+	public String toString() {
+		return "\\ " + params + "=" + expression;
+	}
 }

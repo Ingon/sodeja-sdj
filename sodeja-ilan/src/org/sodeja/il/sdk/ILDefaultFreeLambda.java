@@ -29,11 +29,6 @@ public class ILDefaultFreeLambda implements ILFreeLambda {
 	}
 
 	@Override
-	public int getArgumentsCount() {
-		return arguments.size();
-	}
-
-	@Override
 	public ILClass getType() {
 		throw new UnsupportedOperationException();
 	}

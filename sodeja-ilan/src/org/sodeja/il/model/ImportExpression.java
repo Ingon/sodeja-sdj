@@ -25,4 +25,9 @@ public class ImportExpression implements Expression {
 		ctx.define(importName, type);
 		return importName;
 	}
+
+	@Override
+	public String toString() {
+		return "import " + name;
+	}
 }

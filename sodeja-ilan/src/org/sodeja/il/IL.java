@@ -13,7 +13,8 @@ public class IL {
 //		ILLexer lexer = new ILLexer(new FileReader("test/simple.il"));
 //		ILLexer lexer = new ILLexer(new FileReader("test/tests.il"));
 //		ILLexer lexer = new ILLexer(new FileReader("test/fancy.il"));
-		ILLexer lexer = new ILLexer(new FileReader("test/java.il"));
+//		ILLexer lexer = new ILLexer(new FileReader("test/java.il"));
+		ILLexer lexer = new ILLexer(new FileReader("test/java1.il"));
 		List<String> tokens = lexer.tokenize();
 //		System.out.println(tokens);
 		

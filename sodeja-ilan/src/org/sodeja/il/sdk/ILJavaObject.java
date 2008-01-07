@@ -21,6 +21,6 @@ public class ILJavaObject<T> implements ILObject {
 
 	@Override
 	public String toString() {
-		return "<" + value.getClass().getName() + "> " + value;
+		return "(<" + value.getClass().getName() + "> " + value + ")";
 	}
 }

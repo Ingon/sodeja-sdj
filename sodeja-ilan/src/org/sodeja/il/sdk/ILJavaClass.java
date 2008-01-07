@@ -23,6 +23,10 @@ public class ILJavaClass extends ILClass {
 		this.clazz = clazz;
 	}
 
+	public Class getClazz() {
+		return clazz;
+	}
+
 	@Override
 	public ILObject newInstance(List<ILObject> values) {
 		if(values.size() != 0) {
@@ -83,33 +87,33 @@ public class ILJavaClass extends ILClass {
 			final Object obj = ((ILJavaObject) value).value;
 			
 			final Method realMethod = candidates.get(0);
-			List<Object> vals = null;
-			if(realMethod.getParameterTypes().length != 1) {
-				vals = defaultMap(values);
-			} else {
-				Class paramType = realMethod.getParameterTypes()[0];
-				if(! paramType.isInterface() || paramType.getDeclaredMethods().length != 1) {
-					vals = defaultMap(values);
-				} else if(! (values.get(0) instanceof ILFreeLambda)) {
-					vals = defaultMap(values);
-				} else {
-					final ILFreeLambda lambda = (ILFreeLambda) values.get(0);
-					vals = new ArrayList<Object>();
-					Object localObj = Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {paramType}, new InvocationHandler() {
-						@Override
-						public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-							List<Object> values = ListUtils.asList(args);
-							List<ILObject> promotedValues = ListUtils.map(values, new Function1<ILObject, Object>() {
-								@Override
-								public ILObject execute(Object p) {
-									return SDK.getInstance().makeInstance(p);
-								}});
-							lambda.apply(promotedValues);
-							return null;
-						}});
-					vals.add(localObj);
-				}
-			}
+			List<Object> vals = defaultMap(values);
+//			if(realMethod.getParameterTypes().length != 1) {
+//				vals = defaultMap(values);
+//			} else {
+//				Class paramType = realMethod.getParameterTypes()[0];
+//				if(! paramType.isInterface() || paramType.getDeclaredMethods().length != 1) {
+//					vals = defaultMap(values);
+//				} else if(! (values.get(0) instanceof ILFreeLambda)) {
+//					vals = defaultMap(values);
+//				} else {
+//					final ILFreeLambda lambda = (ILFreeLambda) values.get(0);
+//					vals = new ArrayList<Object>();
+//					Object localObj = Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {paramType}, new InvocationHandler() {
+//						@Override
+//						public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+//							List<Object> values = ListUtils.asList(args);
+//							List<ILObject> promotedValues = ListUtils.map(values, new Function1<ILObject, Object>() {
+//								@Override
+//								public ILObject execute(Object p) {
+//									return SDK.getInstance().makeInstance(p);
+//								}});
+//							lambda.apply(promotedValues);
+//							return null;
+//						}});
+//					vals.add(localObj);
+//				}
+//			}
 				
 			return execute(obj, realMethod, vals);
 		}

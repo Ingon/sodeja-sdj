@@ -16,4 +16,9 @@ public class ValueExpression implements Expression {
 	public ILObject eval(Context ctx) {
 		return value;
 	}
+
+	@Override
+	public String toString() {
+		return value.toString();
+	}
 }

@@ -18,6 +18,6 @@ public class VariableExpression implements Expression {
 	
 	@Override
 	public String toString() {
-		return "Var[" + name + "]";
+		return name.toString();
 	}
 }

@@ -17,4 +17,9 @@ public class SetExpression implements Expression {
 		ctx.define(name.name, value.eval(ctx));
 		return name.name;
 	}
+
+	@Override
+	public String toString() {
+		return name + "=" + value;
+	}
 }
