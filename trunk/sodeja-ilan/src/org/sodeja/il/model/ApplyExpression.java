@@ -19,12 +19,6 @@ public class ApplyExpression implements Expression {
 
 	@Override
 	public ILObject eval(final Context ctx) {
-//		ILObject value = ListUtils.head(expressions).eval(ctx);
-//		if(value instanceof ILFreeLambda) {
-//			return applyLambda(ctx, (ILFreeLambda) value, ListUtils.tail(expressions));
-//		}
-//		
-//		return applyMethod(ctx, value, ListUtils.tail(expressions));
 		return eval(ctx, expressions);
 	}
 
