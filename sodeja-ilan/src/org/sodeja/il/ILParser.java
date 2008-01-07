@@ -11,6 +11,7 @@ import org.sodeja.il.model.ApplyExpression;
 import org.sodeja.il.model.BlockExpression;
 import org.sodeja.il.model.ClassExpression;
 import org.sodeja.il.model.Expression;
+import org.sodeja.il.model.IfExpression;
 import org.sodeja.il.model.ImportExpression;
 import org.sodeja.il.model.LambdaExpression;
 import org.sodeja.il.model.PrecedenceExpression;
@@ -92,6 +93,10 @@ public class ILParser extends AbstractSemanticParser<String, List<Expression>> {
 	
 	private final Parser<String, PrecedenceExpression> PRECEDENSE = thenParser3Cons2("PRECEDENCE", literal("("), EXPRESSION_DEL, literal(")"), PrecedenceExpression.class);
 
+	private final Parser<String, Expression> ELSE = zeroOrOne("ELSE_OPTION", thenParserJust2("ELSE", literal("else"), LAMBDA_BODY));
+	
+	private final Parser<String, IfExpression> IF = thenParser4Cons234("IF", literal("if"), PRECEDENSE, LAMBDA_BODY, ELSE, IfExpression.class);
+	
 	private final Parser<String, SetExpression> SET = thenParser3Cons13("SET", IDENTIFIER, literal("="), EXPRESSION_DEL, SetExpression.class);
 	
 	private final Parser<String, ImportExpression> IMPORT = thenParserCons2("IMPORT", literal("import"), IDENTIFIER, ImportExpression.class);
@@ -100,7 +105,7 @@ public class ILParser extends AbstractSemanticParser<String, List<Expression>> {
 	
 	private final Parser<String, ClassExpression> CLASS = thenParser3Cons23("CLASS", literal("class"), IDENTIFIER, BLOCK, ClassExpression.class);
 
-	private final Parser<String, Expression> SIMPLE_EXPRESSION = oneOf1("EXPRESSION", LAMBDA, PRECEDENSE, VALUE, IDENTIFIER);
+	private final Parser<String, Expression> SIMPLE_EXPRESSION = oneOf1("EXPRESSION", LAMBDA, PRECEDENSE, IF, VALUE, IDENTIFIER);
 	
 	private final Parser<String, List<Expression>> APPLY_BODY = oneOrMore("SIMPLE_EXPRESSIONS", SIMPLE_EXPRESSION);
 	
