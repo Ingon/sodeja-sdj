@@ -11,8 +11,8 @@ class Rational {
 	}
 
 	fun + other = {
-		tnum = (@num + other den) + (@den + other num)
-		tden = @den * other num
+		tnum = (@num + (other den)) + (@den + (other num))
+		tden = @den * (other num)
 		Rational new tnum tden
 	}
 	
@@ -24,12 +24,14 @@ class Rational {
 f = Rational new 1 2
 s = Rational new 2 3
 f * s
+f + s
 
 class Rational {
 	fun / other = {
-		tnum = @num * other den
-		tden = @den * other num
+		tnum = @num * (other den)
+		tden = @den * (other num)
 		Rational new tnum tden
 	}
 }
 
+f / s
