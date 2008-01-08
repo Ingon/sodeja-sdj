@@ -27,6 +27,17 @@ import org.sodeja.parsec.semantic.AbstractSemanticParser;
 
 public class ILParser extends AbstractSemanticParser<String, List<Expression>> {
 
+	private static final String[] KEYWORDS_ARRAY = {"class", "fun", "import", "if", "else"};
+	
+	private static boolean isKeyword(String str) {
+		for(String keword : KEYWORDS_ARRAY) {
+			if(keword.equals(str)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private final DelegateParser<String, List<Expression>> ROOT_EXPRESSIONS_DEL = new DelegateParser<String, List<Expression>>("ROOT_EXPRESSIONS_DEL");
 	
 	private final DelegateParser<String, Expression> EXPRESSION_DEL = new DelegateParser<String, Expression>("EXPRESSIONS_DEL");
@@ -42,6 +53,9 @@ public class ILParser extends AbstractSemanticParser<String, List<Expression>> {
 			}
 			
 			if(head.length() > 1) {
+				if(isKeyword(head)) {
+					return new ParseError<String, VariableExpression>("Expecting identifier", tokens);
+				}
 				return success(new VariableExpression(head), tokens.tail());
 			}
 			

@@ -11,10 +11,10 @@ import org.sodeja.il.runtime.RootContext;
 public class IL {
 	public static void main(String[] args) throws IOException {
 //		ILLexer lexer = new ILLexer(new FileReader("test/simple.il"));
-//		ILLexer lexer = new ILLexer(new FileReader("test/tests.il"));
+		ILLexer lexer = new ILLexer(new FileReader("test/tests.il"));
 //		ILLexer lexer = new ILLexer(new FileReader("test/fancy.il"));
 //		ILLexer lexer = new ILLexer(new FileReader("test/java.il"));
-		ILLexer lexer = new ILLexer(new FileReader("test/java1.il"));
+//		ILLexer lexer = new ILLexer(new FileReader("test/java1.il"));
 		List<String> tokens = lexer.tokenize();
 //		System.out.println(tokens);
 		
