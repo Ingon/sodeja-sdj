@@ -1,5 +1,3 @@
-| maxValue |    " <== Declares maxValue as a local variable"
+| maxValue | "alabala"
 maxValue := Infinity negative.
-#(18 2 64 -99) do: [:element | maxValue := element max: maxValue].
-    "For each element of the array, assign to maxValue whichever value is larger: the value of the element, or that of maxValue"
-^maxValue
+^maxValue.
