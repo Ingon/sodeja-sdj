@@ -74,6 +74,7 @@ public class SILParser {
 	private final Parser executableCodeParser;
 	private final Parser methodParser;
 	
+	@SuppressWarnings("unchecked")
 	private SILParser() {
 		Parser anyChar = anyCharacter();
 		Parser whitespaceChar = whitespaceCharacter();
@@ -583,7 +584,7 @@ public class SILParser {
 			}});
 		
 		Parser methodHeader = or("methodHeader", unaryMethodHeader, binaryMethodHeader, keywordMethodHeader);
-		// TODO make a global parsers
+
 		Parser methodDeclaration_t = then("methodDeclaration", optionalWhitespace, methodHeader, executableCode);
 		Parser methodDeclaration = apply(methodDeclaration_t, new Function1() {
 			@Override
