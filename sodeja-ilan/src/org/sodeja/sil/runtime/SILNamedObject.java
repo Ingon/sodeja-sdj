@@ -4,27 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SILNamedObject extends SILObject {
-	private final List<MutablePair<String, SILObject>> locals;
+	private final List<MutablePair<Reference, Reference>> locals;
 	
-	public SILNamedObject(SILClass type, List<String> localNames) {
+	public SILNamedObject(Reference type, List<Reference> localNames) {
 		super(type);
 		
-		this.locals = new ArrayList<MutablePair<String, SILObject>>();
-		for(String symbol : localNames) {
-			locals.add(new MutablePair<String, SILObject>(symbol, (SILObject) null));
+		this.locals = new ArrayList<MutablePair<Reference, Reference>>();
+		for(Reference symbol : localNames) {
+			locals.add(new MutablePair<Reference, Reference>(symbol, (Reference) null));
 		}
 	}
 	
-	public SILObject at(String name) {
+	public Reference at(Reference name) {
 		return findLocalPair(name).second;
 	}
 
-	public void at_put(String name, SILObject value) {
+	public void at_put(Reference name, Reference value) {
 		findLocalPair(name).second = value;
 	}
 	
-	private MutablePair<String, SILObject> findLocalPair(String name) {
-		for(MutablePair<String, SILObject> pair : locals) {
+	private MutablePair<Reference, Reference> findLocalPair(Reference name) {
+		for(MutablePair<Reference, Reference> pair : locals) {
 			if(pair.first.equals(name)) {
 				return pair;
 			}

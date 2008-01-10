@@ -1,22 +1,23 @@
 package org.sodeja.sil.runtime;
 
 public class SILIndexedObject extends SILObject {
-	private SILObject[] values;
+	private Reference[] values;
 	
-	public SILIndexedObject(SILClass type, Integer initialSize) {
+	public SILIndexedObject(Reference type, Integer initialSize) {
 		super(type);
 		
-		values = new SILObject[initialSize];
+		values = new Reference[initialSize];
 	}
 	
-	public Integer size() {
-		return values.length;
+	public SILJavaObject<Integer> size() {
+		return new SILJavaObject<Integer>(References.JAVA_INTEGER_CLASS);
 	}
 	
-	public void changeSize(Integer newSize) {
-		SILObject[] tvalues = new SILObject[newSize];
-		int length = newSize;
-		if(values.length < newSize) {
+	public void changeSize(SILJavaObject<Integer> newSize) {
+		int newSizeVal = newSize.getValue();
+		Reference[] tvalues = new Reference[newSizeVal];
+		int length = newSizeVal;
+		if(values.length < newSizeVal) {
 			length = values.length;
 		}
 		
@@ -25,11 +26,11 @@ public class SILIndexedObject extends SILObject {
 		values = tvalues;
 	}
 	
-	public SILObject at(Integer index) {
+	public Reference at(Integer index) {
 		return values[index];
 	}
 	
-	public void at_put(Integer index, SILObject value) {
+	public void at_put(Integer index, Reference value) {
 		values[index] = value;
 	}
 }

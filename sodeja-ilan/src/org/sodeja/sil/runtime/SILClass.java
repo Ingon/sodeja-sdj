@@ -3,7 +3,10 @@ package org.sodeja.sil.runtime;
 import org.sodeja.collections.ListUtils;
 
 public class SILClass extends SILNamedObject {
-	public SILClass(SILClass type) {
-		super(type, ListUtils.asList("superclass", "messageDictionary", "instanceSpecification"));
+	public SILClass(Reference type) {
+		super(type, ListUtils.asList(
+				References.SIL_CLASS_SUPERCLASS,
+				References.SIL_CLASS_MESSAGE_DICT,
+				References.SIL_CLASS_INSTANCE_SPEC));
 	}
 }
