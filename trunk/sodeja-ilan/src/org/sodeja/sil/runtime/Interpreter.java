@@ -1,6 +1,6 @@
 package org.sodeja.sil.runtime;
 
-import org.sodeja.sil.model.Reference;
+import org.sodeja.sil.compiler.model.Reference;
 import org.sodeja.sil.runtime.context.Context;
 import org.sodeja.sil.runtime.instructions.Instruction;
 import org.sodeja.sil.runtime.method.CompiledMethod;
