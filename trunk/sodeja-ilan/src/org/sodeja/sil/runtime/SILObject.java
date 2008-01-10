@@ -1,9 +1,9 @@
 package org.sodeja.sil.runtime;
 
 public class SILObject {
-	public final Reference type;
+	public final SILClass type;
 	
-	public SILObject(Reference type) {
+	public SILObject(SILClass type) {
 		this.type = type;
 	}
 }
