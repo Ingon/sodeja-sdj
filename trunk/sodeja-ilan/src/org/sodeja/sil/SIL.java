@@ -12,7 +12,7 @@ public class SIL {
 //		} else {
 //			machine.makeNewImage();
 //		}
-//		machine.run();
+		machine.run();
 		
 //		Parser execCode = SILParser.getInstance().getExecutableCodeParser();
 //		

@@ -1,10 +1,17 @@
 package org.sodeja.sil.runtime;
 
-public class SILJavaObject extends SILObject {
-	public final Object value;
+public class SILJavaObject<T> extends SILObject {
+	private T value;
 	
-	public SILJavaObject(SILClass type, Object value) {
+	public SILJavaObject(SILClass type) {
 		super(type);
+	}
+
+	public T getValue() {
+		return value;
+	}
+
+	public void setValue(T value) {
 		this.value = value;
 	}
 }
