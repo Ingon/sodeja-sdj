@@ -9,6 +9,7 @@ import java.util.List;
 import org.sodeja.collections.ConsList;
 import org.sodeja.parsec2.ParseResult;
 import org.sodeja.parsec2.Parser;
+import org.sodeja.sil.compiler.SILParser;
 
 public class SIL {
 	public static void main(String[] args) throws Exception {
