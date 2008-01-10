@@ -1,18 +1,15 @@
 package org.sodeja.sil;
 
-import java.io.FileInputStream;
-
-import org.sodeja.sil.vm.VirtualMachine;
 
 public class SIL {
 	public static void main(String[] args) throws Exception {
-		VirtualMachine machine = new VirtualMachine();
+//		VirtualMachine machine = new VirtualMachine();
 //		if(args.length > 0) {
 //			machine.restoreImage(new FileInputStream(args[0]));
 //		} else {
 //			machine.makeNewImage();
 //		}
-		machine.run();
+//		machine.run();
 		
 //		Parser execCode = SILParser.getInstance().getExecutableCodeParser();
 //		
