@@ -1,8 +1,6 @@
 package org.sodeja.sil.runtime;
 
-import java.util.List;
-import java.util.Map;
-
+import org.sodeja.sil.model.Reference;
 import org.sodeja.sil.runtime.context.Context;
 import org.sodeja.sil.runtime.instructions.Instruction;
 import org.sodeja.sil.runtime.method.CompiledMethod;
@@ -18,8 +16,7 @@ public class Interpreter {
 	private CompiledMethod currentMethod;
 	private Integer instructionPointer;
 	private Reference receiver;
-	private List<Reference> arguments;
-	private Map<String, Reference> registers;
+	private Reference[] argumentsAndRegisters;
 	
 	public Interpreter(ObjectTable objects) {
 		this.objects = objects;
@@ -40,5 +37,13 @@ public class Interpreter {
 		Instruction instr = ((DefaultCompiledMethod) currentMethod).instructions.get(instructionPointer);
 		instructionPointer = instructionPointer + 1;
 		return instr;
+	}
+	
+	public void setValue(int index, Reference ref) {
+		argumentsAndRegisters[index] = ref;
+	}
+	
+	public Reference getValue(int index) {
+		return argumentsAndRegisters[index];
 	}
 }

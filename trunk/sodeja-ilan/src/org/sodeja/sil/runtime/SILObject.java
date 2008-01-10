@@ -1,13 +1,11 @@
 package org.sodeja.sil.runtime;
 
-import java.util.List;
-
 public class SILObject {
-	public final Reference silClass;
-	public final List<Reference> contents;
+	public final Reference type;
+	public final SILObjectContents contents;
 	
-	public SILObject(Reference silClass, List<Reference> contents) {
-		this.silClass = silClass;
+	public SILObject(Reference type, SILObjectContents contents) {
+		this.type = type;
 		this.contents = contents;
 	}
 }

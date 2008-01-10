@@ -1,4 +1,4 @@
-package org.sodeja.sil;
+package org.sodeja.sil.compiler;
 
 import static org.sodeja.parsec2.ParserCombinators.apply;
 import static org.sodeja.parsec2.ParserCombinators.matchUnless;
