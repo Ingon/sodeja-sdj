@@ -3,10 +3,15 @@ package org.sodeja.sil.runtime.protocol;
 import org.sodeja.sil.runtime.SILDefaultObject;
 import org.sodeja.sil.runtime.SILObject;
 import org.sodeja.sil.runtime.memory.InternalReference;
-import org.sodeja.sil.runtime.vm.VirtualMachine;
+import org.sodeja.sil.runtime.memory.ObjectManager;
 
 public class DictionaryProtocol implements Protocol {
 	DictionaryProtocol() {
+	}
+	
+	public void init(SILObject dictionaryObj) {
+		SILDefaultObject dictionary = (SILDefaultObject) dictionaryObj;
+		throw new UnsupportedOperationException();
 	}
 	
 	public InternalReference get(SILObject dictionaryObj, InternalReference key) {
@@ -64,6 +69,6 @@ public class DictionaryProtocol implements Protocol {
 	}
 	
 	private InternalReference nil() {
-		return VirtualMachine.current().objectManager.nilRef;
+		return ObjectManager.NIL_REF;
 	}
 }

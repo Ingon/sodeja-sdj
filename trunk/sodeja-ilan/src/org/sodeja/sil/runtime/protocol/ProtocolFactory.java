@@ -8,6 +8,7 @@ public class ProtocolFactory {
 	}
 	
 	public final ClassProtocol classProtocol = new ClassProtocol();
+	public final DictionaryProtocol dictionaryProtocol = new DictionaryProtocol();
 	
 	private ProtocolFactory() {
 	}
