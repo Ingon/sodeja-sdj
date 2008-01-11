@@ -66,6 +66,10 @@ public class ObjectManager {
 		
 		ref = create(symbolClassRef);
 		symbols.put(str, ref);
+		
+		SILPrimitiveObject symbolObj = (SILPrimitiveObject) get(ref);
+		symbolObj.setValue(createLink(str));
+		
 		return ref;
 	}
 
