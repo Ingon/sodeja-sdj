@@ -1,4 +1,4 @@
-package org.sodeja.sil.runtime;
+package org.sodeja.sil.runtime.memory;
 
 public class SILInternalReference extends SILReference {
 	public SILInternalReference(Integer id) {
