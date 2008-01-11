@@ -1,6 +1,6 @@
 package org.sodeja.sil.runtime;
 
-import org.sodeja.sil.runtime.memory.SILInternalReference;
+import org.sodeja.sil.runtime.memory.InternalReference;
 
 public class InstanceSpecification {
 	public final InstanceType type;
@@ -15,7 +15,7 @@ public class InstanceSpecification {
 		this.indexSize = indexSize;
 	}
 	
-	public SILObject makeInstance(SILInternalReference typeClass) {
+	public SILObject makeInstance(InternalReference typeClass) {
 		if(type == InstanceType.NAMED) {
 			return new SILNamedObject(typeClass);
 		} else if(type == InstanceType.INDEXED) {

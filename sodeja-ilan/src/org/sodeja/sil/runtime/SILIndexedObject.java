@@ -1,13 +1,13 @@
 package org.sodeja.sil.runtime;
 
-import org.sodeja.sil.runtime.memory.SILInternalReference;
+import org.sodeja.sil.runtime.memory.InternalReference;
 
 public class SILIndexedObject extends SILObject {
-	public final SILInternalReference[] values;
+	public final InternalReference[] values;
 	
-	public SILIndexedObject(SILInternalReference clazz, int initialSize) {
+	public SILIndexedObject(InternalReference clazz, int initialSize) {
 		super(clazz);
 		
-		values = new SILInternalReference[initialSize];
+		values = new InternalReference[initialSize];
 	}
 }

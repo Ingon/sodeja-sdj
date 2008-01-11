@@ -1,20 +1,20 @@
 package org.sodeja.sil.runtime;
 
-import org.sodeja.sil.runtime.memory.SILExternalReference;
-import org.sodeja.sil.runtime.memory.SILInternalReference;
+import org.sodeja.sil.runtime.memory.ExternalReference;
+import org.sodeja.sil.runtime.memory.InternalReference;
 
 public class SILPrimitiveObject extends SILObject {
-	private SILExternalReference value;
+	private ExternalReference value;
 	
-	public SILPrimitiveObject(SILInternalReference clazz) {
+	public SILPrimitiveObject(InternalReference clazz) {
 		super(clazz);
 	}
 
-	public SILExternalReference getValue() {
+	public ExternalReference getValue() {
 		return value;
 	}
 
-	public void setValue(SILExternalReference value) {
+	public void setValue(ExternalReference value) {
 		this.value = value;
 	}
 }
