@@ -1,9 +1,9 @@
 package org.sodeja.sil.runtime.memory;
 
-public abstract class SILReference {
+abstract class SILReference {
 	public final Integer id;
 	
-	public SILReference(Integer id) {
+	protected SILReference(Integer id) {
 		this.id = id;
 	}
 
