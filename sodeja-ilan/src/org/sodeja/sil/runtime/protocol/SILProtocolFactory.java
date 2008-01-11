@@ -1,4 +1,4 @@
-package org.sodeja.sil.runtime;
+package org.sodeja.sil.runtime.protocol;
 
 public class SILProtocolFactory {
 	private static final SILProtocolFactory instance = new SILProtocolFactory();

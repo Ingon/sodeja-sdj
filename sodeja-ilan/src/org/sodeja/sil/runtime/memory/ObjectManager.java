@@ -6,7 +6,7 @@ import java.util.Map;
 import org.sodeja.sil.runtime.InstanceSpecification;
 import org.sodeja.sil.runtime.SILObject;
 import org.sodeja.sil.runtime.SILPrimitiveObject;
-import org.sodeja.sil.runtime.SILProtocolFactory;
+import org.sodeja.sil.runtime.protocol.SILProtocolFactory;
 
 public class ObjectManager {
 	
