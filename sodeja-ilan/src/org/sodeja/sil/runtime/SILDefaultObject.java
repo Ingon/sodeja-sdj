@@ -1,7 +1,7 @@
 package org.sodeja.sil.runtime;
 
 import org.sodeja.sil.runtime.memory.InternalReference;
-import org.sodeja.sil.runtime.vm.VirtualMachine;
+import org.sodeja.sil.runtime.memory.ObjectManager;
 
 public class SILDefaultObject extends SILObject {
 	private InternalReference[] values;
@@ -11,7 +11,7 @@ public class SILDefaultObject extends SILObject {
 		
 		values = new InternalReference[initialSize];
 		for(int i = 0;i < initialSize;i++) {
-			values[i] = VirtualMachine.current().objectManager.nilRef;
+			values[i] = ObjectManager.NIL_REF;
 		}
 	}
 	
@@ -35,6 +35,10 @@ public class SILDefaultObject extends SILObject {
 		
 		InternalReference[] newValues = new InternalReference[newSize];
 		System.arraycopy(values, 0, newValues, 0, mergeSize);
+		for(int i = values.length, n = newSize;i < n;i++) {
+			newValues[i] = ObjectManager.NIL_REF;
+		}
+		
 		values = newValues;
 	}
 	
