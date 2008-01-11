@@ -6,7 +6,7 @@ import java.util.Map;
 import org.sodeja.sil.runtime.InstanceSpecification;
 import org.sodeja.sil.runtime.SILObject;
 import org.sodeja.sil.runtime.SILPrimitiveObject;
-import org.sodeja.sil.runtime.protocol.SILProtocolFactory;
+import org.sodeja.sil.runtime.protocol.ProtocolFactory;
 
 public class ObjectManager {
 	
@@ -20,7 +20,7 @@ public class ObjectManager {
 	
 	private final Map<String, InternalReference> symbols;
 	
-	private final SILProtocolFactory protocols = SILProtocolFactory.getInstance();
+	private final ProtocolFactory protocols = ProtocolFactory.getInstance();
 	
 	public ObjectManager() {
 		symbolClassRef = null;

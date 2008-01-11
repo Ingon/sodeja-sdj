@@ -1,5 +1,5 @@
 package org.sodeja.sil.runtime.protocol;
 
-interface SILProtocol {
+interface Protocol {
 
 }
