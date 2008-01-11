@@ -1,5 +1,7 @@
 package org.sodeja.sil.runtime;
 
+import org.sodeja.sil.runtime.memory.SILInternalReference;
+
 public class InstanceSpecification {
 	public final InstanceType type;
 	public final Integer indexSize;

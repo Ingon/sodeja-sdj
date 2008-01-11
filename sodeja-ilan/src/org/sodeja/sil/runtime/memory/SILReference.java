@@ -1,4 +1,4 @@
-package org.sodeja.sil.runtime;
+package org.sodeja.sil.runtime.memory;
 
 public abstract class SILReference {
 	public final Integer id;

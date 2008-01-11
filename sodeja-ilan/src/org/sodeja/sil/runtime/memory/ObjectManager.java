@@ -1,7 +1,12 @@
-package org.sodeja.sil.runtime;
+package org.sodeja.sil.runtime.memory;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.sodeja.sil.runtime.InstanceSpecification;
+import org.sodeja.sil.runtime.SILObject;
+import org.sodeja.sil.runtime.SILPrimitiveObject;
+import org.sodeja.sil.runtime.SILProtocolFactory;
 
 public class ObjectManager {
 	
