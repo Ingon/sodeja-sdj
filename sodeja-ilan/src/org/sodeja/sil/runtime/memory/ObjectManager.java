@@ -25,6 +25,7 @@ public class ObjectManager {
 	private InternalReference metaclassRef;
 	private InternalReference metaclassClassRef;
 	
+	private DelegatingInternalReference arrayClassRef;
 	private InternalReference systemDictionaryRef;
 	private InternalReference symbolClassRef;
 	
@@ -77,13 +78,17 @@ public class ObjectManager {
 		classProtocol.setSuperclass(classRef, objectRef);
 		
 		// Finish init metaclass
-		classProtocol.setInstanceSpec(metaclassRef, makeInstanceSpecification(4));
+		classProtocol.setInstanceSpec(metaclassRef, makeInstanceSpecification(5));
+		arrayClassRef = new DelegatingInternalReference(this);
+		classProtocol.setInstances(metaclassRef, makeArray());
+		
+		// Arrays
+		// Somehow should merge these two
+		InternalReference arrayClassRef = makeClass(objectRef, 0, 0);
+		this.arrayClassRef.delegate = arrayClassRef;
 		
 		// Symbol hierarchy
 		symbolClassRef = makePrimitiveClass(objectRef, 0);
-		
-		// Arrays
-		InternalReference arrayClassRef = makeClass(objectRef, 0, 0);
 		
 		// System dictionary hierarchy
 		InternalReference dictionaryClassRef = makeClass(objectRef, 0, 2);
@@ -105,33 +110,37 @@ public class ObjectManager {
 	}
 	
 	private InternalReference makeClass(InternalReference superclass, int classVariables, int instanceVariables) {
-		ClassProtocol protocol = vm.protocols.classProtocol;
+		ClassProtocol classProtocol = vm.protocols.classProtocol;
 		
 		InternalReference classClassRef = create(metaclassRef);
-		protocol.init(classClassRef);
-		protocol.setSuperclass(classClassRef, superclass.getValue().typeClass);
-		protocol.setInstanceSpec(classClassRef, makeInstanceSpecification(classVariables));
+		classProtocol.init(classClassRef);
+		classProtocol.setSuperclass(classClassRef, superclass.getValue().typeClass);
+		classProtocol.setInstanceSpec(classClassRef, makeInstanceSpecification(classVariables));
+		classProtocol.setInstances(classClassRef, makeArray());
 		
 		InternalReference classRef = create(classClassRef);
-		protocol.init(classRef);
-		protocol.setSuperclass(classRef, superclass);
-		protocol.setInstanceSpec(classRef, makeInstanceSpecification(instanceVariables));
+		classProtocol.init(classRef);
+		classProtocol.setSuperclass(classRef, superclass);
+		classProtocol.setInstanceSpec(classRef, makeInstanceSpecification(instanceVariables));
+		classProtocol.setInstances(classRef, makeArray());
 		
 		return classRef;
 	}
 
 	private InternalReference makePrimitiveClass(InternalReference superclass, int classVariables) {
-		ClassProtocol protocol = vm.protocols.classProtocol;
+		ClassProtocol classProtocol = vm.protocols.classProtocol;
 		
 		InternalReference classClassRef = create(metaclassRef);
-		protocol.init(classClassRef);
-		protocol.setSuperclass(classClassRef, superclass.getValue().typeClass);
-		protocol.setInstanceSpec(classClassRef, makeInstanceSpecification(classVariables));
+		classProtocol.init(classClassRef);
+		classProtocol.setSuperclass(classClassRef, superclass.getValue().typeClass);
+		classProtocol.setInstanceSpec(classClassRef, makeInstanceSpecification(classVariables));
+		classProtocol.setInstances(classClassRef, makeArray());
 		
 		InternalReference classRef = create(classClassRef);
-		protocol.init(classRef);
-		protocol.setSuperclass(classRef, superclass);
-		protocol.setInstanceSpec(classRef, makePrimitiveInstanceSpecification());
+		classProtocol.init(classRef);
+		classProtocol.setSuperclass(classRef, superclass);
+		classProtocol.setInstanceSpec(classRef, makePrimitiveInstanceSpecification());
+		classProtocol.setInstances(classRef, makeArray());
 		
 		return classRef;
 	}
@@ -148,8 +157,14 @@ public class ObjectManager {
 		return put(nextInternalReference(), prim);
 	}
 	
+	private InternalReference makeArray() {
+		return put(nextInternalReference(), new SILDefaultObject(arrayClassRef, 0));
+	}
+	
 	public InternalReference create(InternalReference typeClass) {
-		return put(nextInternalReference(), createObject(typeClass));
+		InternalReference objRef = put(nextInternalReference(), createObject(typeClass));
+		vm.protocols.arrayProtocol.add(vm.protocols.classProtocol.getInstances(typeClass), objRef);
+		return objRef;
 	}
 	
 	private SILObject createObject(InternalReference typeClass) {
