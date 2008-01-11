@@ -1,5 +1,9 @@
 package org.sodeja.sil.runtime;
 
-public interface SILObject {
-	public SILClass getType();
+public abstract class SILObject {
+	public final SILInternalReference typeClass;
+
+	public SILObject(SILInternalReference typeClass) {
+		this.typeClass = typeClass;
+	}
 }
