@@ -1,7 +1,7 @@
 package org.sodeja.sil.runtime.memory;
 
 public class SILInternalReference extends SILReference {
-	public SILInternalReference(Integer id) {
+	protected SILInternalReference(Integer id) {
 		super(id);
 	}
 
