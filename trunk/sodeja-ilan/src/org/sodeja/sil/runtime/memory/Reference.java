@@ -1,9 +1,11 @@
 package org.sodeja.sil.runtime.memory;
 
 abstract class Reference {
-	public final Integer id;
+	protected final ObjectManager manager;
+	protected final Integer id;
 	
-	protected Reference(Integer id) {
+	protected Reference(ObjectManager manager, Integer id) {
+		this.manager = manager;
 		this.id = id;
 	}
 

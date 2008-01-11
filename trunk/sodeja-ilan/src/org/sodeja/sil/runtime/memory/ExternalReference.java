@@ -1,8 +1,8 @@
 package org.sodeja.sil.runtime.memory;
 
 public class ExternalReference extends Reference {
-	protected ExternalReference(Integer id) {
-		super(id);
+	protected ExternalReference(ObjectManager manager, Integer id) {
+		super(manager, id);
 	}
 
 	@Override
@@ -12,5 +12,9 @@ public class ExternalReference extends Reference {
 		}
 		
 		return super.equals(obj);
+	}
+	
+	public Object getValue() {
+		return manager.getLink(this);
 	}
 }
