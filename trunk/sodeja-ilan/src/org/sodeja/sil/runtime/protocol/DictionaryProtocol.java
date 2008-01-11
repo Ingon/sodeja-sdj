@@ -9,11 +9,6 @@ public class DictionaryProtocol implements Protocol {
 	DictionaryProtocol() {
 	}
 	
-	public void init(SILObject dictionaryObj) {
-		SILDefaultObject dictionary = (SILDefaultObject) dictionaryObj;
-		throw new UnsupportedOperationException();
-	}
-	
 	public InternalReference get(SILObject dictionaryObj, InternalReference key) {
 		SILDefaultObject dictionary = (SILDefaultObject) dictionaryObj;
 		SILDefaultObject keys = (SILDefaultObject) dictionary.at(0).getValue();
