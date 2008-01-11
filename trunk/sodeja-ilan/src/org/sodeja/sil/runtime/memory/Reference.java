@@ -1,18 +1,18 @@
 package org.sodeja.sil.runtime.memory;
 
-abstract class SILReference {
+abstract class Reference {
 	public final Integer id;
 	
-	protected SILReference(Integer id) {
+	protected Reference(Integer id) {
 		this.id = id;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if(! (obj instanceof SILReference)) {
+		if(! (obj instanceof Reference)) {
 			return false;
 		}
-		return id.equals(((SILReference) obj).id);
+		return id.equals(((Reference) obj).id);
 	}
 
 	@Override

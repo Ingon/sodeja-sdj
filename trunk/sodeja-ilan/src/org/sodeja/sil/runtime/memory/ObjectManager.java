@@ -13,28 +13,28 @@ public class ObjectManager {
 	private int internalRefId = 0;
 	private int externalRefId = 0;
 	
-	private final SILInternalReference symbolClassRef;
+	private final InternalReference symbolClassRef;
 	
-	private final Map<SILInternalReference, SILObject> objects;
-	private final Map<SILExternalReference, Object> externals;
+	private final Map<InternalReference, SILObject> objects;
+	private final Map<ExternalReference, Object> externals;
 	
-	private final Map<String, SILInternalReference> symbols;
+	private final Map<String, InternalReference> symbols;
 	
 	private final SILProtocolFactory protocols = SILProtocolFactory.getInstance();
 	
 	public ObjectManager() {
 		symbolClassRef = null;
 		
-		objects = new HashMap<SILInternalReference, SILObject>();
-		externals = new HashMap<SILExternalReference, Object>();
+		objects = new HashMap<InternalReference, SILObject>();
+		externals = new HashMap<ExternalReference, Object>();
 		
-		symbols = new HashMap<String, SILInternalReference>();
+		symbols = new HashMap<String, InternalReference>();
 	}
 
-	public SILInternalReference create(SILInternalReference typeClass) {
+	public InternalReference create(InternalReference typeClass) {
 		SILObject type = get(typeClass);
 		
-		SILInternalReference instanceRef = protocols.classProtocol.getInstanceSpec(type);
+		InternalReference instanceRef = protocols.classProtocol.getInstanceSpec(type);
 		SILPrimitiveObject instanceObj = (SILPrimitiveObject) get(instanceRef);
 		
 		InstanceSpecification instanceSpec = (InstanceSpecification) getLink(instanceObj.getValue());
@@ -43,28 +43,28 @@ public class ObjectManager {
 		return put(newObject);
 	}
 	
-	private SILInternalReference put(SILObject obj) {
-		SILInternalReference ref = new SILInternalReference(internalRefId++);
+	private InternalReference put(SILObject obj) {
+		InternalReference ref = new InternalReference(internalRefId++);
 		objects.put(ref, obj);
 		return ref;
 	}
 	
-	public SILObject get(SILInternalReference ref) {
+	public SILObject get(InternalReference ref) {
 		return validate(objects.get(ref));
 	}
 	
-	public SILExternalReference createLink(Object obj) {
-		SILExternalReference ref = new SILExternalReference(externalRefId++);
+	public ExternalReference createLink(Object obj) {
+		ExternalReference ref = new ExternalReference(externalRefId++);
 		externals.put(ref, obj);
 		return ref;
 	}
 	
-	public Object getLink(SILExternalReference ref) {
+	public Object getLink(ExternalReference ref) {
 		return validate(externals.get(ref));
 	}
 	
-	public SILReference makeSymbol(String str) {
-		SILInternalReference ref = symbols.get(str);
+	public Reference makeSymbol(String str) {
+		InternalReference ref = symbols.get(str);
 		if(ref != null) {
 			return ref;
 		}

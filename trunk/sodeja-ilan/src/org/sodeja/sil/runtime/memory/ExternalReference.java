@@ -1,13 +1,13 @@
 package org.sodeja.sil.runtime.memory;
 
-public class SILExternalReference extends SILReference {
-	protected SILExternalReference(Integer id) {
+public class ExternalReference extends Reference {
+	protected ExternalReference(Integer id) {
 		super(id);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if(! (obj instanceof SILExternalReference)) {
+		if(! (obj instanceof ExternalReference)) {
 			return false;
 		}
 		
