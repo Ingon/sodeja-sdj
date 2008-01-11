@@ -16,10 +16,8 @@ public class InstanceSpecification {
 	}
 	
 	public SILObject makeInstance(InternalReference typeClass) {
-		if(type == InstanceType.NAMED) {
-			return new SILNamedObject(typeClass);
-		} else if(type == InstanceType.INDEXED) {
-			return new SILIndexedObject(typeClass, indexSize);
+		if(type == InstanceType.SIL) {
+			return new SILDefaultObject(typeClass, indexSize);
 		} else if(type == InstanceType.JAVA) {
 			return new SILPrimitiveObject(typeClass);
 		}

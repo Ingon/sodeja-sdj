@@ -13,6 +13,8 @@ public class ObjectManager {
 	private int internalRefId = 0;
 	private int externalRefId = 0;
 	
+	public final InternalReference nilRef;
+	public final ExternalReference nilExternalRef;
 	private final InternalReference symbolClassRef;
 	
 	private final Map<InternalReference, SILObject> objects;
@@ -23,6 +25,8 @@ public class ObjectManager {
 	private final ProtocolFactory protocols = ProtocolFactory.getInstance();
 	
 	public ObjectManager() {
+		nilRef = new InternalReference(this, internalRefId++);
+		nilExternalRef = new ExternalReference(this, externalRefId++);
 		symbolClassRef = null;
 		
 		objects = new HashMap<InternalReference, SILObject>();
@@ -32,19 +36,17 @@ public class ObjectManager {
 	}
 
 	public InternalReference create(InternalReference typeClass) {
-		SILObject type = get(typeClass);
-		
-		InternalReference instanceRef = protocols.classProtocol.getInstanceSpec(type);
-		SILPrimitiveObject instanceObj = (SILPrimitiveObject) get(instanceRef);
-		
-		InstanceSpecification instanceSpec = (InstanceSpecification) getLink(instanceObj.getValue());
+		InternalReference instanceRef = protocols.classProtocol.getInstanceSpec(typeClass.getValue());
+		SILPrimitiveObject instanceObj = (SILPrimitiveObject) instanceRef.getValue();
+
+		InstanceSpecification instanceSpec = (InstanceSpecification) instanceObj.getValue().getValue();
 		SILObject newObject = instanceSpec.makeInstance(typeClass);
 		
 		return put(newObject);
 	}
 	
 	private InternalReference put(SILObject obj) {
-		InternalReference ref = new InternalReference(internalRefId++);
+		InternalReference ref = new InternalReference(this, internalRefId++);
 		objects.put(ref, obj);
 		return ref;
 	}
@@ -54,7 +56,7 @@ public class ObjectManager {
 	}
 	
 	public ExternalReference createLink(Object obj) {
-		ExternalReference ref = new ExternalReference(externalRefId++);
+		ExternalReference ref = new ExternalReference(this, externalRefId++);
 		externals.put(ref, obj);
 		return ref;
 	}

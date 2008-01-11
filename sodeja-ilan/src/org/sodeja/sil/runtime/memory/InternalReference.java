@@ -1,8 +1,10 @@
 package org.sodeja.sil.runtime.memory;
 
+import org.sodeja.sil.runtime.SILObject;
+
 public class InternalReference extends Reference {
-	protected InternalReference(Integer id) {
-		super(id);
+	protected InternalReference(ObjectManager manager, Integer id) {
+		super(manager, id);
 	}
 
 	@Override
@@ -12,5 +14,9 @@ public class InternalReference extends Reference {
 		}
 		
 		return super.equals(obj);
+	}
+	
+	public SILObject getValue() {
+		return manager.get(this);
 	}
 }
