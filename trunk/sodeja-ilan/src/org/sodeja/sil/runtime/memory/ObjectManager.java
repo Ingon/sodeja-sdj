@@ -1,6 +1,7 @@
 package org.sodeja.sil.runtime.memory;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.sodeja.sil.runtime.InstanceSpecification;
@@ -186,6 +187,15 @@ public class ObjectManager {
 	
 	private InternalReference nextInternalReference() {
 		return new InternalReference(this, internalRefId++);
+	}
+	
+	public InternalReference createClass(InternalReference parentSymbol, InternalReference classSymbol, List<InternalReference> instanceVars, List<InternalReference> classVars) {
+		DictionaryProtocol dictionaryProtocol = vm.protocols.dictionaryProtocol;
+		InternalReference parentRef = dictionaryProtocol.get(systemDictionaryRef.getValue(), parentSymbol);
+		
+		InternalReference classRef = makeClass(parentRef, classVars.size(), instanceVars.size());
+		dictionaryProtocol.set(systemDictionaryRef.getValue(), classSymbol, classRef);
+		return classRef;
 	}
 	
 	public SILObject get(InternalReference ref) {
