@@ -6,25 +6,22 @@ import java.util.Map;
 public class ObjectFactory {
 	private SILObject nilObject = new SILPrimitiveObject<Void>();
 	
-	private SILDefaultClass object = new SILDefaultClass();
-	private SILDefaultClass objectClass = new SILDefaultClass();
+	private SILClass object = new SILClass();
+	private SILClass objectClass = new SILClass();
 	
-	private SILDefaultClass metaclass = new SILDefaultClass();
-	private SILDefaultClass metaclassClass = new SILDefaultClass();
+	private SILClass metaclass = new SILClass();
+	private SILClass metaclassClass = new SILClass();
 	
-	private SILDefaultClass clazz = new SILDefaultClass();
-	private SILDefaultClass clazzClass = new SILDefaultClass();
+	private SILClass clazz = new SILClass();
+	private SILClass clazzClass = new SILClass();
 	
-	private SILDefaultClass clazzDescription = new SILDefaultClass();
-	private SILDefaultClass clazzDescriptionClass = new SILDefaultClass();
+	private SILClass clazzDescription = new SILClass();
+	private SILClass clazzDescriptionClass = new SILClass();
 	
-	private SILDefaultClass instanceSpecification = new SILDefaultClass();
-	private SILDefaultClass instanceSpecificationClass = new SILDefaultClass();
+	private SILClass instanceSpecification = new SILClass();
+	private SILClass instanceSpecificationClass = new SILClass();
 	
-	private SILDefaultClass symbol = null;
-	
-	private final AbstractInstanceSpecification abstractInstanceSpecification = new AbstractInstanceSpecification();
-	private SILPrimitiveObject<AbstractInstanceSpecification> abstractInstanceSpecificationObj = null;
+	private SILClass symbol = null;
 	
 	private final PrimitiveInstanceSpecification primitiveInstanceSpecification = new PrimitiveInstanceSpecification();
 	private SILPrimitiveObject<PrimitiveInstanceSpecification> primitiveInstanceSpecificationObj = null;
@@ -59,6 +56,7 @@ public class ObjectFactory {
 		// instance specification init
 		initFormSuper(object, instanceSpecificationClass, instanceSpecification);
 		initInstanceSpecifications();
+		initPrimitive(instanceSpecification);
 		
 		// instance specifications of the roots
 		object.setInstanceSpecification(makeObjectInstanceSpecification(0, 0));
@@ -73,41 +71,24 @@ public class ObjectFactory {
 		clazzDescription.setInstanceSpecification(classInstanceSpecificationObj);
 		clazzDescriptionClass.setInstanceSpecification(classInstanceSpecificationObj);
 		
-		initPrimitive(instanceSpecificationClass, instanceSpecification);
-
 		// Collection hierarchy
-		SILDefaultClass collection = subclass(object);
-		collection.setInstanceSpecification(makeObjectInstanceSpecification(0, 0));
+		SILClass collection = subclassAbstract(object);
+		SILClass sequencableCollection = subclassAbstract(collection);
+		SILClass arrayedCollection = subclassAbstract(sequencableCollection);
 		
-		SILDefaultClass sequencableCollection = subclass(collection);
-		sequencableCollection.setInstanceSpecification(makeObjectInstanceSpecification(0, 0));
+		SILClass array = subclassPrimitive(arrayedCollection);
 		
-		SILDefaultClass arrayedCollection = subclass(sequencableCollection);
-		arrayedCollection.setInstanceSpecification(makeObjectInstanceSpecification(0, 0));
+		SILClass string = subclassPrimitive(arrayedCollection);
+		symbol = subclassPrimitive(string);
 		
-		SILDefaultClass array = subclass(arrayedCollection);
-		array.setInstanceSpecification(primitiveInstanceSpecificationObj);
+		SILClass set = subclassAbstract(collection);
+		SILClass dictionary = subclassAbstract(set);
 		
-		SILDefaultClass string = subclass(arrayedCollection);
-		string.setInstanceSpecification(primitiveInstanceSpecificationObj);
-		
-		symbol = subclass(string);
-		
-		SILDefaultClass set = subclass(collection);
-		set.setInstanceSpecification(makeObjectInstanceSpecification(0, 0));
-		
-		SILDefaultClass dictionary = subclass(set);
-		dictionary.setInstanceSpecification(makeObjectInstanceSpecification(0, 0));
-		
-		SILDefaultClass systemDictionary = subclass(dictionary);
-		systemDictionary.setInstanceSpecification(primitiveInstanceSpecificationObj);
+		SILClass systemDictionary = subclassPrimitive(dictionary);
 		createPrimitiveInstance(systemDictionary, new HashMap<SILObject, SILObject>());
-		
-//		initPrimitive(symbolClass, symbol);
 	}
 	
 	private void initInstanceSpecifications() {
-		makeAbstractInstanceSpecification();
 		makePrimitiveInstanceSpecification();
 		makeClassInstanceSpecification();
 	}
@@ -119,13 +100,6 @@ public class ObjectFactory {
 		primitiveInstanceSpecificationObj.setValue(primitiveInstanceSpecification);
 	}
 
-	@SuppressWarnings("unchecked")
-	private void makeAbstractInstanceSpecification() {
-		abstractInstanceSpecificationObj = (SILPrimitiveObject<AbstractInstanceSpecification>) primitiveInstanceSpecification.createInstance();
-		abstractInstanceSpecificationObj.setType(instanceSpecification);
-		abstractInstanceSpecificationObj.setValue(abstractInstanceSpecification);
-	}
-	
 	@SuppressWarnings("unchecked")
 	private void makeClassInstanceSpecification() {
 		classInstanceSpecificationObj = (SILPrimitiveObject<ClassInstanceSpecification>) primitiveInstanceSpecification.createInstance();
@@ -141,20 +115,32 @@ public class ObjectFactory {
 		return specObj;
 	}
 	
-	private void initPrimitive(SILDefaultClass typeClass, SILDefaultClass type) {
-		typeClass.setInstanceSpecification(classInstanceSpecificationObj);
+	private void initPrimitive(SILClass type) {
+		((SILClass) type.getType()).setInstanceSpecification(classInstanceSpecificationObj);
 		type.setInstanceSpecification(primitiveInstanceSpecificationObj);
 	}
 	
-	private SILDefaultClass subclass(SILDefaultClass superclass) {
-		SILDefaultClass typeClass = new SILDefaultClass();
-		SILDefaultClass type = new SILDefaultClass();
+	private SILClass subclassAbstract(SILClass superclass) {
+		SILClass subclass = subclass(superclass);
+		subclass.setInstanceSpecification(makeObjectInstanceSpecification(0, 0));
+		return subclass;
+	}
+	
+	private SILClass subclassPrimitive(SILClass superclass) {
+		SILClass subclass = subclass(superclass);
+		initPrimitive(subclass);
+		return subclass;
+	}
+	
+	private SILClass subclass(SILClass superclass) {
+		SILClass typeClass = new SILClass();
+		SILClass type = new SILClass();
 		
 		initFormSuper(superclass, typeClass, type);
 		return type;
 	}
 	
-	private void initFormSuper(SILDefaultClass superclass, SILDefaultClass typeClass, SILDefaultClass type) {
+	private void initFormSuper(SILClass superclass, SILClass typeClass, SILClass type) {
 		typeClass.setType(metaclass);
 		typeClass.setSuperclass(superclass.getType());
 		
@@ -163,7 +149,7 @@ public class ObjectFactory {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private <T> SILPrimitiveObject<T> createPrimitiveInstance(SILDefaultClass type, T value) {
+	private <T> SILPrimitiveObject<T> createPrimitiveInstance(SILClass type, T value) {
 		SILPrimitiveObject<PrimitiveInstanceSpecification> instanceSpecObj = (SILPrimitiveObject<PrimitiveInstanceSpecification>) type.getInstanceSpecification();
 		PrimitiveInstanceSpecification instanceSpec = ((PrimitiveInstanceSpecification) instanceSpecObj.getValue());
 		
