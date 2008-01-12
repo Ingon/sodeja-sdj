@@ -3,8 +3,8 @@ package org.sodeja.sil.runtime2;
 public class SILDefaultObject implements SILObject {
 	
 	private SILObject type;
-	private SILObject[] namedVars;
-	private SILObject[] indexVars;
+	protected SILObject[] namedVars;
+	protected SILObject[] indexVars;
 	
 	public SILDefaultObject(int namedSize, int indexSize) {
 		namedVars = new SILObject[namedSize];
