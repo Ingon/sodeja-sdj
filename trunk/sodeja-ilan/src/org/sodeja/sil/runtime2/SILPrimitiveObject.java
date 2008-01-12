@@ -1,9 +1,9 @@
 package org.sodeja.sil.runtime2;
 
-public class SILPrimitiveObject implements SILObject {
+public class SILPrimitiveObject<T> implements SILObject {
 
 	private SILClass type;
-	private Object value;
+	private T value;
 	
 	protected SILPrimitiveObject() {
 	}
@@ -13,11 +13,11 @@ public class SILPrimitiveObject implements SILObject {
 		return type;
 	}
 
-	public Object getValue() {
+	public T getValue() {
 		return value;
 	}
 
-	public void setValue(Object value) {
+	public void setValue(T value) {
 		this.value = value;
 	}
 
