@@ -2,7 +2,7 @@ package org.sodeja.sil.runtime;
 
 public class SILClass extends SILDefaultObject {
 	protected SILClass() {
-		super(3, 0);
+		super(5, 0);
 	}
 	
 	public SILObject getSuperclass() {
@@ -17,6 +17,14 @@ public class SILClass extends SILDefaultObject {
 		return namedVars[2];
 	}
 
+	public SILObject getSubclasses() {
+		return namedVars[3];
+	}
+	
+	public SILObject getInstances() {
+		return namedVars[4];
+	}
+
 	protected void setSuperclass(SILObject superclass) {
 		namedVars[0] = superclass;
 	}
@@ -27,5 +35,13 @@ public class SILClass extends SILDefaultObject {
 
 	protected void setMethodDictionary(SILObject methodDictionary) {
 		namedVars[2] = methodDictionary;
+	}
+
+	protected void setSubclasses(SILObject subclasses) {
+		namedVars[3] = subclasses;
+	}
+
+	protected void setInstances(SILObject instances) {
+		namedVars[4] = instances;
 	}
 }
