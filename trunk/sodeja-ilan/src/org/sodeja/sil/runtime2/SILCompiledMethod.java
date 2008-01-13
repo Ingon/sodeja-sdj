@@ -1,7 +1,7 @@
 package org.sodeja.sil.runtime2;
 
 public class SILCompiledMethod extends SILDefaultObject {
-	public SILCompiledMethod() {
+	protected SILCompiledMethod() {
 		super(4, 0);
 	}
 

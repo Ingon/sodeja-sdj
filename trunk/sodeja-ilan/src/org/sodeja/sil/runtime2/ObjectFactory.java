@@ -29,6 +29,9 @@ public class ObjectFactory {
 	private final ClassInstanceSpecification classInstanceSpecification = new ClassInstanceSpecification();
 	private SILPrimitiveObject<ClassInstanceSpecification> classInstanceSpecificationObj = null;
 	
+	private final CompiledMethodInstanceSpecification compiledMethodInstanceSpecification = new CompiledMethodInstanceSpecification();
+	private SILPrimitiveObject<CompiledMethodInstanceSpecification> compiledMethodInstanceSpecificationObj = null;
+	
 	private Map<String, SILPrimitiveObject<String>> symbols;
 	
 	public ObjectFactory() {
@@ -86,11 +89,26 @@ public class ObjectFactory {
 		
 		SILClass systemDictionary = subclassPrimitive(dictionary);
 		createPrimitiveInstance(systemDictionary, new HashMap<SILObject, SILObject>());
+		
+		// Magnitudes
+		SILClass magnitude = subclassAbstract(object);
+		SILClass character = subclassPrimitive(magnitude);
+		
+		SILClass aritmeticValue = subclassAbstract(magnitude);
+		SILClass number = subclassAbstract(aritmeticValue);
+		
+		SILClass real = subclassPrimitive(number);
+		SILClass integer = subclassPrimitive(number);
+		
+		// Methods
+		SILClass method = subclass(object);
+		method.setInstanceSpecification(compiledMethodInstanceSpecificationObj);
 	}
 	
 	private void initInstanceSpecifications() {
 		makePrimitiveInstanceSpecification();
 		makeClassInstanceSpecification();
+		makeCompiledMethodInstanceSpecification();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -105,6 +123,13 @@ public class ObjectFactory {
 		classInstanceSpecificationObj = (SILPrimitiveObject<ClassInstanceSpecification>) primitiveInstanceSpecification.createInstance();
 		classInstanceSpecificationObj.setType(instanceSpecification);
 		classInstanceSpecificationObj.setValue(classInstanceSpecification);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void makeCompiledMethodInstanceSpecification() {
+		compiledMethodInstanceSpecificationObj = (SILPrimitiveObject<CompiledMethodInstanceSpecification>) primitiveInstanceSpecification.createInstance();
+		compiledMethodInstanceSpecificationObj.setType(instanceSpecification);
+		compiledMethodInstanceSpecificationObj.setValue(compiledMethodInstanceSpecification);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -137,6 +162,7 @@ public class ObjectFactory {
 		SILClass type = new SILClass();
 		
 		initFormSuper(superclass, typeClass, type);
+		typeClass.setInstanceSpecification(classInstanceSpecificationObj);
 		return type;
 	}
 	
