@@ -3,7 +3,7 @@ package org.sodeja.sil.runtime2;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ObjectFactory {
+public class ObjectManager {
 	private SILObject nilObject = new SILPrimitiveObject<Void>();
 	
 	private SILClass object = new SILClass();
@@ -32,9 +32,11 @@ public class ObjectFactory {
 	private final CompiledMethodInstanceSpecification compiledMethodInstanceSpecification = new CompiledMethodInstanceSpecification();
 	private SILPrimitiveObject<CompiledMethodInstanceSpecification> compiledMethodInstanceSpecificationObj = null;
 	
-	private Map<String, SILPrimitiveObject<String>> symbols;
+	private Map<String, SILPrimitiveObject<String>> symbols = new HashMap<String, SILPrimitiveObject<String>>();
+
+	private SILPrimitiveObject<Map<SILObject, SILObject>> systemDictionary;
 	
-	public ObjectFactory() {
+	public ObjectManager() {
 		// root hierarchy
 		object.setType(objectClass);
 		object.setSuperclass(nilObject);
@@ -87,8 +89,8 @@ public class ObjectFactory {
 		SILClass set = subclassAbstract(collection);
 		SILClass dictionary = subclassAbstract(set);
 		
-		SILClass systemDictionary = subclassPrimitive(dictionary);
-		createPrimitiveInstance(systemDictionary, new HashMap<SILObject, SILObject>());
+		SILClass systemDictionaryClass = subclassPrimitive(dictionary);
+		systemDictionary = (SILPrimitiveObject) createPrimitiveInstance(systemDictionaryClass, new HashMap<SILObject, SILObject>());
 		
 		// Magnitudes
 		SILClass magnitude = subclassAbstract(object);
@@ -100,9 +102,43 @@ public class ObjectFactory {
 		SILClass real = subclassPrimitive(number);
 		SILClass integer = subclassPrimitive(number);
 		
+		// Boolean
+		SILClass silBoolean = subclassAbstract(object);
+		SILClass silTrue = subclassAbstract(silBoolean);
+		SILClass silFalse = subclassAbstract(silBoolean);
+		
 		// Methods
-		SILClass method = subclass(object);
-		method.setInstanceSpecification(compiledMethodInstanceSpecificationObj);
+		SILClass compiledMethod = subclass(object);
+		compiledMethod.setInstanceSpecification(compiledMethodInstanceSpecificationObj);
+		
+		// Fill out system dictionary
+		systemDictionary.getValue().put(makeSymbol("Object"), object);
+		systemDictionary.getValue().put(makeSymbol("Metaclass"), metaclass);
+		systemDictionary.getValue().put(makeSymbol("Class"), clazz);
+		systemDictionary.getValue().put(makeSymbol("ClassDescription"), clazzDescription);
+		systemDictionary.getValue().put(makeSymbol("InstanceSpecification"), instanceSpecification);
+		systemDictionary.getValue().put(makeSymbol("CompiledMethod"), compiledMethod);
+		
+		systemDictionary.getValue().put(makeSymbol("Collection"), collection);
+		systemDictionary.getValue().put(makeSymbol("SequencableCollection"), sequencableCollection);
+		systemDictionary.getValue().put(makeSymbol("ArrayedCollection"), arrayedCollection);
+		systemDictionary.getValue().put(makeSymbol("Array"), array);
+		systemDictionary.getValue().put(makeSymbol("String"), string);
+		systemDictionary.getValue().put(makeSymbol("Symbol"), symbol);
+		systemDictionary.getValue().put(makeSymbol("Set"), set);
+		systemDictionary.getValue().put(makeSymbol("Dictionary"), dictionary);
+		systemDictionary.getValue().put(makeSymbol("SystemDictionary"), systemDictionary);
+		
+		systemDictionary.getValue().put(makeSymbol("Magnitude"), magnitude);
+		systemDictionary.getValue().put(makeSymbol("Character"), character);
+		systemDictionary.getValue().put(makeSymbol("AritmeticValue"), aritmeticValue);
+		systemDictionary.getValue().put(makeSymbol("Number"), number);
+		systemDictionary.getValue().put(makeSymbol("Real"), real);
+		systemDictionary.getValue().put(makeSymbol("Integer"), integer);
+		
+		systemDictionary.getValue().put(makeSymbol("Boolean"), silBoolean);
+		systemDictionary.getValue().put(makeSymbol("True"), silTrue);
+		systemDictionary.getValue().put(makeSymbol("False"), silFalse);
 	}
 	
 	private void initInstanceSpecifications() {

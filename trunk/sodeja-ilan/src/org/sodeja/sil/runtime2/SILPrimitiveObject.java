@@ -24,4 +24,9 @@ public class SILPrimitiveObject<T> implements SILObject {
 	protected void setType(SILObject type) {
 		this.type = type;
 	}
+
+	@Override
+	public String toString() {
+		return String.valueOf(value);
+	}
 }
