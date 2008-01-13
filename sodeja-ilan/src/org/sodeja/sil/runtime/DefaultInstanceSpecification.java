@@ -1,4 +1,4 @@
-package org.sodeja.sil.runtime2;
+package org.sodeja.sil.runtime;
 
 public class DefaultInstanceSpecification implements InstanceSpecification {
 	

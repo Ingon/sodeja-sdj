@@ -1,4 +1,4 @@
-package org.sodeja.sil.runtime2;
+package org.sodeja.sil.runtime;
 
 import java.util.HashMap;
 import java.util.Map;

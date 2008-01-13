@@ -1,6 +1,6 @@
 package org.sodeja.sil;
 
-import org.sodeja.sil.runtime2.ObjectManager;
+import org.sodeja.sil.runtime.ObjectManager;
 
 public class SIL {
 	public static void main(String[] args) throws Exception {
