@@ -1,7 +1,6 @@
 package org.sodeja.sil;
 
-import org.sodeja.sil.runtime.vm.VirtualMachine;
-import org.sodeja.sil.runtime2.ObjectFactory;
+import org.sodeja.sil.runtime2.ObjectManager;
 
 public class SIL {
 	public static void main(String[] args) throws Exception {
@@ -12,8 +11,9 @@ public class SIL {
 //			machine.makeNewImage();
 //		}
 //		machine.run();
-		ObjectFactory fac = new ObjectFactory();
-		System.out.println(fac);
+		ObjectManager objectManager = new ObjectManager();
+//		MethodManager methodManager = new MethodManager();
+		System.out.println(objectManager);
 		
 //		Parser execCode = SILParser.getInstance().getExecutableCodeParser();
 //		
