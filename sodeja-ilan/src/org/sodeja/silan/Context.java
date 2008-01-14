@@ -4,8 +4,8 @@ public interface Context {
 
 	public abstract Instruction nextInstruction();
 
-	public abstract SILObject get(int location);
+	public abstract SILObject pop();
 
-	public abstract void set(int location, SILObject value);
+	public abstract void push(SILObject value);
 
 }

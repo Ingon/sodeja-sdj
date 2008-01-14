@@ -1,14 +1,22 @@
 package org.sodeja.silan;
 
-public class ExecutableContext implements Context {
+import java.util.HashMap;
+import java.util.Map;
+
+public class ExecutableContext extends AbstractContext {
 	
 	private final CompiledCode code;
-	private final SILObject[] temps;
+	
+	private final Map<String, SILObject> localVariables;
+	
 	private int instructionPointer;
 	
 	public ExecutableContext(CompiledCode code) {
+		super(code.maxStackSize);
 		this.code = code;
-		this.temps = new SILObject[code.tempCount];
+		
+		this.localVariables = new HashMap<String, SILObject>();
+		
 		this.instructionPointer = 0;
 	}
 	
@@ -18,13 +26,5 @@ public class ExecutableContext implements Context {
 		}
 		
 		return code.instructions.get(instructionPointer++);
-	}
-	
-	public SILObject get(int location) {
-		return temps[location];
-	}
-	
-	public void set(int location, SILObject value) {
-		temps[location] = value;
 	}
 }

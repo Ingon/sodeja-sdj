@@ -26,9 +26,10 @@ public class ObjectManager {
 
 	private void init() {
 		List<Instruction> addInstructions = ListUtils.asList(
+				new PushReferenceInstruction("aNumber"),
 				new IntegerAddInstruction(this), 
-				new ReturnMethodInstruction(1));
-		integer.addMethod("+", new CompiledMethod(Collections.EMPTY_LIST, 1, 1, addInstructions));
+				new ReturnMethodInstruction());
+		integer.addMethod("+", new CompiledMethod(ListUtils.asList("aNumber"), Collections.EMPTY_LIST, 0, addInstructions));
 	}
 	
 	public SILObject getNil() {

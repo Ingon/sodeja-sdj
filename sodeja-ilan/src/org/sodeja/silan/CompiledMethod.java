@@ -4,10 +4,10 @@ import java.util.List;
 
 public class CompiledMethod extends CompiledCode {
 	
-	public final int argumentCount;
+	public final List<String> arguments;
 	
-	public CompiledMethod(List<String> localVariables, int argumentCount, int tempCount, List<Instruction> instructions) {
+	public CompiledMethod(List<String> arguments, List<String> localVariables, int tempCount, List<Instruction> instructions) {
 		super(localVariables, tempCount, instructions);
-		this.argumentCount = argumentCount;
+		this.arguments = arguments;
 	}
 }

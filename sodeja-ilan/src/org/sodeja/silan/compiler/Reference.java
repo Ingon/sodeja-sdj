@@ -1,6 +1,6 @@
 package org.sodeja.silan.compiler;
 
-public class Reference {
+public class Reference implements Primary {
 	public final String value;
 
 	public Reference(String value) {

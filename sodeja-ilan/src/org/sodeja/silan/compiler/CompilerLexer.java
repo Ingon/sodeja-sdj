@@ -5,7 +5,9 @@ import java.util.List;
 
 public class CompilerLexer {
 	static final String WHITESPACE = " ";
+	
 	static final String STATEMENT_END = ".";
+	static final String ASSIGNMENT = ":=";
 	
 	CompilerLexer() {
 	}
@@ -105,6 +107,15 @@ public class CompilerLexer {
 			if(ch == '.') {
 				result.add(new Token(STATEMENT_END, TokenType.SEPARATOR));
 				continue;
+			}
+			
+			if(ch == ':') {
+				char next = str.charAt(i + 1);
+				if(next == '=') {
+					result.add(new Token(ASSIGNMENT, TokenType.SEPARATOR));
+					i++;
+					continue;
+				}
 			}
 			
 			throw new RuntimeException("Unknown character");
