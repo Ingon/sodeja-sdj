@@ -18,4 +18,9 @@ public class SILPrimitiveObject<T> implements SILObject {
 	public SILClass getType() {
 		return manager.getByTypeName(typeName);
 	}
+
+	@Override
+	public String toString() {
+		return String.valueOf(value);
+	}
 }

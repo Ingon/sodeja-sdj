@@ -1,5 +1,6 @@
 package org.sodeja.silan;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.sodeja.collections.ListUtils;
@@ -27,7 +28,7 @@ public class ObjectManager {
 		List<Instruction> addInstructions = ListUtils.asList(
 				new IntegerAddInstruction(this), 
 				new ReturnMethodInstruction(1));
-		integer.addMethod("+", new CompiledMethod(1, 1, addInstructions));
+		integer.addMethod("+", new CompiledMethod(Collections.EMPTY_LIST, 1, 1, addInstructions));
 	}
 	
 	public SILObject getNil() {
