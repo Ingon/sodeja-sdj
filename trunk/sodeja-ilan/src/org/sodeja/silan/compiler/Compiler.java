@@ -10,7 +10,7 @@ import org.sodeja.silan.CompiledCode;
 import org.sodeja.silan.CompiledMethod;
 import org.sodeja.silan.Instruction;
 import org.sodeja.silan.ReturnCodeInstruction;
-import org.sodeja.silan.SendMessageInstruction;
+import org.sodeja.silan.BinaryMessageInstruction;
 import org.sodeja.silan.StoreIntegerLiteralInstruction;
 import org.sodeja.silan.VirtualMachine;
 
@@ -45,7 +45,7 @@ public class Compiler {
 			}
 			instructions.addAll(result.first);
 			if(i == n - 1) {
-				instructions.add(new ReturnCodeInstruction(statementTempCount - 1));
+				instructions.add(new ReturnCodeInstruction());
 			}
 		}
 		
@@ -92,7 +92,7 @@ public class Compiler {
 			
 			instructions.add(compilePrimary(operand.primary, tempCount++));
 			tempCount++;
-			instructions.add(new SendMessageInstruction(0, binary.selector, 1, 2));
+			instructions.add(new BinaryMessageInstruction(binary.selector));
 		}
 		
 		return Pair.of(instructions, tempCount);
@@ -103,7 +103,7 @@ public class Compiler {
 			throw new UnsupportedOperationException();
 		}
 		
-		return new StoreIntegerLiteralInstruction(location, ((IntegerLiteral) primary).value);
+		return new StoreIntegerLiteralInstruction(((IntegerLiteral) primary).value);
 	}
 	
 	public CompiledMethod compileMethod(String methodSource) {

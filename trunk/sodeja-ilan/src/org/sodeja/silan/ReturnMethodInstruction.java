@@ -1,20 +1,16 @@
 package org.sodeja.silan;
 
 public class ReturnMethodInstruction implements Instruction {
-	
-	private final int returnIndex;
-	
-	public ReturnMethodInstruction(int returnIndex) {
-		this.returnIndex = returnIndex;
+	public ReturnMethodInstruction() {
 	}
 
 	@Override
 	public void execute(Process process) {
 		ChildContext mc = (ChildContext) process.getActiveContext();
-		SILObject obj = mc.get(returnIndex);
+		SILObject obj = mc.pop();
 		
 		Context parent = mc.getParent();
-		parent.set(mc.getReturnIndex(), obj);
+		parent.push(obj);
 		process.setActiveContext(parent);
 	}
 }

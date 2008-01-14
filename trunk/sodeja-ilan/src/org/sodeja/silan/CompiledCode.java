@@ -4,12 +4,12 @@ import java.util.List;
 
 public class CompiledCode {
 	public final List<String> localVariables;
-	public final int tempCount;
+	public final int maxStackSize;
 	public final List<Instruction> instructions;
 	
-	public CompiledCode(List<String> localVariables, int tempCount, List<Instruction> instructions) {
+	public CompiledCode(List<String> localVariables, int maxStackSize, List<Instruction> instructions) {
 		this.localVariables = localVariables;
-		this.tempCount = tempCount;
+		this.maxStackSize = maxStackSize;
 		this.instructions = instructions;
 	}
 }

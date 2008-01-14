@@ -67,7 +67,7 @@ public class CompilerParser {
 	
 	private final Parser<Token, Expression> EXPRESSION = thenParserCons("EXPRESSION", PRIMARY, MESSAGES, Expression.class);
 	
-	private final Parser<Token, String> ASSIGNMENT = thenParserJust1("ASSIGNMENT", IDENTIFIER, matchLiteral(":="));
+	private final Parser<Token, String> ASSIGNMENT = thenParser4Just2("ASSIGNMENT", OP_WHITESPACE, IDENTIFIER, OP_WHITESPACE, matchLiteral(":="));
 
 	private final Parser<Token, String> OPTIONAL_ASSIGNMENT = zeroOrOne("OPTIONAL_ASSIGNMENT", ASSIGNMENT);
 	
@@ -126,7 +126,7 @@ public class CompilerParser {
 			@Override
 			protected ParsingResult<Token, String> executeDelegate(ConsList<Token> tokens) {
 				Token head = tokens.head();
-				if(head.type != TokenType.SEPARATOR) {
+				if(head.type != TokenType.SEPARATOR && head.type != TokenType.OPERATOR) {
 					return new ParseError<Token, String>("Expected " + TokenType.SEPARATOR.name(), tokens);
 				}
 

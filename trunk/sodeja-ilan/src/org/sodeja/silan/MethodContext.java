@@ -1,26 +1,37 @@
 package org.sodeja.silan;
 
-public class MethodContext implements ChildContext {
+import java.util.HashMap;
+import java.util.Map;
+
+public class MethodContext extends AbstractContext implements ChildContext {
 	private final Context parent;
 	
 	private final SILObject receiver;
 	private final CompiledMethod method;
-	private final int returnIndex;
 	
-	private final SILObject[] temps;
+	private final Map<String, SILObject> argumentValues;
+	private final Map<String, SILObject> localValues;
 	
 	private int instructionPointer;
 	
 	public MethodContext(Context parent, SILObject receiver, 
-			CompiledMethod method, int argumentIndex, int resultIndex) {
+			CompiledMethod method, SILObject[] arguments) {
+		super(method.maxStackSize);
 		this.parent = parent;
 		
 		this.receiver = receiver;
 		this.method = method;
-		this.returnIndex = resultIndex;
 		
-		this.temps = new SILObject[method.argumentCount + method.tempCount];
-		this.temps[0] = parent.get(argumentIndex);
+		if(method.arguments.size() != arguments.length) {
+			throw new RuntimeException("Difference arguments count");
+		}
+		
+		this.argumentValues = new HashMap<String, SILObject>();
+		for(int i = 0, n = method.arguments.size(); i < n;i++) {
+			argumentValues.put(method.arguments.get(i), arguments[i]);
+		}
+		
+		this.localValues = new HashMap<String, SILObject>();
 		
 		this.instructionPointer = 0;
 	}
@@ -31,25 +42,11 @@ public class MethodContext implements ChildContext {
 	}
 	
 	@Override
-	public SILObject get(int location) {
-		return temps[location];
-	}
-
-	@Override
-	public void set(int location, SILObject value) {
-		temps[location] = value;
-	}
-
-	@Override
 	public Context getParent() {
 		return parent;
 	}
 
 	public SILObject getReceiver() {
 		return receiver;
-	}
-
-	public int getReturnIndex() {
-		return returnIndex;
 	}
 }
