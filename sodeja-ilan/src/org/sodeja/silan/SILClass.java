@@ -6,14 +6,14 @@ import java.util.Map;
 public class SILClass implements SILObject {
 	
 	private final SILClass superclass;
-	private final Map<String, Method> methods;
+	private final Map<String, CompiledMethod> methods;
 	
 	public SILClass(SILClass superclass) {
 		this.superclass = superclass;
-		this.methods = new HashMap<String, Method>();
+		this.methods = new HashMap<String, CompiledMethod>();
 	}
 	
-	protected void addMethod(String selector, Method method) {
+	protected void addMethod(String selector, CompiledMethod method) {
 		methods.put(selector, method);
 	}
 	
@@ -21,7 +21,7 @@ public class SILClass implements SILObject {
 		return superclass;
 	}
 
-	public Method findMethod(String selector) {
+	public CompiledMethod findMethod(String selector) {
 		return methods.get(selector);
 	}
 

@@ -19,7 +19,7 @@ public class SendMessageInstruction implements Instruction {
 		SILObject value = process.getActiveContext().get(receiverIndex);
 		SILClass clazz = value.getType();
 		
-		Method method = clazz.findMethod(selector);
+		CompiledMethod method = clazz.findMethod(selector);
 		if(method == null) {
 			throw new UnsupportedOperationException("Implements doesNotUnderstand: logic");
 		}
