@@ -27,7 +27,7 @@ public class Compiler {
 	}
 
 	public CompiledCode compileCode(String codeSource) {
-		List<String> tokens = lexer.lexify(codeSource);
+		List<Token> tokens = lexer.lexify(codeSource);
 		ExecutableCode code = parser.parseCode(tokens);
 		
 		throw new UnsupportedOperationException();
@@ -49,7 +49,7 @@ public class Compiler {
 	}
 
 	public CompiledMethod compileMethod(String methodSource) {
-		List<String> tokens = lexer.lexify(methodSource);
+		List<Token> tokens = lexer.lexify(methodSource);
 		Method method = parser.parseMethod(tokens);
 		
 		throw new UnsupportedOperationException();

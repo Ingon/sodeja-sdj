@@ -10,14 +10,14 @@ public class CompilerLexer {
 	CompilerLexer() {
 	}
 	
-	public List<String> lexify(String str) {
-		List<String> result = new ArrayList<String>();
+	public List<Token> lexify(String str) {
+		List<Token> result = new ArrayList<Token>();
 		for(int i = 0, n = str.length();i < n;i++) {
 			char ch = str.charAt(i);
 			
 			if(whitespaceChar(ch)) {
-				if(result.get(result.size() - 1) != WHITESPACE) {
-					result.add(WHITESPACE);
+				if(result.get(result.size() - 1).type != TokenType.WHITESPACE) {
+					result.add(new Token(WHITESPACE, TokenType.WHITESPACE));
 				}
 				
 				continue;
@@ -29,8 +29,8 @@ public class CompilerLexer {
 					throw new RuntimeException("Comment starting on " + i + " is not closed");
 				}
 				
-				if(result.get(result.size() - 1) != WHITESPACE) {
-					result.add(WHITESPACE);
+				if(result.get(result.size() - 1).type != TokenType.WHITESPACE) {
+					result.add(new Token(WHITESPACE, TokenType.WHITESPACE));
 				}
 				
 				i = commentEnd;
@@ -41,19 +41,21 @@ public class CompilerLexer {
 				int identifierEnd = readUntilIdentifierEnd(str, i);
 				String identifier = str.substring(i, identifierEnd);
 				
+				TokenType type = TokenType.IDENTIFIER;
 				// Check keyword
 				if(n > identifierEnd && str.charAt(identifierEnd) == ':') {
 					identifier += ':';
+					type = TokenType.KEYWORD;
 				}
 				
-				result.add(identifier);
+				result.add(new Token(identifier, type));
 				continue;
 			}
 			
 			if(digit(ch)) {
 				int integerEnd = readUntilDigits(str, i);
 				String val = str.substring(i, integerEnd);
-				result.add(val);
+				result.add(new Token(val, TokenType.INTEGER));
 				i = integerEnd - 1;
 				continue;
 			}
@@ -70,7 +72,7 @@ public class CompilerLexer {
 			if(isBinaryChar(ch)) {
 				int binaryEnd = readUntilBinary(str, i);
 				String binary = str.substring(i, binaryEnd);
-				result.add(binary);
+				result.add(new Token(binary, TokenType.OPERATOR));
 				i = binaryEnd - 1;
 				continue;
 			}
@@ -79,7 +81,7 @@ public class CompilerLexer {
 				if(i + 1 == n) {
 					throw new RuntimeException("Starting char literal without char");
 				}
-				result.add("$" + str.charAt(i + 1));
+				result.add(new Token("$" + str.charAt(i + 1), TokenType.CHARACTER));
 				i++;
 				continue;
 			}
@@ -90,7 +92,7 @@ public class CompilerLexer {
 					throw new RuntimeException("String starting on " + i + " is not closed");
 				}
 				String stringLiteral = str.substring(i, stringEnd + 1);
-				result.add(stringLiteral);
+				result.add(new Token(stringLiteral, TokenType.STRING));
 				i = stringEnd;
 				continue;
 			}
@@ -101,7 +103,7 @@ public class CompilerLexer {
 			}
 			
 			if(ch == '.') {
-				result.add(STATEMENT_END);
+				result.add(new Token(STATEMENT_END, TokenType.SEPARATOR));
 				continue;
 			}
 			
@@ -179,35 +181,35 @@ public class CompilerLexer {
 	}
 
 	
-	private boolean whitespaceChar(char ch) {
+	static boolean whitespaceChar(char ch) {
 		return Character.isWhitespace(ch);
 	}
 	
-	private boolean digit(char ch) {
+	static boolean digit(char ch) {
 		return ch >= '0' && ch <= '9';
 	}
 	
-	private boolean letter(char ch) {
+	static boolean letter(char ch) {
 		return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
 	}
 	
-	private boolean letterOrDigit(char ch) {
+	static boolean letterOrDigit(char ch) {
 		return letter(ch) || digit(ch);
 	}
 	
-	private boolean identifierStart(char ch) {
+	static boolean identifierStart(char ch) {
 		return letter(ch) || ch == '_';
 	}
 
-	private boolean identifierPart(char ch) {
+	static boolean identifierPart(char ch) {
 		return letterOrDigit(ch) || ch == '_';
 	}
 	
-	private boolean isCommentChar(char ch) {
+	static boolean isCommentChar(char ch) {
 		return ch == '"';
 	}
 	
-	private boolean isBinaryChar(char ch) {
+	static boolean isBinaryChar(char ch) {
 		return ch == '~' || ch == '!' || ch == '@' || ch == '%' || ch == '*'
 			|| ch == '-' || ch == '+' || ch == '=' || ch == '|' || ch == '\\'
 			|| ch == '<' || ch == '>' || ch == ',' || ch == '?' || ch == '/';
