@@ -9,6 +9,6 @@ public class ProcessManager {
 	}
 
 	public Process newProcess(CompiledCode code) {
-		throw new UnsupportedOperationException();
+		return new Process(vm, new ExecutableContext(code));
 	}
 }
