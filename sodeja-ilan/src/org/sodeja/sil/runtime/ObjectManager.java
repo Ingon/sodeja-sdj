@@ -231,4 +231,9 @@ public class ObjectManager {
 		symbols.put(str, value);
 		return value;
 	}
+	
+	SILObject getFromSystemDictionary(String str) {
+		SILObject symbol = makeSymbol(str);
+		return systemDictionary.getValue().get(symbol);
+	}
 }
