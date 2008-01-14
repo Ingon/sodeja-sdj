@@ -4,7 +4,7 @@ public class MethodContext implements ChildContext {
 	private final Context parent;
 	
 	private final SILObject receiver;
-	private final Method method;
+	private final CompiledMethod method;
 	private final int returnIndex;
 	
 	private final SILObject[] temps;
@@ -12,7 +12,7 @@ public class MethodContext implements ChildContext {
 	private int instructionPointer;
 	
 	public MethodContext(Context parent, SILObject receiver, 
-			Method method, int argumentIndex, int resultIndex) {
+			CompiledMethod method, int argumentIndex, int resultIndex) {
 		this.parent = parent;
 		
 		this.receiver = receiver;

@@ -15,7 +15,7 @@ public class VirtualMachine {
 	}
 
 	public SILObject compileAndExecute(String string) {
-		CompiledCode code = compiler.compile(string);
+		CompiledCode code = compiler.compileCode(string);
 		return execute(code);
 	}
 
