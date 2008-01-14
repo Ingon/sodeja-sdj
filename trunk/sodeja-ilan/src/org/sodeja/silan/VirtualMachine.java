@@ -6,19 +6,26 @@ public class VirtualMachine {
 	
 	private final Compiler compiler;
 	private final ProcessManager processes;
+	private final ObjectManager objects;
 	
 	public VirtualMachine() {
 		compiler = new Compiler(this);
 		processes = new ProcessManager(this);
+		objects = new ObjectManager(this);
 	}
 
-	public void compileAndExecute(String string) {
+	public SILObject compileAndExecute(String string) {
 		CompiledCode code = compiler.compile(string);
-		execute(code);
+		return execute(code);
 	}
 
-	private void execute(CompiledCode code) {
+	private SILObject execute(CompiledCode code) {
 		Process proc = processes.newProcess(code);
 		proc.run();
+		return proc.getValue();
+	}
+	
+	public ObjectManager getObjectManager() {
+		return objects;
 	}
 }
