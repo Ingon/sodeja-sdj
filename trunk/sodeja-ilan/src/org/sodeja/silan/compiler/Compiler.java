@@ -3,6 +3,7 @@ package org.sodeja.silan.compiler;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.sodeja.collections.CollectionUtils;
 import org.sodeja.collections.ListUtils;
 import org.sodeja.functional.Pair;
 import org.sodeja.silan.CompiledCode;
@@ -29,25 +30,82 @@ public class Compiler {
 	public CompiledCode compileCode(String codeSource) {
 		List<Token> tokens = lexer.lexify(codeSource);
 		ExecutableCode code = parser.parseCode(tokens);
+		if(code.finalStatement != null) {
+			throw new UnsupportedOperationException("Does not supports explicit return");
+		}
 		
-		throw new UnsupportedOperationException();
-//		ExecutableCode code = parser.parseCode(codeSource);
-//		int tempCount = code.localVariables.size();
-//		
-//		int statementTempCount = 0;
-//		List<Instruction> instructions = new ArrayList<Instruction>();
-//		
-//		for(Statement stmt : code.statements) {
-//			Pair<List<Instruction>, Integer> result = compile(code, stmt);
-//			if(statementTempCount < result.second) {
-//				statementTempCount = result.second;
-//			}
-//			instructions.addAll(result.first);
-//		}
-//		
-//		return new CompiledCode(tempCount + statementTempCount, instructions);
+		int statementTempCount = 0;
+		List<Instruction> instructions = new ArrayList<Instruction>();
+		
+		for(int i = 0, n = code.statements.size();i < n;i++) {
+			Statement stmt = code.statements.get(i);
+			Pair<List<Instruction>, Integer> result = compile(code, stmt);
+			if(statementTempCount < result.second) {
+				statementTempCount = result.second;
+			}
+			instructions.addAll(result.first);
+			if(i == n - 1) {
+				instructions.add(new ReturnCodeInstruction(statementTempCount - 1));
+			}
+		}
+		
+		return new CompiledCode(code.localVariables, statementTempCount, instructions);
 	}
 
+	private Pair<List<Instruction>, Integer> compile(ExecutableCode code, Statement stmt) {
+		if(stmt.assignment != null) {
+			throw new UnsupportedOperationException("Does not supports assignment");
+		}
+		
+		return compile(code, stmt.expression);
+	}
+
+	private Pair<List<Instruction>, Integer> compile(ExecutableCode code, Expression expression) {
+		if(expression.messages.size() > 1) {
+			throw new UnsupportedOperationException("Does not supports cascade compile");
+		}
+		
+		int tempCount = 0;
+		List<Instruction> instructions = new ArrayList<Instruction>();
+		
+		instructions.add(compilePrimary(expression.primary, tempCount++));
+		
+		Message message = expression.messages.get(0);
+		if(message instanceof UnaryRootMessage) {
+			throw new UnsupportedOperationException("Does not supports unary messages");
+		} else if(message instanceof KeywordMessage) {
+			throw new UnsupportedOperationException("Does not supports keyword messages");
+		} else if(message instanceof BinaryRootMessage) {
+			BinaryRootMessage root = (BinaryRootMessage) message;
+			if(root.binaries.size() > 1) {
+				throw new UnsupportedOperationException("Does not supports muliple binary messages");
+			}
+			if(root.keyword != null) {
+				throw new UnsupportedOperationException("Does not supports keyword messages");
+			}
+			
+			BinaryMessage binary = root.binaries.get(0);
+			BinaryMessageOperand operand = binary.operand;
+			if(! CollectionUtils.isEmpty(operand.unaries)) {
+				throw new UnsupportedOperationException("Does not supports multiple binary messages");
+			}
+			
+			instructions.add(compilePrimary(operand.primary, tempCount++));
+			tempCount++;
+			instructions.add(new SendMessageInstruction(0, binary.selector, 1, 2));
+		}
+		
+		return Pair.of(instructions, tempCount);
+	}
+
+	private Instruction compilePrimary(Primary primary, int location) {
+		if(! (primary instanceof IntegerLiteral)) {
+			throw new UnsupportedOperationException();
+		}
+		
+		return new StoreIntegerLiteralInstruction(location, ((IntegerLiteral) primary).value);
+	}
+	
 	public CompiledMethod compileMethod(String methodSource) {
 		List<Token> tokens = lexer.lexify(methodSource);
 		Method method = parser.parseMethod(tokens);
