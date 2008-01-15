@@ -5,11 +5,14 @@ import java.util.List;
 
 import org.sodeja.collections.CollectionUtils;
 import org.sodeja.functional.Pair;
+import org.sodeja.silan.CompiledBlock;
 import org.sodeja.silan.CompiledCode;
 import org.sodeja.silan.CompiledMethod;
 import org.sodeja.silan.compiler.src.BinaryMessage;
 import org.sodeja.silan.compiler.src.BinaryMessageOperand;
 import org.sodeja.silan.compiler.src.BinaryRootMessage;
+import org.sodeja.silan.compiler.src.BlockLiteral;
+import org.sodeja.silan.compiler.src.BooleanLiteral;
 import org.sodeja.silan.compiler.src.ExecutableCode;
 import org.sodeja.silan.compiler.src.Expression;
 import org.sodeja.silan.compiler.src.IntegerLiteral;
@@ -17,6 +20,7 @@ import org.sodeja.silan.compiler.src.KeywordMessage;
 import org.sodeja.silan.compiler.src.KeywordMessageArgument;
 import org.sodeja.silan.compiler.src.Message;
 import org.sodeja.silan.compiler.src.MethodDeclaration;
+import org.sodeja.silan.compiler.src.NestedExpression;
 import org.sodeja.silan.compiler.src.NilLiteral;
 import org.sodeja.silan.compiler.src.Primary;
 import org.sodeja.silan.compiler.src.Reference;
@@ -29,6 +33,8 @@ import org.sodeja.silan.instruction.ClearStackInstruction;
 import org.sodeja.silan.instruction.Instruction;
 import org.sodeja.silan.instruction.MessageInstruction;
 import org.sodeja.silan.instruction.PopReferenceInstruction;
+import org.sodeja.silan.instruction.PushBlockInstruction;
+import org.sodeja.silan.instruction.PushBooleanLiteralInstruction;
 import org.sodeja.silan.instruction.PushIntegerLiteralInstruction;
 import org.sodeja.silan.instruction.PushNilLiteralInstruction;
 import org.sodeja.silan.instruction.PushReferenceInstruction;
@@ -106,7 +112,15 @@ public class Compiler {
 		List<Instruction> instructions = new ArrayList<Instruction>();
 		
 		tempCount++;
-		instructions.add(compilePrimary(expression.primary));
+		Pair<List<Instruction>, Integer> subResult = null;
+		
+		if(expression.primary instanceof NestedExpression) {
+			subResult = compile(code, ((NestedExpression) expression.primary).statement);
+			instructions.addAll(subResult.first);
+		} else {
+			instructions.add(compilePrimary(expression.primary));
+		}
+		
 		if(! expression.messages.isEmpty()) {
 			Message message = expression.messages.get(0);
 			if(message instanceof UnaryRootMessage) {
@@ -154,18 +168,30 @@ public class Compiler {
 			}
 		}
 		
+		if(subResult != null) {
+			tempCount = Math.max(tempCount, subResult.second);
+		}
+		
 		return Pair.of(instructions, tempCount);
 	}
 
 	private Instruction compilePrimary(Primary primary) {
 		if(primary instanceof NilLiteral) {
 			return new PushNilLiteralInstruction();
+		} else if(primary instanceof BooleanLiteral) {
+			return new PushBooleanLiteralInstruction(((BooleanLiteral) primary).value);
 		} else if(primary instanceof IntegerLiteral) {
 			return new PushIntegerLiteralInstruction(((IntegerLiteral) primary).value);
 		} else if(primary instanceof StringLiteral) {
 			return new PushStringLiteralInstruction(((StringLiteral) primary).value);
 		} else if(primary instanceof Reference) {
 			return new PushReferenceInstruction(((Reference) primary).value);
+		} else if(primary instanceof BlockLiteral) {
+			BlockLiteral blockLiteral = (BlockLiteral) primary;
+			CompiledCode code = compileCode(blockLiteral.code, false);
+			CompiledBlock block = new CompiledBlock(blockLiteral.argument, 
+					code.localVariables, code.maxStackSize, code.instructions);
+			return new PushBlockInstruction(block);
 		}
 		throw new UnsupportedOperationException();
 	}
@@ -180,7 +206,6 @@ public class Compiler {
 			instructions.addAll(unary.first);
 			
 			instructions.add(new MessageInstruction(binary.selector, 1));
-//			instructions.add(new BinaryMessageInstruction(binary.selector));
 		}
 		
 		return Pair.of(instructions, 2);
@@ -190,7 +215,6 @@ public class Compiler {
 		List<Instruction> instructions = new ArrayList<Instruction>();
 		for(UnaryMessage msg : messages) {
 			instructions.add(new MessageInstruction(msg.selector, 0));
-//			instructions.add(new UnaryMessageInstruction(msg.selector));
 		}
 		return Pair.of(instructions, 0);
 	}

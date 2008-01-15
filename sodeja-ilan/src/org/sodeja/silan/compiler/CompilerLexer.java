@@ -13,6 +13,12 @@ public class CompilerLexer {
 	static final String ASSIGNMENT = ":=";
 	static final String RETURN = "^";
 	
+	static final String NESTED_START = "(";
+	static final String NESTED_END = ")";
+
+	static final String BLOCK_START = "[";
+	static final String BLOCK_END = "]";
+	
 	CompilerLexer() {
 	}
 	
@@ -118,10 +124,28 @@ public class CompilerLexer {
 					i++;
 					continue;
 				}
+				
+				int identifierEnd = readUntilIdentifierEnd(str, i + 1);
+				String identifier = str.substring(i + 1, identifierEnd);
+				result.add(new Token(identifier, TokenType.BLOCK_ARGUMENT));
+				i = identifierEnd - 1;
+				continue;
 			}
 			
 			if(ch == '^') {
 				result.add(new Token(RETURN, TokenType.OPERATOR));
+				continue;
+			}
+			
+			if(ch == '(' || ch == ')') {
+				String val = ch == '(' ? NESTED_START : NESTED_END;
+				result.add(new Token(val, TokenType.SEPARATOR));
+				continue;
+			}
+
+			if(ch == '[' || ch == ']') {
+				String val = ch == '[' ? BLOCK_START : BLOCK_END;
+				result.add(new Token(val, TokenType.SEPARATOR));
 				continue;
 			}
 			
@@ -236,7 +260,7 @@ public class CompilerLexer {
 	}
 	
 	static boolean isBinaryChar(char ch) {
-		return ch == '~' || ch == '!' || ch == '@' || ch == '%' || ch == '*'
+		return ch == '~' || ch == '!' || ch == '@' || ch == '%' || ch == '&' || ch == '*'
 			|| ch == '-' || ch == '+' || ch == '=' || ch == '|' || ch == '\\'
 			|| ch == '<' || ch == '>' || ch == ',' || ch == '?' || ch == '/';
 	}

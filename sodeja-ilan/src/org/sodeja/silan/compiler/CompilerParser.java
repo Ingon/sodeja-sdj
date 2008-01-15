@@ -16,6 +16,9 @@ import org.sodeja.silan.compiler.src.BinaryHeader;
 import org.sodeja.silan.compiler.src.BinaryMessage;
 import org.sodeja.silan.compiler.src.BinaryMessageOperand;
 import org.sodeja.silan.compiler.src.BinaryRootMessage;
+import org.sodeja.silan.compiler.src.BlockLiteral;
+import org.sodeja.silan.compiler.src.BlockLiteralArguments;
+import org.sodeja.silan.compiler.src.BooleanLiteral;
 import org.sodeja.silan.compiler.src.CharacterLiteral;
 import org.sodeja.silan.compiler.src.ExecutableCode;
 import org.sodeja.silan.compiler.src.Expression;
@@ -28,6 +31,7 @@ import org.sodeja.silan.compiler.src.Literal;
 import org.sodeja.silan.compiler.src.Message;
 import org.sodeja.silan.compiler.src.MethodDeclaration;
 import org.sodeja.silan.compiler.src.MethodHeader;
+import org.sodeja.silan.compiler.src.NestedExpression;
 import org.sodeja.silan.compiler.src.NilLiteral;
 import org.sodeja.silan.compiler.src.Primary;
 import org.sodeja.silan.compiler.src.Reference;
@@ -41,6 +45,10 @@ import org.sodeja.silan.compiler.src.UnaryRootMessage;
 
 public class CompilerParser {
 
+	private final DelegateParser<Token, Statement> STATEMENT_INT_DEL = new DelegateParser<Token, Statement>("STATEMENT_INT_DEL");
+	
+	private final DelegateParser<Token, ExecutableCode> EXECUTABLE_CODE_DEL = new DelegateParser<Token, ExecutableCode>("EXECUTABLE_CODE_DEL");
+	
 	private final Parser<Token, String> IDENTIFIER = matchByType(TokenType.IDENTIFIER);
 	
 	private final Parser<Token, String> KEYWORD = matchByType(TokenType.KEYWORD);
@@ -59,14 +67,27 @@ public class CompilerParser {
 	
 	private final Parser<Token, NilLiteral> NIL_LITERAL = applyCons("NIL_LITERAL", matchConstantReference("nil"), NilLiteral.class);
 	
-	private final Parser<Token, Literal> CONSTANT_REFERENCE = oneOf1("CONSTANT_REFERENCE", NIL_LITERAL);
+	private final Parser<Token, BooleanLiteral> TRUE_LITERAL = applyCons("TRUE_LITERAL", matchConstantReference("true"), BooleanLiteral.class);
+
+	private final Parser<Token, BooleanLiteral> FALSE_LITERAL = applyCons("FALSE_LITERAL", matchConstantReference("false"), BooleanLiteral.class);
 	
-	private final Parser<Token, Literal> LITERAL = oneOf1("LITERAL", CONSTANT_REFERENCE, INTEGER_LITERAL, CHARACTER_LITERAL, STRING_LITERAL);
+	private final Parser<Token, Literal> CONSTANT_REFERENCE = oneOf1("CONSTANT_REFERENCE", NIL_LITERAL, TRUE_LITERAL, FALSE_LITERAL);
+
+	private final Parser<Token, List<String>> BLOCK_LITERAL_ARGUMENTS_LIST = oneOrMoreSep("BLOCK_LITERAL_ARGUMENTS_LIST", matchByType(TokenType.BLOCK_ARGUMENT) , WHITESPACE);
+	
+	private final Parser<Token, List<String>> BLOCK_LITERAL_ARGUMENTS = thenParser4Just2("BLOCK_LITERAL_ARGUMENTS", OP_WHITESPACE, BLOCK_LITERAL_ARGUMENTS_LIST , OP_WHITESPACE, matchLiteral("|"));
+	
+	private final Parser<Token, ExecutableCode> EXECUTABLE_CODE_SPACE = thenParserJust1("EXECUTABLE_CODE_SPACE", EXECUTABLE_CODE_DEL, OP_WHITESPACE);
+	
+	private final Parser<Token, BlockLiteral> BLOCK_LITERAL = thenParser4Cons23("BLOCK_LITERAL", matchLiteral("["), zeroOrOne("BLOCK_LITERAL_ARGUMENTS_", BLOCK_LITERAL_ARGUMENTS), EXECUTABLE_CODE_SPACE, matchLiteral("]"), BlockLiteral.class);
+	
+	private final Parser<Token, Literal> LITERAL = oneOf1("LITERAL", CONSTANT_REFERENCE, INTEGER_LITERAL, CHARACTER_LITERAL, STRING_LITERAL, BLOCK_LITERAL);
+	
+	private final Parser<Token, NestedExpression> NESTED = thenParser4Cons2("NESTED", matchLiteral("("), STATEMENT_INT_DEL, OP_WHITESPACE, matchLiteral(")"), NestedExpression.class);
 	
 	private final Parser<Token, Reference> REFERENCE = applyCons("REFERENCE", IDENTIFIER, Reference.class);
 	
-//	private final Parser<String, Primary> PRIMARY = oneOf1("PRIMARY", LITERAL, REFERENCE, NESTED);
-	private final Parser<Token, Primary> PRIMARY = oneOf1("PRIMARY", LITERAL, REFERENCE);
+	private final Parser<Token, Primary> PRIMARY = oneOf1("PRIMARY", LITERAL, REFERENCE, NESTED);
 
 	private final Parser<Token, UnaryMessage> UNARY_MESSAGE = applyCons("UNARY_MESSAGE", IDENTIFIER, UnaryMessage.class);
 
@@ -139,6 +160,8 @@ public class CompilerParser {
 	private final Parser<Token, MethodDeclaration> METHOD_DECLARATION = thenParser3Cons23("", OP_WHITESPACE, METHOD_HEADER, EXECUTABLE_CODE, MethodDeclaration.class);
 	
 	CompilerParser() {
+		STATEMENT_INT_DEL.delegate = STATEMENT_INT;
+		EXECUTABLE_CODE_DEL.delegate = EXECUTABLE_CODE;
 	}
 	
 	public ExecutableCode parseCode(List<Token> tokensList) {
