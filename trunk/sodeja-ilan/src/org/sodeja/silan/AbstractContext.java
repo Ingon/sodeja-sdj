@@ -3,6 +3,8 @@ package org.sodeja.silan;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.sodeja.silan.instruction.Instruction;
+
 public abstract class AbstractContext implements Context {
 
 	private final Process process;

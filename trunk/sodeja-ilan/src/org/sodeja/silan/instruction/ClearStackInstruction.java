@@ -1,4 +1,6 @@
-package org.sodeja.silan;
+package org.sodeja.silan.instruction;
+
+import org.sodeja.silan.Process;
 
 public class ClearStackInstruction implements Instruction {
 	@Override

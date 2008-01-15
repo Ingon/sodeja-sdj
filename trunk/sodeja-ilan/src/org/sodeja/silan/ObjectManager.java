@@ -4,6 +4,10 @@ import java.util.Collections;
 import java.util.List;
 
 import org.sodeja.collections.ListUtils;
+import org.sodeja.silan.instruction.Instruction;
+import org.sodeja.silan.instruction.IntegerAddInstruction;
+import org.sodeja.silan.instruction.PushReferenceInstruction;
+import org.sodeja.silan.instruction.ReturnMethodInstruction;
 
 public class ObjectManager {
 
