@@ -6,9 +6,12 @@ import java.util.List;
 import org.sodeja.collections.CollectionUtils;
 import org.sodeja.collections.ListUtils;
 import org.sodeja.functional.Pair;
+import org.sodeja.silan.ClearStackInstruction;
 import org.sodeja.silan.CompiledCode;
 import org.sodeja.silan.CompiledMethod;
 import org.sodeja.silan.Instruction;
+import org.sodeja.silan.PopReferenceInstruction;
+import org.sodeja.silan.PushReferenceInstruction;
 import org.sodeja.silan.ReturnCodeInstruction;
 import org.sodeja.silan.BinaryMessageInstruction;
 import org.sodeja.silan.StoreIntegerLiteralInstruction;
@@ -46,6 +49,8 @@ public class Compiler {
 			instructions.addAll(result.first);
 			if(i == n - 1) {
 				instructions.add(new ReturnCodeInstruction());
+			} else {
+				instructions.add(new ClearStackInstruction());
 			}
 		}
 		
@@ -53,11 +58,11 @@ public class Compiler {
 	}
 
 	private Pair<List<Instruction>, Integer> compile(ExecutableCode code, Statement stmt) {
+		Pair<List<Instruction>, Integer> result = compile(code, stmt.expression);
 		if(stmt.assignment != null) {
-			throw new UnsupportedOperationException("Does not supports assignment");
+			result.first.add(new PopReferenceInstruction(stmt.assignment));
 		}
-		
-		return compile(code, stmt.expression);
+		return result;
 	}
 
 	private Pair<List<Instruction>, Integer> compile(ExecutableCode code, Expression expression) {
@@ -99,11 +104,12 @@ public class Compiler {
 	}
 
 	private Instruction compilePrimary(Primary primary, int location) {
-		if(! (primary instanceof IntegerLiteral)) {
-			throw new UnsupportedOperationException();
+		if(primary instanceof IntegerLiteral) {
+			return new StoreIntegerLiteralInstruction(((IntegerLiteral) primary).value);
+		} else if(primary instanceof Reference) {
+			return new PushReferenceInstruction(((Reference) primary).value);
 		}
-		
-		return new StoreIntegerLiteralInstruction(((IntegerLiteral) primary).value);
+		throw new UnsupportedOperationException();
 	}
 	
 	public CompiledMethod compileMethod(String methodSource) {

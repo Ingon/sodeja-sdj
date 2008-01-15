@@ -5,22 +5,15 @@ import java.util.Map;
 
 public class MethodContext extends AbstractContext implements ChildContext {
 	private final Context parent;
-	
 	private final SILObject receiver;
-	private final CompiledMethod method;
-	
 	private final Map<String, SILObject> argumentValues;
-	private final Map<String, SILObject> localValues;
-	
-	private int instructionPointer;
 	
 	public MethodContext(Context parent, SILObject receiver, 
 			CompiledMethod method, SILObject[] arguments) {
-		super(method.maxStackSize);
+		super(parent.getProcess(), method);
 		this.parent = parent;
 		
 		this.receiver = receiver;
-		this.method = method;
 		
 		if(method.arguments.size() != arguments.length) {
 			throw new RuntimeException("Difference arguments count");
@@ -30,20 +23,26 @@ public class MethodContext extends AbstractContext implements ChildContext {
 		for(int i = 0, n = method.arguments.size(); i < n;i++) {
 			argumentValues.put(method.arguments.get(i), arguments[i]);
 		}
-		
-		this.localValues = new HashMap<String, SILObject>();
-		
-		this.instructionPointer = 0;
 	}
 
 	@Override
-	public Instruction nextInstruction() {
-		return method.instructions.get(instructionPointer++);
-	}
-	
-	@Override
 	public Context getParent() {
 		return parent;
+	}
+
+	@Override
+	public SILObject resolve(String reference) {
+		SILObject val = argumentValues.get(reference);
+		if(val != null) {
+			return val;
+		}
+		
+		val = super.resolve(reference);
+		if(val != null) {
+			return val;
+		}
+		
+		throw new UnsupportedOperationException("Should look in the receiver");
 	}
 
 	public SILObject getReceiver() {

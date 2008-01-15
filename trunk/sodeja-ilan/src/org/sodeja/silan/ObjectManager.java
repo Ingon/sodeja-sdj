@@ -29,7 +29,7 @@ public class ObjectManager {
 				new PushReferenceInstruction("aNumber"),
 				new IntegerAddInstruction(this), 
 				new ReturnMethodInstruction());
-		integer.addMethod("+", new CompiledMethod(ListUtils.asList("aNumber"), Collections.EMPTY_LIST, 0, addInstructions));
+		integer.addMethod("+", new CompiledMethod(ListUtils.asList("aNumber"), Collections.EMPTY_LIST, 1, addInstructions));
 	}
 	
 	public SILObject getNil() {

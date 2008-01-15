@@ -7,9 +7,8 @@ public class Process {
 	private Context activeContext;
 	private SILObject value;
 	
-	public Process(VirtualMachine vm, Context executableContext) {
+	public Process(VirtualMachine vm) {
 		this.vm = vm;
-		this.activeContext = executableContext;
 	}
 
 	public void run() {

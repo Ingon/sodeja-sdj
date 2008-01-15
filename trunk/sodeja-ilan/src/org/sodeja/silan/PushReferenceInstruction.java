@@ -10,6 +10,7 @@ public class PushReferenceInstruction implements Instruction {
 
 	@Override
 	public void execute(Process process) {
-		process.getActiveContext().findSymbolValue()
+		SILObject obj = process.getActiveContext().resolve(reference);
+		process.getActiveContext().push(obj);
 	}
 }
