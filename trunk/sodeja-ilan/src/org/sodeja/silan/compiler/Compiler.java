@@ -17,6 +17,7 @@ import org.sodeja.silan.compiler.src.KeywordMessage;
 import org.sodeja.silan.compiler.src.KeywordMessageArgument;
 import org.sodeja.silan.compiler.src.Message;
 import org.sodeja.silan.compiler.src.MethodDeclaration;
+import org.sodeja.silan.compiler.src.NilLiteral;
 import org.sodeja.silan.compiler.src.Primary;
 import org.sodeja.silan.compiler.src.Reference;
 import org.sodeja.silan.compiler.src.Statement;
@@ -29,6 +30,7 @@ import org.sodeja.silan.instruction.Instruction;
 import org.sodeja.silan.instruction.MessageInstruction;
 import org.sodeja.silan.instruction.PopReferenceInstruction;
 import org.sodeja.silan.instruction.PushIntegerLiteralInstruction;
+import org.sodeja.silan.instruction.PushNilLiteralInstruction;
 import org.sodeja.silan.instruction.PushReferenceInstruction;
 import org.sodeja.silan.instruction.PushStringLiteralInstruction;
 import org.sodeja.silan.instruction.ReturnCodeInstruction;
@@ -156,7 +158,9 @@ public class Compiler {
 	}
 
 	private Instruction compilePrimary(Primary primary) {
-		if(primary instanceof IntegerLiteral) {
+		if(primary instanceof NilLiteral) {
+			return new PushNilLiteralInstruction();
+		} else if(primary instanceof IntegerLiteral) {
 			return new PushIntegerLiteralInstruction(((IntegerLiteral) primary).value);
 		} else if(primary instanceof StringLiteral) {
 			return new PushStringLiteralInstruction(((StringLiteral) primary).value);
