@@ -1,4 +1,10 @@
-package org.sodeja.silan;
+package org.sodeja.silan.instruction;
+
+import org.sodeja.silan.MethodContext;
+import org.sodeja.silan.ObjectManager;
+import org.sodeja.silan.Process;
+import org.sodeja.silan.SILObject;
+import org.sodeja.silan.SILPrimitiveObject;
 
 public class IntegerAddInstruction extends PrimitiveInstruction {
 	public IntegerAddInstruction(ObjectManager manager) {

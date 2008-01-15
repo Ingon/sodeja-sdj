@@ -1,5 +1,7 @@
 package org.sodeja.silan;
 
+import org.sodeja.silan.instruction.Instruction;
+
 public interface Context {
 	public Process getProcess();
 	

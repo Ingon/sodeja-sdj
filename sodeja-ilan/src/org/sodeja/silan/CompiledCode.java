@@ -2,6 +2,8 @@ package org.sodeja.silan;
 
 import java.util.List;
 
+import org.sodeja.silan.instruction.Instruction;
+
 public class CompiledCode {
 	public final List<String> localVariables;
 	public final int maxStackSize;
