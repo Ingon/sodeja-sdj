@@ -3,6 +3,9 @@ package org.sodeja.silan.compiler;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.sodeja.silan.compiler.src.Token;
+import org.sodeja.silan.compiler.src.TokenType;
+
 public class CompilerLexer {
 	static final String WHITESPACE = " ";
 	
