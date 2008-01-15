@@ -72,6 +72,10 @@ public class ObjectManager {
 		typesMapping.put("Integer", integer);
 		typesMapping.put("String", string);
 		typesMapping.put("Nil", nil);
+		
+		subclass("Object", "Transcript", Collections.EMPTY_LIST);
+		SILClassClass transcript = (SILClassClass) getByTypeName("Transcript").getType();
+		
 	}
 
 	private void initInteger() {
