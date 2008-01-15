@@ -101,68 +101,59 @@ public class Compiler {
 		int tempCount = 0;
 		List<Instruction> instructions = new ArrayList<Instruction>();
 		
-		instructions.add(compilePrimary(expression.primary, tempCount++));
+		tempCount++;
+		instructions.add(compilePrimary(expression.primary));
 		if(! expression.messages.isEmpty()) {
-		Message message = expression.messages.get(0);
+			Message message = expression.messages.get(0);
 			if(message instanceof UnaryRootMessage) {
 				UnaryRootMessage root = (UnaryRootMessage) message;
-				if(! CollectionUtils.isEmpty(root.binaries)) {
-					throw new UnsupportedOperationException("Does not supports muliple binary messages");
-				}
 				if(root.keyword != null) {
 					throw new UnsupportedOperationException("Does not supports keyword messages");
 				}
-				for(UnaryMessage msg : root.unaries) {
-					instructions.add(new UnaryMessageInstruction(msg.selector));
+				
+				Pair<List<Instruction>, Integer> unaryInstructions = compileUnaryChain(root.unaries);
+				instructions.addAll(unaryInstructions.first);
+				
+				if(! CollectionUtils.isEmpty(root.binaries)) {
+					Pair<List<Instruction>, Integer> binInstructions = compileBinary(root.binaries);
+					instructions.addAll(binInstructions.first);
+					tempCount++;
 				}
 			} else if(message instanceof KeywordMessage) {
 				KeywordMessage root = (KeywordMessage) message;
 				for(KeywordMessageArgument arg : root.arguments) {
-					instructions.add(compilePrimary(arg.primary, tempCount++));
+					tempCount++;
+					instructions.add(compilePrimary(arg.primary));
 	
-//					if(! CollectionUtils.isEmpty(arg.unaries)) {
-//						throw new UnsupportedOperationException("Does not supports unary messages");
-//					}
-					for(UnaryMessage msg : arg.unaries) {
-						instructions.add(new UnaryMessageInstruction(msg.selector));
+					if(! CollectionUtils.isEmpty(arg.unaries)) {
+						Pair<List<Instruction>, Integer> unaryInstructions = compileUnaryChain(arg.unaries);
+						instructions.addAll(unaryInstructions.first);
 					}
 					
-					if(CollectionUtils.isEmpty(arg.binaries)) {
-						continue;
+					if(! CollectionUtils.isEmpty(arg.binaries)) {
+						Pair<List<Instruction>, Integer> binInstructions = compileBinary(arg.binaries);
+						instructions.addAll(binInstructions.first);
+						tempCount++;
 					}
-					if(arg.binaries.size() > 1) {
-						throw new UnsupportedOperationException("Does not supports muliple binary messages");
-					}
-					
-					BinaryMessage binary = arg.binaries.get(0);
-					Pair<List<Instruction>, Integer> binInstructions = compileBinary(binary);
-					
-					instructions.addAll(binInstructions.first);
-					tempCount += binInstructions.second;
 				}
 				
 				instructions.add(new KeywordMessageInstruction(root.selector, root.arguments.size()));
 			} else if(message instanceof BinaryRootMessage) {
 				BinaryRootMessage root = (BinaryRootMessage) message;
-				if(root.binaries.size() > 1) {
-					throw new UnsupportedOperationException("Does not supports muliple binary messages");
-				}
 				if(root.keyword != null) {
 					throw new UnsupportedOperationException("Does not supports keyword messages");
 				}
 				
-				BinaryMessage binary = root.binaries.get(0);
-				Pair<List<Instruction>, Integer> binInstructions = compileBinary(binary);
-				
+				Pair<List<Instruction>, Integer> binInstructions = compileBinary(root.binaries);
 				instructions.addAll(binInstructions.first);
-				tempCount += binInstructions.second;
+				tempCount++;
 			}
 		}
 		
 		return Pair.of(instructions, tempCount);
 	}
 
-	private Instruction compilePrimary(Primary primary, int location) {
+	private Instruction compilePrimary(Primary primary) {
 		if(primary instanceof IntegerLiteral) {
 			return new PushIntegerLiteralInstruction(((IntegerLiteral) primary).value);
 		} else if(primary instanceof Reference) {
@@ -171,12 +162,28 @@ public class Compiler {
 		throw new UnsupportedOperationException();
 	}
 	
+	private Pair<List<Instruction>, Integer> compileBinary(List<BinaryMessage> binaries) {
+		List<Instruction> instructions = new ArrayList<Instruction>();
+		for(BinaryMessage binary : binaries) {
+			BinaryMessageOperand operand = binary.operand;
+			instructions.add(compilePrimary(operand.primary));
+			
+			Pair<List<Instruction>, Integer> unary = compileUnaryChain(operand.unaries);
+			instructions.addAll(unary.first);
+			
+			instructions.add(new BinaryMessageInstruction(binary.selector));
+		}
+		
+		return Pair.of(instructions, 2);
+	}
+	
 	private Pair<List<Instruction>, Integer> compileBinary(BinaryMessage binary) {
 		List<Instruction> instructions = new ArrayList<Instruction>();
 		int tempCount = 0;
 		
 		BinaryMessageOperand operand = binary.operand;
-		instructions.add(compilePrimary(operand.primary, tempCount++));
+		tempCount++;
+		instructions.add(compilePrimary(operand.primary));
 		for(UnaryMessage msg : operand.unaries) {
 			instructions.add(new UnaryMessageInstruction(msg.selector));
 		}
@@ -185,6 +192,20 @@ public class Compiler {
 		instructions.add(new BinaryMessageInstruction(binary.selector));
 		
 		return Pair.of(instructions, tempCount);
+	}
+	
+	private Pair<List<Instruction>, Integer> compileUnaryChain(List<UnaryMessage> messages) {
+		List<Instruction> instructions = new ArrayList<Instruction>();
+		for(UnaryMessage msg : messages) {
+			instructions.add(new UnaryMessageInstruction(msg.selector));
+		}
+		return Pair.of(instructions, 0);
+	}
+	
+	private Pair<List<Instruction>, Integer> compileUnary(UnaryMessage msg) {
+		List<Instruction> instructions = new ArrayList<Instruction>();
+		instructions.add(new UnaryMessageInstruction(msg.selector));
+		return Pair.of(instructions, 0);
 	}
 	
 	public CompiledMethod compileMethod(String methodSource) {
