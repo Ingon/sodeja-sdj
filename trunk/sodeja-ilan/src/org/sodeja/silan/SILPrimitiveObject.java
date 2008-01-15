@@ -23,4 +23,14 @@ public class SILPrimitiveObject<T> implements SILObject {
 	public String toString() {
 		return String.valueOf(value);
 	}
+
+	@Override
+	public void set(String reference, SILObject value) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public SILObject get(String reference) {
+		throw new UnsupportedOperationException();
+	}
 }

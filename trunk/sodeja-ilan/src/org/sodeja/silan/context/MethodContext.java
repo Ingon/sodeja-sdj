@@ -45,7 +45,22 @@ public class MethodContext extends AbstractContext implements ChildContext {
 			return val;
 		}
 		
-		throw new UnsupportedOperationException("Should look in the receiver");
+		val = receiver.get(reference);
+		if(val != null) {
+			return val;
+		}
+		
+		throw new UnsupportedOperationException("Not implemented above instance scope");
+	}
+
+	@Override
+	public boolean update(String reference, SILObject value) {
+		if(super.update(reference, value)) {
+			return true;
+		}
+		
+		receiver.set(reference, value);
+		return true;
 	}
 
 	public SILObject getReceiver() {

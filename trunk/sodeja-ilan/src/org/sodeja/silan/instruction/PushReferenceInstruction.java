@@ -14,6 +14,9 @@ public class PushReferenceInstruction implements Instruction {
 	@Override
 	public void execute(Process process) {
 		SILObject obj = process.getActiveContext().resolve(reference);
+		if(obj == null) {
+			throw new RuntimeException("Did not found reference to " + reference);
+		}
 		process.getActiveContext().push(obj);
 	}
 }

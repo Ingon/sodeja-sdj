@@ -12,22 +12,27 @@ import org.sodeja.parsec.ParseSuccess;
 import org.sodeja.parsec.Parser;
 import org.sodeja.parsec.ParsingResult;
 import org.sodeja.parsec.combinator.DelegateParser;
+import org.sodeja.silan.compiler.src.BinaryHeader;
 import org.sodeja.silan.compiler.src.BinaryMessage;
 import org.sodeja.silan.compiler.src.BinaryMessageOperand;
 import org.sodeja.silan.compiler.src.BinaryRootMessage;
 import org.sodeja.silan.compiler.src.ExecutableCode;
 import org.sodeja.silan.compiler.src.Expression;
 import org.sodeja.silan.compiler.src.IntegerLiteral;
+import org.sodeja.silan.compiler.src.KeywordHeader;
+import org.sodeja.silan.compiler.src.KeywordHeaderSegment;
 import org.sodeja.silan.compiler.src.KeywordMessage;
 import org.sodeja.silan.compiler.src.KeywordMessageArgument;
 import org.sodeja.silan.compiler.src.Literal;
 import org.sodeja.silan.compiler.src.Message;
-import org.sodeja.silan.compiler.src.Method;
+import org.sodeja.silan.compiler.src.MethodDeclaration;
+import org.sodeja.silan.compiler.src.MethodHeader;
 import org.sodeja.silan.compiler.src.Primary;
 import org.sodeja.silan.compiler.src.Reference;
 import org.sodeja.silan.compiler.src.Statement;
 import org.sodeja.silan.compiler.src.Token;
 import org.sodeja.silan.compiler.src.TokenType;
+import org.sodeja.silan.compiler.src.UnaryHeader;
 import org.sodeja.silan.compiler.src.UnaryMessage;
 import org.sodeja.silan.compiler.src.UnaryRootMessage;
 
@@ -59,7 +64,7 @@ public class CompilerParser {
 
 	private final Parser<Token, List<UnaryMessage>> UNARY_MESSAGE_CHAIN_ZERO = zeroOrMore("UNARY_MESSAGE_CHAIN_ZERO", thenParserJust2("UNARY_MESSAGE_CHAIN_ZERO_INT", OP_WHITESPACE, UNARY_MESSAGE));
 
-	private final Parser<Token, List<UnaryMessage>> UNARY_MESSAGE_CHAIN_ONE = oneOrMoreSep("UNARY_MESSAGE_CHAIN_ONE", UNARY_MESSAGE, UNARY_MESSAGE);
+	private final Parser<Token, List<UnaryMessage>> UNARY_MESSAGE_CHAIN_ONE = oneOrMoreSep("UNARY_MESSAGE_CHAIN_ONE", UNARY_MESSAGE, WHITESPACE);
 	
 	private final Parser<Token, BinaryMessageOperand> BINARY_OPERAND = thenParserCons("BINARY_OPERAND", PRIMARY, UNARY_MESSAGE_CHAIN_ZERO, BinaryMessageOperand.class);
 	
@@ -69,7 +74,9 @@ public class CompilerParser {
 
 	private final Parser<Token, List<BinaryMessage>> BINARY_CHAIN_ONE = oneOrMoreSep("BINARY_CHAIN_ONE", BINARY_MESSAGE, OP_WHITESPACE);
 	
-	private final Parser<Token, KeywordMessageArgument> KEYWORD_MESSAGE_ARGUMENT = thenParser4Cons("KEYWORD_MESSAGE_ARGUMENT", KEYWORD, PRIMARY, UNARY_MESSAGE_CHAIN_ZERO, BINARY_CHAIN_ZERO, KeywordMessageArgument.class);
+	private final Parser<Token, Primary> WHITESPACE_PRIMARY = thenParserJust2("WHITESPACE_PRIMARY", OP_WHITESPACE, PRIMARY);
+	
+	private final Parser<Token, KeywordMessageArgument> KEYWORD_MESSAGE_ARGUMENT = thenParser4Cons("KEYWORD_MESSAGE_ARGUMENT", KEYWORD, WHITESPACE_PRIMARY, UNARY_MESSAGE_CHAIN_ZERO, BINARY_CHAIN_ZERO, KeywordMessageArgument.class);
 	
 	private final Parser<Token, KeywordMessage> KEYWORD_MESSAGE = applyCons("KEYWORD_MESSAGE", oneOrMore("KEYWORD_MESSAGE_ARGUMENTS", KEYWORD_MESSAGE_ARGUMENT), KeywordMessage.class);
 
@@ -108,6 +115,18 @@ public class CompilerParser {
 	private final Parser<Token, List<String>> OPTIONAL_LOCAL_VARIABLE = zeroOrOne("OPTIONAL_LOCAL_VARIABLE", LOCAL_VARIABLES);
 	
 	private final Parser<Token, ExecutableCode> EXECUTABLE_CODE = thenParser3Cons123("EXECUTABLE_CODE", OPTIONAL_LOCAL_VARIABLE, STATEMENTS, OPTIONAL_FINAL_STATEMENT, ExecutableCode.class);
+
+	private final Parser<Token, UnaryHeader> UNARY_HEADER = applyCons("UNARY_HEADER", IDENTIFIER, UnaryHeader.class);
+
+	private final Parser<Token, BinaryHeader> BINARY_HEADER = thenParser3Cons13("BINARY_HEADER", BINARY, OP_WHITESPACE, IDENTIFIER, BinaryHeader.class);
+
+	private final Parser<Token, KeywordHeaderSegment> KEYWORD_HEADER_SEGMENT = thenParser3Cons13("KEYWORD_HEADER_SEGMENT", KEYWORD, OP_WHITESPACE, IDENTIFIER, KeywordHeaderSegment.class);
+	
+	private final Parser<Token, KeywordHeader> KEYWORD_HEADER = applyCons("KEYWORD_HEADER", oneOrMoreSep("KEYWORD_HEADER", KEYWORD_HEADER_SEGMENT, WHITESPACE), KeywordHeader.class);
+	
+	private final Parser<Token, MethodHeader> METHOD_HEADER = oneOf1("METHOD_HEADER", UNARY_HEADER, BINARY_HEADER, KEYWORD_HEADER);
+	
+	private final Parser<Token, MethodDeclaration> METHOD_DECLARATION = thenParser3Cons23("", OP_WHITESPACE, METHOD_HEADER, EXECUTABLE_CODE, MethodDeclaration.class);
 	
 	CompilerParser() {
 	}
@@ -122,8 +141,14 @@ public class CompilerParser {
 		return ((ParseSuccess<Token, ExecutableCode>) parseResults).result;
 	}
 	
-	public Method parseMethod(List<Token> tokens) {
-		throw new UnsupportedOperationException();
+	public MethodDeclaration parseMethod(List<Token> tokensList) {
+		ConsList<Token> tokens = ConsList.createList(tokensList);
+		ParsingResult<Token, MethodDeclaration> parseResults = METHOD_DECLARATION.execute(tokens);
+		if(parseResults instanceof ParseError) {
+			throw new RuntimeException(((ParseError<Token, MethodDeclaration>) parseResults).error);
+		}
+		
+		return ((ParseSuccess<Token, MethodDeclaration>) parseResults).result;
 	}
 	
 	private static Parser<Token, String> matchByType(final TokenType type) {

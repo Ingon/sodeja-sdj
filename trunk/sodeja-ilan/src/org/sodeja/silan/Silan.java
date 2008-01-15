@@ -10,9 +10,14 @@ import org.sodeja.collections.ListUtils;
 public class Silan {
 	public static void main(String[] args) throws IOException {
 		VirtualMachine vm = new VirtualMachine();
-//		vm.getObjectManager().subclass("Object", "Association", ListUtils.asList("key", "value"));
 		
-		String source = readFully("test/silan/2.silan");
+		vm.subclass("Object", "Association", ListUtils.asList("key", "value"));
+		vm.compileAndAttach(readFully("test/silan/61.silan"), "Association");
+		vm.compileAndAttach(readFully("test/silan/62.silan"), "Association");
+		vm.compileAndAttach(readFully("test/silan/71.silan"), "Association");
+		vm.compileAndAttach(readFully("test/silan/72.silan"), "Association");
+		
+		String source = readFully("test/silan/7.silan");
 		
 		SILObject value = vm.compileAndExecute(source);
 		

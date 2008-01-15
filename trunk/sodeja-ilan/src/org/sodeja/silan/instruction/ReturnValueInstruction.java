@@ -2,16 +2,13 @@ package org.sodeja.silan.instruction;
 
 import org.sodeja.silan.Process;
 import org.sodeja.silan.SILObject;
-import org.sodeja.silan.context.ChildContext;
 import org.sodeja.silan.context.Context;
+import org.sodeja.silan.context.MethodContext;
 
-public class ReturnMethodInstruction implements Instruction {
-	public ReturnMethodInstruction() {
-	}
-
+public class ReturnValueInstruction implements Instruction {
 	@Override
 	public void execute(Process process) {
-		ChildContext mc = (ChildContext) process.getActiveContext();
+		MethodContext mc = (MethodContext) process.getActiveContext();
 		SILObject obj = mc.pop();
 		
 		Context parent = mc.getParent();
