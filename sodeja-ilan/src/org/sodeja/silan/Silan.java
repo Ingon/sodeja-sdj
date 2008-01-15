@@ -12,12 +12,13 @@ public class Silan {
 		VirtualMachine vm = new VirtualMachine();
 		
 		vm.subclass("Object", "Association", ListUtils.asList("key", "value"));
-		vm.compileAndAttach(readFully("test/silan/61.silan"), "Association");
-		vm.compileAndAttach(readFully("test/silan/62.silan"), "Association");
-		vm.compileAndAttach(readFully("test/silan/71.silan"), "Association");
-		vm.compileAndAttach(readFully("test/silan/72.silan"), "Association");
+		vm.compileAndAttach(readFully("test/silan/6_1.silan"), "Association");
+		vm.compileAndAttach(readFully("test/silan/6_2.silan"), "Association");
+		vm.compileAndAttach(readFully("test/silan/7_1.silan"), "Association");
+		vm.compileAndAttach(readFully("test/silan/7_2.silan"), "Association");
+		vm.compileAndAttach(readFully("test/silan/11_1.silan"), "Association");
 		
-		String source = readFully("test/silan/7.silan");
+		String source = readFully("test/silan/11.silan");
 		
 		SILObject value = vm.compileAndExecute(source);
 		

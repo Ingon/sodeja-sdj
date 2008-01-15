@@ -78,7 +78,9 @@ public class CompilerParser {
 	
 	private final Parser<Token, KeywordMessageArgument> KEYWORD_MESSAGE_ARGUMENT = thenParser4Cons("KEYWORD_MESSAGE_ARGUMENT", KEYWORD, WHITESPACE_PRIMARY, UNARY_MESSAGE_CHAIN_ZERO, BINARY_CHAIN_ZERO, KeywordMessageArgument.class);
 	
-	private final Parser<Token, KeywordMessage> KEYWORD_MESSAGE = applyCons("KEYWORD_MESSAGE", oneOrMore("KEYWORD_MESSAGE_ARGUMENTS", KEYWORD_MESSAGE_ARGUMENT), KeywordMessage.class);
+	private final Parser<Token, List<KeywordMessageArgument>> KEYWORD_MESSAGE_ARGUMENTS = oneOrMoreSep("KEYWORD_MESSAGE_ARGUMENTS", KEYWORD_MESSAGE_ARGUMENT, OP_WHITESPACE);
+	
+	private final Parser<Token, KeywordMessage> KEYWORD_MESSAGE = applyCons("KEYWORD_MESSAGE", KEYWORD_MESSAGE_ARGUMENTS, KeywordMessage.class);
 
 	private final Parser<Token, KeywordMessage> OPTIONAL_KEYWORD_MESSAGE = zeroOrOne("OPTIONAL_KEYWORD_MESSAGE", KEYWORD_MESSAGE);
 	
