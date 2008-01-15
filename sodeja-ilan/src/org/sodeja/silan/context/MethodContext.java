@@ -1,7 +1,10 @@
-package org.sodeja.silan;
+package org.sodeja.silan.context;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.sodeja.silan.CompiledMethod;
+import org.sodeja.silan.SILObject;
 
 public class MethodContext extends AbstractContext implements ChildContext {
 	private final Context parent;
