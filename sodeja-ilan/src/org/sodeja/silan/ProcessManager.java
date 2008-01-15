@@ -9,6 +9,8 @@ public class ProcessManager {
 	}
 
 	public Process newProcess(CompiledCode code) {
-		return new Process(vm, new ExecutableContext(code));
+		Process process = new Process(vm);
+		process.setActiveContext(new ExecutableContext(process, code));
+		return process;
 	}
 }

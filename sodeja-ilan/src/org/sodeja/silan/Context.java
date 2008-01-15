@@ -1,11 +1,17 @@
 package org.sodeja.silan;
 
 public interface Context {
+	public Process getProcess();
+	
+	public Instruction nextInstruction();
 
-	public abstract Instruction nextInstruction();
+	public SILObject pop();
 
-	public abstract SILObject pop();
+	public void push(SILObject value);
+	
+	public SILObject resolve(String reference);
 
-	public abstract void push(SILObject value);
+	public void update(String reference, SILObject pop);
 
+	public void clear();
 }
