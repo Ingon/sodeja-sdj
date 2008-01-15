@@ -11,6 +11,7 @@ public class CompilerLexer {
 	
 	static final String STATEMENT_END = ".";
 	static final String ASSIGNMENT = ":=";
+	static final String RETURN = "^";
 	
 	CompilerLexer() {
 	}
@@ -47,9 +48,11 @@ public class CompilerLexer {
 				if(n > identifierEnd && str.charAt(identifierEnd) == ':') {
 					identifier += ':';
 					type = TokenType.KEYWORD;
+					identifierEnd++;
 				}
 				
 				result.add(new Token(identifier, type));
+				i = identifierEnd - 1;
 				continue;
 			}
 			
@@ -115,6 +118,11 @@ public class CompilerLexer {
 					i++;
 					continue;
 				}
+			}
+			
+			if(ch == '^') {
+				result.add(new Token(RETURN, TokenType.OPERATOR));
+				continue;
 			}
 			
 			throw new RuntimeException("Unknown character");

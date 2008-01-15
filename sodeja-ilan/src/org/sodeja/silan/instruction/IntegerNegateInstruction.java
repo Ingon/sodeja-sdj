@@ -6,20 +6,17 @@ import org.sodeja.silan.SILObject;
 import org.sodeja.silan.SILPrimitiveObject;
 import org.sodeja.silan.context.MethodContext;
 
-public class IntegerAddInstruction extends PrimitiveInstruction {
-	public IntegerAddInstruction(ObjectManager manager) {
+public class IntegerNegateInstruction extends PrimitiveInstruction {
+	public IntegerNegateInstruction(ObjectManager manager) {
 		super(manager);
 	}
-
+	
 	@Override
 	public void execute(Process process) {
 		MethodContext mc = (MethodContext) process.getActiveContext();
-		
 		SILPrimitiveObject<Integer> i1 = (SILPrimitiveObject<Integer>) mc.getReceiver();
-		SILPrimitiveObject<Integer> i2 = (SILPrimitiveObject<Integer>) mc.pop();
 		
-		Integer primitiveResult = i1.value + i2.value;
-		SILObject result = manager.newInteger(primitiveResult);
+		SILObject result = manager.newInteger(- i1.value);
 		mc.push(result);
 	}
 }

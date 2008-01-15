@@ -15,7 +15,7 @@ public interface Context {
 	
 	public SILObject resolve(String reference);
 
-	public void update(String reference, SILObject pop);
+	public boolean update(String reference, SILObject pop);
 
 	public void clear();
 }

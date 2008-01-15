@@ -10,7 +10,7 @@ import org.sodeja.silan.instruction.Instruction;
 
 public abstract class AbstractContext implements Context {
 
-	private final Process process;
+	protected final Process process;
 	
 	private final CompiledCode code;
 	private final Map<String, SILObject> localVariables;
@@ -64,13 +64,14 @@ public abstract class AbstractContext implements Context {
 	}
 	
 	@Override
-	public void update(String reference, SILObject value) {
+	public boolean update(String reference, SILObject value) {
 		SILObject oldValue = localVariables.get(reference);
 		if(oldValue == null) {
-			throw new UnsupportedOperationException();
+			return false;
 		}
 		
 		localVariables.put(reference, value);
+		return true;
 	}
 
 	@Override

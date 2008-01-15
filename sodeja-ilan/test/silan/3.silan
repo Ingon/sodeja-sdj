@@ -1,0 +1,4 @@
+"This gives -8."
+| a |
+a := 3 + 5.
+a negated.

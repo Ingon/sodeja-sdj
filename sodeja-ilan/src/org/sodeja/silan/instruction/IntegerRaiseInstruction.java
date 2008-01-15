@@ -6,11 +6,12 @@ import org.sodeja.silan.SILObject;
 import org.sodeja.silan.SILPrimitiveObject;
 import org.sodeja.silan.context.MethodContext;
 
-public class IntegerAddInstruction extends PrimitiveInstruction {
-	public IntegerAddInstruction(ObjectManager manager) {
+public class IntegerRaiseInstruction extends PrimitiveInstruction {
+	public IntegerRaiseInstruction(ObjectManager manager) {
 		super(manager);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(Process process) {
 		MethodContext mc = (MethodContext) process.getActiveContext();
@@ -18,7 +19,7 @@ public class IntegerAddInstruction extends PrimitiveInstruction {
 		SILPrimitiveObject<Integer> i1 = (SILPrimitiveObject<Integer>) mc.getReceiver();
 		SILPrimitiveObject<Integer> i2 = (SILPrimitiveObject<Integer>) mc.pop();
 		
-		Integer primitiveResult = i1.value + i2.value;
+		Integer primitiveResult = (int) Math.pow(i1.value, i2.value);
 		SILObject result = manager.newInteger(primitiveResult);
 		mc.push(result);
 	}

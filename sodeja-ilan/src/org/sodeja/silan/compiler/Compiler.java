@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sodeja.collections.CollectionUtils;
-import org.sodeja.collections.ListUtils;
 import org.sodeja.functional.Pair;
+import org.sodeja.sil.runtime.exec.ReturnMethodInstruction;
 import org.sodeja.silan.CompiledCode;
 import org.sodeja.silan.CompiledMethod;
-import org.sodeja.silan.VirtualMachine;
 import org.sodeja.silan.compiler.src.BinaryMessage;
 import org.sodeja.silan.compiler.src.BinaryMessageOperand;
 import org.sodeja.silan.compiler.src.BinaryRootMessage;
@@ -16,30 +15,32 @@ import org.sodeja.silan.compiler.src.ExecutableCode;
 import org.sodeja.silan.compiler.src.Expression;
 import org.sodeja.silan.compiler.src.IntegerLiteral;
 import org.sodeja.silan.compiler.src.KeywordMessage;
+import org.sodeja.silan.compiler.src.KeywordMessageArgument;
 import org.sodeja.silan.compiler.src.Message;
-import org.sodeja.silan.compiler.src.Method;
+import org.sodeja.silan.compiler.src.MethodDeclaration;
 import org.sodeja.silan.compiler.src.Primary;
 import org.sodeja.silan.compiler.src.Reference;
 import org.sodeja.silan.compiler.src.Statement;
 import org.sodeja.silan.compiler.src.Token;
+import org.sodeja.silan.compiler.src.UnaryMessage;
 import org.sodeja.silan.compiler.src.UnaryRootMessage;
 import org.sodeja.silan.instruction.BinaryMessageInstruction;
 import org.sodeja.silan.instruction.ClearStackInstruction;
 import org.sodeja.silan.instruction.Instruction;
+import org.sodeja.silan.instruction.KeywordMessageInstruction;
 import org.sodeja.silan.instruction.PopReferenceInstruction;
 import org.sodeja.silan.instruction.PushIntegerLiteralInstruction;
 import org.sodeja.silan.instruction.PushReferenceInstruction;
 import org.sodeja.silan.instruction.ReturnCodeInstruction;
+import org.sodeja.silan.instruction.ReturnSelfInstruction;
+import org.sodeja.silan.instruction.ReturnValueInstruction;
+import org.sodeja.silan.instruction.UnaryMessageInstruction;
 
 public class Compiler {
-	private final VirtualMachine vm;
-	
 	private final CompilerLexer lexer;
 	private final CompilerParser parser;
 	
-	public Compiler(VirtualMachine vm) {
-		this.vm = vm;
-		
+	public Compiler() {
 		this.lexer = new CompilerLexer();
 		this.parser = new CompilerParser();
 	}
@@ -47,10 +48,10 @@ public class Compiler {
 	public CompiledCode compileCode(String codeSource) {
 		List<Token> tokens = lexer.lexify(codeSource);
 		ExecutableCode code = parser.parseCode(tokens);
-		if(code.finalStatement != null) {
-			throw new UnsupportedOperationException("Does not supports explicit return");
-		}
-		
+		return compileCode(code, false);
+	}
+
+	private CompiledCode compileCode(ExecutableCode code, boolean isMethod) {
 		int statementTempCount = 0;
 		List<Instruction> instructions = new ArrayList<Instruction>();
 		
@@ -61,16 +62,29 @@ public class Compiler {
 				statementTempCount = result.second;
 			}
 			instructions.addAll(result.first);
-			if(i == n - 1) {
-				instructions.add(new ReturnCodeInstruction());
+			if(i == n - 1 && code.finalStatement == null) {
+				if(isMethod) {
+					instructions.add(new ReturnSelfInstruction());
+				} else {
+					instructions.add(new ReturnCodeInstruction());
+				}
 			} else {
 				instructions.add(new ClearStackInstruction());
 			}
 		}
 		
+		if(code.finalStatement != null) {
+			Pair<List<Instruction>, Integer> result = compile(code, code.finalStatement);
+			if(statementTempCount < result.second) {
+				statementTempCount = result.second;
+			}
+			instructions.addAll(result.first);
+			instructions.add(new ReturnValueInstruction());
+		}
+		
 		return new CompiledCode(code.localVariables, statementTempCount, instructions);
 	}
-
+	
 	private Pair<List<Instruction>, Integer> compile(ExecutableCode code, Statement stmt) {
 		Pair<List<Instruction>, Integer> result = compile(code, stmt.expression);
 		if(stmt.assignment != null) {
@@ -88,30 +102,61 @@ public class Compiler {
 		List<Instruction> instructions = new ArrayList<Instruction>();
 		
 		instructions.add(compilePrimary(expression.primary, tempCount++));
-		
+		if(! expression.messages.isEmpty()) {
 		Message message = expression.messages.get(0);
-		if(message instanceof UnaryRootMessage) {
-			throw new UnsupportedOperationException("Does not supports unary messages");
-		} else if(message instanceof KeywordMessage) {
-			throw new UnsupportedOperationException("Does not supports keyword messages");
-		} else if(message instanceof BinaryRootMessage) {
-			BinaryRootMessage root = (BinaryRootMessage) message;
-			if(root.binaries.size() > 1) {
-				throw new UnsupportedOperationException("Does not supports muliple binary messages");
+			if(message instanceof UnaryRootMessage) {
+				UnaryRootMessage root = (UnaryRootMessage) message;
+				if(! CollectionUtils.isEmpty(root.binaries)) {
+					throw new UnsupportedOperationException("Does not supports muliple binary messages");
+				}
+				if(root.keyword != null) {
+					throw new UnsupportedOperationException("Does not supports keyword messages");
+				}
+				for(UnaryMessage msg : root.unaries) {
+					instructions.add(new UnaryMessageInstruction(msg.selector));
+				}
+			} else if(message instanceof KeywordMessage) {
+				KeywordMessage root = (KeywordMessage) message;
+				for(KeywordMessageArgument arg : root.arguments) {
+					instructions.add(compilePrimary(arg.primary, tempCount++));
+	
+//					if(! CollectionUtils.isEmpty(arg.unaries)) {
+//						throw new UnsupportedOperationException("Does not supports unary messages");
+//					}
+					for(UnaryMessage msg : arg.unaries) {
+						instructions.add(new UnaryMessageInstruction(msg.selector));
+					}
+					
+					if(CollectionUtils.isEmpty(arg.binaries)) {
+						continue;
+					}
+					if(arg.binaries.size() > 1) {
+						throw new UnsupportedOperationException("Does not supports muliple binary messages");
+					}
+					
+					BinaryMessage binary = arg.binaries.get(0);
+					Pair<List<Instruction>, Integer> binInstructions = compileBinary(binary);
+					
+					instructions.addAll(binInstructions.first);
+					tempCount += binInstructions.second;
+				}
+				
+				instructions.add(new KeywordMessageInstruction(root.selector, root.arguments.size()));
+			} else if(message instanceof BinaryRootMessage) {
+				BinaryRootMessage root = (BinaryRootMessage) message;
+				if(root.binaries.size() > 1) {
+					throw new UnsupportedOperationException("Does not supports muliple binary messages");
+				}
+				if(root.keyword != null) {
+					throw new UnsupportedOperationException("Does not supports keyword messages");
+				}
+				
+				BinaryMessage binary = root.binaries.get(0);
+				Pair<List<Instruction>, Integer> binInstructions = compileBinary(binary);
+				
+				instructions.addAll(binInstructions.first);
+				tempCount += binInstructions.second;
 			}
-			if(root.keyword != null) {
-				throw new UnsupportedOperationException("Does not supports keyword messages");
-			}
-			
-			BinaryMessage binary = root.binaries.get(0);
-			BinaryMessageOperand operand = binary.operand;
-			if(! CollectionUtils.isEmpty(operand.unaries)) {
-				throw new UnsupportedOperationException("Does not supports multiple binary messages");
-			}
-			
-			instructions.add(compilePrimary(operand.primary, tempCount++));
-			tempCount++;
-			instructions.add(new BinaryMessageInstruction(binary.selector));
 		}
 		
 		return Pair.of(instructions, tempCount);
@@ -126,21 +171,28 @@ public class Compiler {
 		throw new UnsupportedOperationException();
 	}
 	
-	public CompiledMethod compileMethod(String methodSource) {
-		List<Token> tokens = lexer.lexify(methodSource);
-		Method method = parser.parseMethod(tokens);
+	private Pair<List<Instruction>, Integer> compileBinary(BinaryMessage binary) {
+		List<Instruction> instructions = new ArrayList<Instruction>();
+		int tempCount = 0;
 		
-		throw new UnsupportedOperationException();
+		BinaryMessageOperand operand = binary.operand;
+		instructions.add(compilePrimary(operand.primary, tempCount++));
+		for(UnaryMessage msg : operand.unaries) {
+			instructions.add(new UnaryMessageInstruction(msg.selector));
+		}
+		
+		tempCount++;
+		instructions.add(new BinaryMessageInstruction(binary.selector));
+		
+		return Pair.of(instructions, tempCount);
 	}
 	
-//	private Pair<List<Instruction>, Integer> compile(ExecutableCode code, Statement stmt) {
-//		// TODO fix this
-//		StoreIntegerLiteralInstruction i3 = new StoreIntegerLiteralInstruction(0, 3);
-//		StoreIntegerLiteralInstruction i5 = new StoreIntegerLiteralInstruction(1, 5);
-//		SendMessageInstruction msg = new SendMessageInstruction(0, "+", 1, 2);
-//		ReturnCodeInstruction ret = new ReturnCodeInstruction(2);
-//		
-//		List<Instruction> instructions = ListUtils.asList(i3, i5, msg, ret);
-//		return Pair.of(instructions, 3);
-//	}
+	public CompiledMethod compileMethod(String methodSource) {
+		List<Token> tokens = lexer.lexify(methodSource);
+		MethodDeclaration method = parser.parseMethod(tokens);
+		
+		CompiledCode code = compileCode(method.code, true);
+		return new CompiledMethod(method.header.getSelector(), method.header.getArguments(), 
+				code.localVariables, code.maxStackSize, code.instructions);
+	}
 }
