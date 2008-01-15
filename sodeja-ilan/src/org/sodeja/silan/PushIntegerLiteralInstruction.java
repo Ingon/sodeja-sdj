@@ -1,9 +1,9 @@
 package org.sodeja.silan;
 
-public class StoreIntegerLiteralInstruction implements Instruction {
+public class PushIntegerLiteralInstruction implements Instruction {
 	public final Integer value;
 	
-	public StoreIntegerLiteralInstruction(Integer value) {
+	public PushIntegerLiteralInstruction(Integer value) {
 		this.value = value;
 	}
 

@@ -14,7 +14,7 @@ import org.sodeja.silan.PopReferenceInstruction;
 import org.sodeja.silan.PushReferenceInstruction;
 import org.sodeja.silan.ReturnCodeInstruction;
 import org.sodeja.silan.BinaryMessageInstruction;
-import org.sodeja.silan.StoreIntegerLiteralInstruction;
+import org.sodeja.silan.PushIntegerLiteralInstruction;
 import org.sodeja.silan.VirtualMachine;
 import org.sodeja.silan.compiler.src.BinaryMessage;
 import org.sodeja.silan.compiler.src.BinaryMessageOperand;
@@ -119,7 +119,7 @@ public class Compiler {
 
 	private Instruction compilePrimary(Primary primary, int location) {
 		if(primary instanceof IntegerLiteral) {
-			return new StoreIntegerLiteralInstruction(((IntegerLiteral) primary).value);
+			return new PushIntegerLiteralInstruction(((IntegerLiteral) primary).value);
 		} else if(primary instanceof Reference) {
 			return new PushReferenceInstruction(((Reference) primary).value);
 		}
