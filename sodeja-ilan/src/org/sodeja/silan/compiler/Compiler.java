@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.sodeja.collections.CollectionUtils;
 import org.sodeja.functional.Pair;
-import org.sodeja.sil.runtime.exec.ReturnMethodInstruction;
 import org.sodeja.silan.CompiledCode;
 import org.sodeja.silan.CompiledMethod;
 import org.sodeja.silan.compiler.src.BinaryMessage;
@@ -48,7 +47,10 @@ public class Compiler {
 	public CompiledCode compileCode(String codeSource) {
 		List<Token> tokens = lexer.lexify(codeSource);
 		ExecutableCode code = parser.parseCode(tokens);
-		return compileCode(code, false);
+		
+		CompiledCode compiled = compileCode(code, false);
+		compiled.setSource(codeSource);
+		return compiled;
 	}
 
 	private CompiledCode compileCode(ExecutableCode code, boolean isMethod) {
@@ -117,12 +119,12 @@ public class Compiler {
 				if(! CollectionUtils.isEmpty(root.binaries)) {
 					Pair<List<Instruction>, Integer> binInstructions = compileBinary(root.binaries);
 					instructions.addAll(binInstructions.first);
-					tempCount++;
+
+					tempCount += 1;
 				}
 			} else if(message instanceof KeywordMessage) {
 				KeywordMessage root = (KeywordMessage) message;
 				for(KeywordMessageArgument arg : root.arguments) {
-					tempCount++;
 					instructions.add(compilePrimary(arg.primary));
 	
 					if(! CollectionUtils.isEmpty(arg.unaries)) {
@@ -133,10 +135,10 @@ public class Compiler {
 					if(! CollectionUtils.isEmpty(arg.binaries)) {
 						Pair<List<Instruction>, Integer> binInstructions = compileBinary(arg.binaries);
 						instructions.addAll(binInstructions.first);
-						tempCount++;
 					}
 				}
 				
+				tempCount += root.arguments.size() + 1;
 				instructions.add(new KeywordMessageInstruction(root.selector, root.arguments.size()));
 			} else if(message instanceof BinaryRootMessage) {
 				BinaryRootMessage root = (BinaryRootMessage) message;
@@ -146,7 +148,7 @@ public class Compiler {
 				
 				Pair<List<Instruction>, Integer> binInstructions = compileBinary(root.binaries);
 				instructions.addAll(binInstructions.first);
-				tempCount++;
+				tempCount += 1;
 			}
 		}
 		
@@ -176,24 +178,7 @@ public class Compiler {
 		
 		return Pair.of(instructions, 2);
 	}
-	
-	private Pair<List<Instruction>, Integer> compileBinary(BinaryMessage binary) {
-		List<Instruction> instructions = new ArrayList<Instruction>();
-		int tempCount = 0;
-		
-		BinaryMessageOperand operand = binary.operand;
-		tempCount++;
-		instructions.add(compilePrimary(operand.primary));
-		for(UnaryMessage msg : operand.unaries) {
-			instructions.add(new UnaryMessageInstruction(msg.selector));
-		}
-		
-		tempCount++;
-		instructions.add(new BinaryMessageInstruction(binary.selector));
-		
-		return Pair.of(instructions, tempCount);
-	}
-	
+
 	private Pair<List<Instruction>, Integer> compileUnaryChain(List<UnaryMessage> messages) {
 		List<Instruction> instructions = new ArrayList<Instruction>();
 		for(UnaryMessage msg : messages) {
@@ -202,18 +187,16 @@ public class Compiler {
 		return Pair.of(instructions, 0);
 	}
 	
-	private Pair<List<Instruction>, Integer> compileUnary(UnaryMessage msg) {
-		List<Instruction> instructions = new ArrayList<Instruction>();
-		instructions.add(new UnaryMessageInstruction(msg.selector));
-		return Pair.of(instructions, 0);
-	}
-	
 	public CompiledMethod compileMethod(String methodSource) {
 		List<Token> tokens = lexer.lexify(methodSource);
 		MethodDeclaration method = parser.parseMethod(tokens);
 		
 		CompiledCode code = compileCode(method.code, true);
-		return new CompiledMethod(method.header.getSelector(), method.header.getArguments(), 
+		
+		CompiledMethod compiledMethod = new CompiledMethod(
+				method.header.getSelector(), method.header.getArguments(), 
 				code.localVariables, code.maxStackSize, code.instructions);
+		compiledMethod.setSource(methodSource);
+		return compiledMethod;
 	}
 }
