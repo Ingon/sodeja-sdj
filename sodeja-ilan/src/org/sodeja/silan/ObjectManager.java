@@ -1,7 +1,9 @@
 package org.sodeja.silan;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.sodeja.collections.ListUtils;
 import org.sodeja.silan.instruction.Instruction;
@@ -23,8 +25,13 @@ public class ObjectManager {
 			return getByTypeName("Nil");
 		}};
 	
+	private final Map<String, SILClass> typesMapping;
+		
 	public ObjectManager(VirtualMachine virtualMachine) {
 		this.vm = virtualMachine;
+		
+		typesMapping = new HashMap<String, SILClass>();
+		
 		init();
 	}
 
@@ -34,6 +41,10 @@ public class ObjectManager {
 				new IntegerAddInstruction(this), 
 				new ReturnMethodInstruction());
 		integer.addMethod("+", new CompiledMethod(ListUtils.asList("aNumber"), Collections.EMPTY_LIST, 1, addInstructions));
+		
+		typesMapping.put("Object", object);
+		typesMapping.put("Integer", integer);
+		typesMapping.put("Nil", nil);
 	}
 	
 	public SILObject getNil() {
@@ -44,11 +55,21 @@ public class ObjectManager {
 		return new SILPrimitiveObject<Integer>(this, "Integer", value);
 	}
 
+	public SILObject newString(String value) {
+		return new SILPrimitiveObject<String>(this, "String", value);
+	}
+	
+	public void subclass(String parentName, String newClassName, List<String> instanceVariables) {
+		SILClass parent = getByTypeName(parentName);
+		SILClass newClass = new SILClass(parent, instanceVariables);
+		typesMapping.put(newClassName, newClass);
+	}
+	
 	protected SILClass getByTypeName(String typeName) {
-		if("Integer".equals(typeName)) {
-			return integer;
+		SILClass result = typesMapping.get(typeName);
+		if(result == null) {
+			throw new RuntimeException("Unknown type: " + typeName);
 		}
-		
-		throw new IllegalArgumentException("");
+		return result;
 	}
 }
