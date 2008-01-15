@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.sodeja.collections.ListUtils;
+import org.sodeja.functional.Pair;
+import org.sodeja.silan.context.Context;
 import org.sodeja.silan.instruction.Instruction;
 import org.sodeja.silan.instruction.IntegerAddInstruction;
 import org.sodeja.silan.instruction.IntegerNegateInstruction;
@@ -28,21 +30,17 @@ public class ObjectManager {
 	private SILClass string = new SILClass(object);
 	
 	private SILClass nil = new SILClass(object);
-	private SILObject nilInstance = new SILObject() {
-		@Override
-		public SILClass getType() {
-			return getByTypeName("Nil");
-		}
-
-		@Override
-		public void set(String reference, SILObject value) {
-			throw new RuntimeException("Trying to set value of Nil!");
-		}
-
-		@Override
-		public SILObject get(String reference) {
-			throw new RuntimeException("Trying to set value of Nil!");
-		}};
+	private SILObject nilInstance = new SILPrimitiveObject<Void>(this, "Nil", null);
+	
+	private SILClass bool = new SILClass(object);
+	
+	private SILClass trueClass = new SILClass(bool);
+	private SILClass falseClass = new SILClass(bool);
+	
+	private SILObject trueInstance = new SILPrimitiveObject<Boolean>(this, "True", Boolean.TRUE);
+	private SILObject falseInstance = new SILPrimitiveObject<Boolean>(this, "False", Boolean.FALSE);
+	
+	private SILClass compiledBlock = new SILClass(object);
 	
 	private final Map<String, SILClass> typesMapping;
 		
@@ -69,10 +67,15 @@ public class ObjectManager {
 		
 		initInteger();
 		initString();
+		initBoolean();
 		
 		typesMapping.put("Object", object);
 		typesMapping.put("Integer", integer);
 		typesMapping.put("String", string);
+		typesMapping.put("Boolean", bool);
+		typesMapping.put("True", trueClass);
+		typesMapping.put("False", falseClass);
+		typesMapping.put("CompiledBlock", compiledBlock);
 		typesMapping.put("Nil", nil);
 		
 		subclass("Object", "Transcript", Collections.EMPTY_LIST);
@@ -84,6 +87,12 @@ public class ObjectManager {
 				new ReturnSelfInstruction());
 		transcript.addMethod(new CompiledMethod("show:", ListUtils.asList("aString"),
 				Collections.EMPTY_LIST, 1, showInstructions));
+		
+		
+		List<Instruction> blockInstructions = ListUtils.asList(
+				);
+		compiledBlock.addMethod(new CompiledMethod("value", Collections.EMPTY_LIST,
+				Collections.EMPTY_LIST, 0, blockInstructions));
 	}
 
 	private void initInteger() {
@@ -117,6 +126,15 @@ public class ObjectManager {
 				Collections.EMPTY_LIST, 1, appendInstructions ));
 	}
 	
+	private void initBoolean() {
+//		List<Instruction> appendInstructions = ListUtils.asList(
+//				new PushReferenceInstruction("aBool"),
+//				new StringAppendInstruction(this), 
+//				new ReturnValueInstruction());
+//		bool.addMethod(new CompiledMethod("&", ListUtils.asList("aBool"),
+//				Collections.EMPTY_LIST, 1, appendInstructions ));
+	}
+	
 	public SILObject getNil() {
 		return nilInstance;
 	}
@@ -127,6 +145,17 @@ public class ObjectManager {
 
 	public SILObject newString(String value) {
 		return new SILPrimitiveObject<String>(this, "String", value);
+	}
+	
+	public SILObject newBoolean(Boolean value) {
+		if(value) {
+			return trueInstance;
+		}
+		return falseInstance;
+	}
+	
+	public SILObject newBlock(CompiledBlock block, Context ctx) {
+		return new SILPrimitiveObject<Pair<CompiledBlock, Context>>(this, "CompiledBlock", Pair.of(block, ctx));
 	}
 	
 	public void subclass(String parentName, String newClassName, List<String> instanceVariables) {
