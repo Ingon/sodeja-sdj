@@ -12,10 +12,7 @@ public class Silan {
 		VirtualMachine vm = new VirtualMachine();
 //		vm.getObjectManager().subclass("Object", "Association", ListUtils.asList("key", "value"));
 		
-//		String source = "| a | \r\n" +
-//				"a := 3 + 5.\r\n" +
-//				"a + 2.";
-		String source = readFully("test/silan/1.silan");
+		String source = readFully("test/silan/2.silan");
 		
 		SILObject value = vm.compileAndExecute(source);
 		

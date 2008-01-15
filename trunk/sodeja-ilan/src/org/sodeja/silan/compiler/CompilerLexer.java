@@ -21,22 +21,18 @@ public class CompilerLexer {
 			char ch = str.charAt(i);
 			
 			if(whitespaceChar(ch)) {
-				if(result.get(result.size() - 1).type != TokenType.WHITESPACE) {
-					result.add(new Token(WHITESPACE, TokenType.WHITESPACE));
-				}
+				addWhiteSpace(result);
 				
 				continue;
 			}
 			
 			if(isCommentChar(ch)) {
 				int commentEnd = readUntilCommentEnd(str, i);
-				if(commentEnd != -1) {
+				if(commentEnd == -1) {
 					throw new RuntimeException("Comment starting on " + i + " is not closed");
 				}
 				
-				if(result.get(result.size() - 1).type != TokenType.WHITESPACE) {
-					result.add(new Token(WHITESPACE, TokenType.WHITESPACE));
-				}
+				addWhiteSpace(result);
 				
 				i = commentEnd;
 				continue;
@@ -124,6 +120,14 @@ public class CompilerLexer {
 			throw new RuntimeException("Unknown character");
 		}
 		return result;
+	}
+
+	private void addWhiteSpace(List<Token> result) {
+		if(result.size() == 0) {
+			result.add(new Token(WHITESPACE, TokenType.WHITESPACE));
+		} else if(result.get(result.size() - 1).type != TokenType.WHITESPACE) {
+			result.add(new Token(WHITESPACE, TokenType.WHITESPACE));
+		}
 	}
 	
 	private int readUntilCommentEnd(String str, int start) {
