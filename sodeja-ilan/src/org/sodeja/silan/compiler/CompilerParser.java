@@ -16,6 +16,7 @@ import org.sodeja.silan.compiler.src.BinaryHeader;
 import org.sodeja.silan.compiler.src.BinaryMessage;
 import org.sodeja.silan.compiler.src.BinaryMessageOperand;
 import org.sodeja.silan.compiler.src.BinaryRootMessage;
+import org.sodeja.silan.compiler.src.CharacterLiteral;
 import org.sodeja.silan.compiler.src.ExecutableCode;
 import org.sodeja.silan.compiler.src.Expression;
 import org.sodeja.silan.compiler.src.IntegerLiteral;
@@ -30,6 +31,7 @@ import org.sodeja.silan.compiler.src.MethodHeader;
 import org.sodeja.silan.compiler.src.Primary;
 import org.sodeja.silan.compiler.src.Reference;
 import org.sodeja.silan.compiler.src.Statement;
+import org.sodeja.silan.compiler.src.StringLiteral;
 import org.sodeja.silan.compiler.src.Token;
 import org.sodeja.silan.compiler.src.TokenType;
 import org.sodeja.silan.compiler.src.UnaryHeader;
@@ -48,12 +50,14 @@ public class CompilerParser {
 	
 	private final Parser<Token, String> OP_WHITESPACE = zeroOrOne("OP_WHITESPACE", WHITESPACE);
 
-	private final Parser<Token, String> INTEGER = matchByType(TokenType.INTEGER);
-	
-	private final Parser<Token, IntegerLiteral> INTEGER_LITERAL = applyCons("INTEGER_LITERAL", INTEGER, IntegerLiteral.class);
+	private final Parser<Token, IntegerLiteral> INTEGER_LITERAL = applyCons("INTEGER_LITERAL", matchByType(TokenType.INTEGER), IntegerLiteral.class);
 
+	private final Parser<Token, CharacterLiteral> CHARACTER_LITERAL = applyCons("CHARACTER_LITERAL", matchByType(TokenType.CHARACTER), CharacterLiteral.class);
+	
+	private final Parser<Token, StringLiteral> STRING_LITERAL = applyCons("STRING_LITERAL", matchByType(TokenType.STRING), StringLiteral.class);
+	
 //	private final Parser<String, Literal> LITERAL = oneOf1(CONSTANT_REFERENCE, INTEGER_LITERAL, CHARACTER_LITERAL, STRING_LITERAL);
-	private final Parser<Token, Literal> LITERAL = oneOf1("LITERAL", INTEGER_LITERAL);
+	private final Parser<Token, Literal> LITERAL = oneOf1("LITERAL", INTEGER_LITERAL, CHARACTER_LITERAL, STRING_LITERAL);
 	
 	private final Parser<Token, Reference> REFERENCE = applyCons("REFERENCE", IDENTIFIER, Reference.class);
 	

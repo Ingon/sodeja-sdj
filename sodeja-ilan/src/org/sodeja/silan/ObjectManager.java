@@ -13,6 +13,7 @@ import org.sodeja.silan.instruction.IntegerRaiseInstruction;
 import org.sodeja.silan.instruction.NewObjectInstruction;
 import org.sodeja.silan.instruction.PushReferenceInstruction;
 import org.sodeja.silan.instruction.ReturnValueInstruction;
+import org.sodeja.silan.instruction.StringAppendInstruction;
 
 public class ObjectManager {
 
@@ -22,8 +23,9 @@ public class ObjectManager {
 	private SILClassClass objectClass = new SILClassClass(null);
 	
 	private SILClass integer = new SILClass(object);
-	private SILClass nil = new SILClass(object);
+	private SILClass string = new SILClass(object);
 	
+	private SILClass nil = new SILClass(object);
 	private SILObject nilInstance = new SILObject() {
 		@Override
 		public SILClass getType() {
@@ -56,8 +58,23 @@ public class ObjectManager {
 				new NewObjectInstruction(this),
 				new ReturnValueInstruction());
 		objectClass.addMethod(new CompiledMethod("new", Collections.EMPTY_LIST,
-				Collections.EMPTY_LIST, 1, newInstructions ));
+				Collections.EMPTY_LIST, 1, newInstructions));
 		
+		List<Instruction> dnuInstructions = ListUtils.asList(
+				);
+		object.addMethod(new CompiledMethod("doesNotUnderstand:", ListUtils.asList("aMessage"),
+				Collections.EMPTY_LIST, 0, dnuInstructions));
+		
+		initInteger();
+		initString();
+		
+		typesMapping.put("Object", object);
+		typesMapping.put("Integer", integer);
+		typesMapping.put("String", string);
+		typesMapping.put("Nil", nil);
+	}
+
+	private void initInteger() {
 		List<Instruction> addInstructions = ListUtils.asList(
 				new PushReferenceInstruction("aNumber"),
 				new IntegerAddInstruction(this), 
@@ -77,10 +94,15 @@ public class ObjectManager {
 				new ReturnValueInstruction());
 		integer.addMethod(new CompiledMethod("raisedTo:", ListUtils.asList("aNumber"), 
 				Collections.EMPTY_LIST, 1, raisedTo));
-		
-		typesMapping.put("Object", object);
-		typesMapping.put("Integer", integer);
-		typesMapping.put("Nil", nil);
+	}
+	
+	private void initString() {
+		List<Instruction> appendInstructions = ListUtils.asList(
+				new PushReferenceInstruction("aString"),
+				new StringAppendInstruction(this), 
+				new ReturnValueInstruction());
+		string.addMethod(new CompiledMethod(",", ListUtils.asList("aString"),
+				Collections.EMPTY_LIST, 1, appendInstructions ));
 	}
 	
 	public SILObject getNil() {

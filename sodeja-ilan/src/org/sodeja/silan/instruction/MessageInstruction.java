@@ -6,12 +6,12 @@ import org.sodeja.silan.SILClass;
 import org.sodeja.silan.SILObject;
 import org.sodeja.silan.context.MethodContext;
 
-public class KeywordMessageInstruction implements Instruction {
+public class MessageInstruction implements Instruction {
 
 	private final String selector;
 	private final int size;
 	
-	public KeywordMessageInstruction(String selector, int size) {
+	public MessageInstruction(String selector, int size) {
 		this.selector = selector;
 		this.size = size;
 	}

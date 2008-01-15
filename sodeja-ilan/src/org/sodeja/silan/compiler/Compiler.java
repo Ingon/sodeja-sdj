@@ -20,20 +20,20 @@ import org.sodeja.silan.compiler.src.MethodDeclaration;
 import org.sodeja.silan.compiler.src.Primary;
 import org.sodeja.silan.compiler.src.Reference;
 import org.sodeja.silan.compiler.src.Statement;
+import org.sodeja.silan.compiler.src.StringLiteral;
 import org.sodeja.silan.compiler.src.Token;
 import org.sodeja.silan.compiler.src.UnaryMessage;
 import org.sodeja.silan.compiler.src.UnaryRootMessage;
-import org.sodeja.silan.instruction.BinaryMessageInstruction;
 import org.sodeja.silan.instruction.ClearStackInstruction;
 import org.sodeja.silan.instruction.Instruction;
-import org.sodeja.silan.instruction.KeywordMessageInstruction;
+import org.sodeja.silan.instruction.MessageInstruction;
 import org.sodeja.silan.instruction.PopReferenceInstruction;
 import org.sodeja.silan.instruction.PushIntegerLiteralInstruction;
 import org.sodeja.silan.instruction.PushReferenceInstruction;
+import org.sodeja.silan.instruction.PushStringLiteralInstruction;
 import org.sodeja.silan.instruction.ReturnCodeInstruction;
 import org.sodeja.silan.instruction.ReturnSelfInstruction;
 import org.sodeja.silan.instruction.ReturnValueInstruction;
-import org.sodeja.silan.instruction.UnaryMessageInstruction;
 
 public class Compiler {
 	private final CompilerLexer lexer;
@@ -139,7 +139,7 @@ public class Compiler {
 				}
 				
 				tempCount += root.arguments.size() + 1;
-				instructions.add(new KeywordMessageInstruction(root.selector, root.arguments.size()));
+				instructions.add(new MessageInstruction(root.selector, root.arguments.size()));
 			} else if(message instanceof BinaryRootMessage) {
 				BinaryRootMessage root = (BinaryRootMessage) message;
 				if(root.keyword != null) {
@@ -158,6 +158,8 @@ public class Compiler {
 	private Instruction compilePrimary(Primary primary) {
 		if(primary instanceof IntegerLiteral) {
 			return new PushIntegerLiteralInstruction(((IntegerLiteral) primary).value);
+		} else if(primary instanceof StringLiteral) {
+			return new PushStringLiteralInstruction(((StringLiteral) primary).value);
 		} else if(primary instanceof Reference) {
 			return new PushReferenceInstruction(((Reference) primary).value);
 		}
@@ -173,7 +175,8 @@ public class Compiler {
 			Pair<List<Instruction>, Integer> unary = compileUnaryChain(operand.unaries);
 			instructions.addAll(unary.first);
 			
-			instructions.add(new BinaryMessageInstruction(binary.selector));
+			instructions.add(new MessageInstruction(binary.selector, 1));
+//			instructions.add(new BinaryMessageInstruction(binary.selector));
 		}
 		
 		return Pair.of(instructions, 2);
@@ -182,7 +185,8 @@ public class Compiler {
 	private Pair<List<Instruction>, Integer> compileUnaryChain(List<UnaryMessage> messages) {
 		List<Instruction> instructions = new ArrayList<Instruction>();
 		for(UnaryMessage msg : messages) {
-			instructions.add(new UnaryMessageInstruction(msg.selector));
+			instructions.add(new MessageInstruction(msg.selector, 0));
+//			instructions.add(new UnaryMessageInstruction(msg.selector));
 		}
 		return Pair.of(instructions, 0);
 	}
