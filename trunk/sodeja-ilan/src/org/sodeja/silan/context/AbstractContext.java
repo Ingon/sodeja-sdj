@@ -1,8 +1,11 @@
-package org.sodeja.silan;
+package org.sodeja.silan.context;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.sodeja.silan.CompiledCode;
+import org.sodeja.silan.Process;
+import org.sodeja.silan.SILObject;
 import org.sodeja.silan.instruction.Instruction;
 
 public abstract class AbstractContext implements Context {
