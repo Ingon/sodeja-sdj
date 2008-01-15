@@ -18,11 +18,9 @@ public class Silan {
 		vm.compileAndAttach(readFully("test/silan/7_2.silan"), "Association");
 		vm.compileAndAttach(readFully("test/silan/11_1.silan"), "Association");
 		
-		for(int i = 1; i < 14;i++) {
-			String source = readFully("test/silan/" + i + ".silan");
-			SILObject value = vm.compileAndExecute(source);
-			System.out.println("Value: " + value);
-		}
+		String source = readFully("test/silan/14.silan");
+		SILObject value = vm.compileAndExecute(source);
+		System.out.println("Value: " + value);
 	}
 	
 	private static String readFully(String file) throws IOException {

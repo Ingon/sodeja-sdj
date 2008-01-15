@@ -28,6 +28,7 @@ import org.sodeja.silan.compiler.src.Literal;
 import org.sodeja.silan.compiler.src.Message;
 import org.sodeja.silan.compiler.src.MethodDeclaration;
 import org.sodeja.silan.compiler.src.MethodHeader;
+import org.sodeja.silan.compiler.src.NilLiteral;
 import org.sodeja.silan.compiler.src.Primary;
 import org.sodeja.silan.compiler.src.Reference;
 import org.sodeja.silan.compiler.src.Statement;
@@ -56,8 +57,11 @@ public class CompilerParser {
 	
 	private final Parser<Token, StringLiteral> STRING_LITERAL = applyCons("STRING_LITERAL", matchByType(TokenType.STRING), StringLiteral.class);
 	
-//	private final Parser<String, Literal> LITERAL = oneOf1(CONSTANT_REFERENCE, INTEGER_LITERAL, CHARACTER_LITERAL, STRING_LITERAL);
-	private final Parser<Token, Literal> LITERAL = oneOf1("LITERAL", INTEGER_LITERAL, CHARACTER_LITERAL, STRING_LITERAL);
+	private final Parser<Token, NilLiteral> NIL_LITERAL = applyCons("NIL_LITERAL", matchConstantReference("nil"), NilLiteral.class);
+	
+	private final Parser<Token, Literal> CONSTANT_REFERENCE = oneOf1("CONSTANT_REFERENCE", NIL_LITERAL);
+	
+	private final Parser<Token, Literal> LITERAL = oneOf1("LITERAL", CONSTANT_REFERENCE, INTEGER_LITERAL, CHARACTER_LITERAL, STRING_LITERAL);
 	
 	private final Parser<Token, Reference> REFERENCE = applyCons("REFERENCE", IDENTIFIER, Reference.class);
 	
@@ -167,6 +171,23 @@ public class CompilerParser {
 				}
 
 				return new ParseSuccess<Token, String>(head.value, tokens.tail());
+			}};
+	}
+	
+	private static Parser<Token, String> matchConstantReference(final String str) {
+		return new AbstractParser<Token, String>(str) {
+			@Override
+			protected ParsingResult<Token, String> executeDelegate(ConsList<Token> tokens) {
+				Token head = tokens.head();
+				if(head.type != TokenType.IDENTIFIER) {
+					return new ParseError<Token, String>("Expected " + str, tokens);
+				}
+
+				if(! head.value.equals(str)) {
+					return new ParseError<Token, String>("Expected " + str, tokens);
+				}
+				
+				return new ParseSuccess<Token, String>(str, tokens.tail());
 			}};
 	}
 	
