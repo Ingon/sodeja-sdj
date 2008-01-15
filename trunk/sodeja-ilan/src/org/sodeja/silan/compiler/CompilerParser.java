@@ -12,6 +12,24 @@ import org.sodeja.parsec.ParseSuccess;
 import org.sodeja.parsec.Parser;
 import org.sodeja.parsec.ParsingResult;
 import org.sodeja.parsec.combinator.DelegateParser;
+import org.sodeja.silan.compiler.src.BinaryMessage;
+import org.sodeja.silan.compiler.src.BinaryMessageOperand;
+import org.sodeja.silan.compiler.src.BinaryRootMessage;
+import org.sodeja.silan.compiler.src.ExecutableCode;
+import org.sodeja.silan.compiler.src.Expression;
+import org.sodeja.silan.compiler.src.IntegerLiteral;
+import org.sodeja.silan.compiler.src.KeywordMessage;
+import org.sodeja.silan.compiler.src.KeywordMessageArgument;
+import org.sodeja.silan.compiler.src.Literal;
+import org.sodeja.silan.compiler.src.Message;
+import org.sodeja.silan.compiler.src.Method;
+import org.sodeja.silan.compiler.src.Primary;
+import org.sodeja.silan.compiler.src.Reference;
+import org.sodeja.silan.compiler.src.Statement;
+import org.sodeja.silan.compiler.src.Token;
+import org.sodeja.silan.compiler.src.TokenType;
+import org.sodeja.silan.compiler.src.UnaryMessage;
+import org.sodeja.silan.compiler.src.UnaryRootMessage;
 
 public class CompilerParser {
 

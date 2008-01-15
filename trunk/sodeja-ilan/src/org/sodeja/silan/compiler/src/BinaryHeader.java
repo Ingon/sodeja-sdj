@@ -1,4 +1,4 @@
-package org.sodeja.silan.compiler;
+package org.sodeja.silan.compiler.src;
 
 public class BinaryHeader implements Header {
 	public final String selector;

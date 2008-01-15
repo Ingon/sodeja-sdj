@@ -1,4 +1,4 @@
-package org.sodeja.silan.compiler;
+package org.sodeja.silan.compiler.src;
 
 public class IntegerLiteral implements Literal {
 	public final Integer value;

@@ -16,6 +16,20 @@ import org.sodeja.silan.ReturnCodeInstruction;
 import org.sodeja.silan.BinaryMessageInstruction;
 import org.sodeja.silan.StoreIntegerLiteralInstruction;
 import org.sodeja.silan.VirtualMachine;
+import org.sodeja.silan.compiler.src.BinaryMessage;
+import org.sodeja.silan.compiler.src.BinaryMessageOperand;
+import org.sodeja.silan.compiler.src.BinaryRootMessage;
+import org.sodeja.silan.compiler.src.ExecutableCode;
+import org.sodeja.silan.compiler.src.Expression;
+import org.sodeja.silan.compiler.src.IntegerLiteral;
+import org.sodeja.silan.compiler.src.KeywordMessage;
+import org.sodeja.silan.compiler.src.Message;
+import org.sodeja.silan.compiler.src.Method;
+import org.sodeja.silan.compiler.src.Primary;
+import org.sodeja.silan.compiler.src.Reference;
+import org.sodeja.silan.compiler.src.Statement;
+import org.sodeja.silan.compiler.src.Token;
+import org.sodeja.silan.compiler.src.UnaryRootMessage;
 
 public class Compiler {
 	private final VirtualMachine vm;

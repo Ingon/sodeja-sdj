@@ -1,4 +1,4 @@
-package org.sodeja.silan.compiler;
+package org.sodeja.silan.compiler.src;
 
 import java.util.List;
 

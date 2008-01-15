@@ -1,4 +1,4 @@
-package org.sodeja.silan.compiler;
+package org.sodeja.silan.compiler.src;
 
 public class UnaryMessage implements Message {
 	public final String selector;
