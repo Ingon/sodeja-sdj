@@ -12,8 +12,10 @@ import org.sodeja.silan.instruction.IntegerNegateInstruction;
 import org.sodeja.silan.instruction.IntegerRaiseInstruction;
 import org.sodeja.silan.instruction.NewObjectInstruction;
 import org.sodeja.silan.instruction.PushReferenceInstruction;
+import org.sodeja.silan.instruction.ReturnSelfInstruction;
 import org.sodeja.silan.instruction.ReturnValueInstruction;
 import org.sodeja.silan.instruction.StringAppendInstruction;
+import org.sodeja.silan.instruction.StringDisplayInstruction;
 
 public class ObjectManager {
 
@@ -76,6 +78,12 @@ public class ObjectManager {
 		subclass("Object", "Transcript", Collections.EMPTY_LIST);
 		SILClassClass transcript = (SILClassClass) getByTypeName("Transcript").getType();
 		
+		List<Instruction> showInstructions = ListUtils.asList(
+				new PushReferenceInstruction("aString"),
+				new StringDisplayInstruction(this), 
+				new ReturnSelfInstruction());
+		transcript.addMethod(new CompiledMethod("show:", ListUtils.asList("aString"),
+				Collections.EMPTY_LIST, 1, showInstructions));
 	}
 
 	private void initInteger() {
