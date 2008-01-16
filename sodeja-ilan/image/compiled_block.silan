@@ -34,6 +34,12 @@ repeat
 		gotoIfFalse.
 		returnSelf.
 	}
+	
+	whileTrue () () 2 {
+		callBlock.
+		gotoIfTrue.
+		returnSelf.
+	}
 }
 {
 }
