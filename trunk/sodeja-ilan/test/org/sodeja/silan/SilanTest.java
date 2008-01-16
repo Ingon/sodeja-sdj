@@ -86,6 +86,11 @@ public class SilanTest extends TestCase {
 		SILObject val = vm.compileAndExecute("[1 * 2 * 3 * 4 * 5.] value.");
 		assertPrimitiveInteger(120, val);
 	}
+
+	public void testBlock3() throws Exception {
+		SILObject val = vm.compileAndExecute("[:x | x * x.] value: 6.");
+		assertPrimitiveInteger(36, val);
+	}
 	
 	private void assertPrimitiveInteger(Integer expected, SILObject actual) {
 		assertTrue(actual instanceof SILPrimitiveObject);

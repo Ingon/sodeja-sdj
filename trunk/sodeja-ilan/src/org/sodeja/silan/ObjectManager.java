@@ -96,6 +96,13 @@ public class ObjectManager {
 				new ReturnValueInstruction());
 		compiledBlock.addMethod(new CompiledMethod("value", Collections.EMPTY_LIST,
 				Collections.EMPTY_LIST, 0, blockInstructions));
+
+		List<Instruction> blockInstructions1 = ListUtils.asList(
+				new PushReferenceInstruction("anObject"),
+				new CallBlockInstruction(),
+				new ReturnValueInstruction());
+		compiledBlock.addMethod(new CompiledMethod("value:", ListUtils.asList("anObject"),
+				Collections.EMPTY_LIST, 1, blockInstructions1));
 	}
 
 	private void initInteger() {
