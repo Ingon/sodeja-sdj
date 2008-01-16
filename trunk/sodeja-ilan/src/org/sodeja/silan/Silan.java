@@ -17,7 +17,7 @@ public class Silan {
 //		vm.compileAndAttach(readFully("test/silan/7_1.silan"), "Association");
 //		vm.compileAndAttach(readFully("test/silan/7_2.silan"), "Association");
 //		vm.compileAndAttach(readFully("test/silan/11_1.silan"), "Association");
-		vm.compileAndAttach(readFully("test/silan/15_1.silan"), "Boolean");
+		vm.compileAndAttach(readFully("test/silan/15_1.silan"), "True");
 //		vm.compileAndAttach(readFully("test/silan/15_5.silan"), "Boolean");
 		
 		String source = readFully("test/silan/15.silan");

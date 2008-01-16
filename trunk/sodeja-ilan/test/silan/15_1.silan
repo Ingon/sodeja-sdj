@@ -1,2 +1,2 @@
-ifTrue: trueOperand ifFalse: falseOperand 
-	^trueOperand value.
+ifTrue: operand
+	^operand value.

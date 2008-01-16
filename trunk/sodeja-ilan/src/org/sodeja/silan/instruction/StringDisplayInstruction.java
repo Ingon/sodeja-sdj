@@ -9,6 +9,7 @@ public class StringDisplayInstruction extends PrimitiveInstruction {
 		super(manager);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(Process process) {
 		SILPrimitiveObject<String> str = (SILPrimitiveObject<String>) process.getActiveContext().pop();

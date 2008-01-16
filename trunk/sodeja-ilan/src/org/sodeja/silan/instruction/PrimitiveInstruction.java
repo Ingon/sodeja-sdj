@@ -13,4 +13,8 @@ public abstract class PrimitiveInstruction implements Instruction {
 		this.manager = manager;
 		this.id = idCounter++;
 	}
+
+	public int getId() {
+		return id;
+	}
 }
