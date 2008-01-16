@@ -3,17 +3,18 @@ package org.sodeja.silan;
 import java.util.List;
 
 import org.sodeja.silan.compiler.Compiler;
+import org.sodeja.silan.objects.ImageObjectManager;
 
 public class VirtualMachine {
 	
-	private final Compiler compiler;
-	private final ProcessManager processes;
-	private final ObjectManager objects;
+	public final Compiler compiler;
+	public final ProcessManager processes;
+	public final ImageObjectManager objects;
 	
 	public VirtualMachine() {
 		compiler = new Compiler();
 		processes = new ProcessManager(this);
-		objects = new ObjectManager(this);
+		objects = new ImageObjectManager(this);
 	}
 
 	public void subclass(String parentName, String newClassName, List<String> instanceVariables) {
@@ -34,9 +35,5 @@ public class VirtualMachine {
 		Process proc = processes.newProcess(code);
 		proc.run();
 		return proc.getValue();
-	}
-	
-	public ObjectManager getObjectManager() {
-		return objects;
 	}
 }

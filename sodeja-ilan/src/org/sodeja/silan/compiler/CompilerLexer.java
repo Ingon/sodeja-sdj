@@ -62,7 +62,7 @@ public class CompilerLexer {
 				continue;
 			}
 			
-			if(digit(ch)) {
+			if(isDigit(ch)) {
 				int integerEnd = readUntilDigits(str, i);
 				String val = str.substring(i, integerEnd);
 				result.add(new Token(val, TokenType.INTEGER));
@@ -72,7 +72,7 @@ public class CompilerLexer {
 			
 			if(ch == '-') {
 				char next = str.charAt(i + 1);
-				if(digit(next)) {
+				if(isDigit(next)) {
 					throw new UnsupportedOperationException();
 				} else {
 					throw new UnsupportedOperationException();
@@ -162,7 +162,7 @@ public class CompilerLexer {
 		}
 	}
 	
-	private int readUntilCommentEnd(String str, int start) {
+	public static int readUntilCommentEnd(String str, int start) {
 		for(int i = start + 1, n = str.length();i < n;i++) {
 			char ch = str.charAt(i);
 			if(isCommentChar(ch)) {
@@ -173,7 +173,7 @@ public class CompilerLexer {
 		return -1;
 	}
 	
-	private int readUntilIdentifierEnd(String str, int start) {
+	public static int readUntilIdentifierEnd(String str, int start) {
 		for(int i = start + 1, n = str.length();i < n;i++) {
 			char ch = str.charAt(i);
 			if(! identifierPart(ch)) {
@@ -184,10 +184,10 @@ public class CompilerLexer {
 		return str.length() - 1;
 	}
 
-	private int readUntilDigits(String str, int start) {
+	public static int readUntilDigits(String str, int start) {
 		for(int i = start + 1, n = str.length();i < n;i++) {
 			char ch = str.charAt(i);
-			if(! digit(ch)) {
+			if(! isDigit(ch)) {
 				return i;
 			}
 		}
@@ -195,7 +195,7 @@ public class CompilerLexer {
 		return str.length() - 1;
 	}
 	
-	private int readUntilBinary(String str, int start) {
+	public static int readUntilBinary(String str, int start) {
 		for(int i = start + 1, n = str.length();i < n;i++) {
 			char ch = str.charAt(i);
 			if(! isBinaryChar(ch)) {
@@ -206,7 +206,7 @@ public class CompilerLexer {
 		return str.length() - 1;
 	}
 
-	private int readUntilStringEnd(String str, int start) {
+	public static int readUntilStringEnd(String str, int start) {
 		for(int i = start + 1, n = str.length();i < n;i++) {
 			char ch = str.charAt(i);
 			if(ch != '\'') {
@@ -231,11 +231,11 @@ public class CompilerLexer {
 	}
 
 	
-	static boolean whitespaceChar(char ch) {
+	public static boolean whitespaceChar(char ch) {
 		return Character.isWhitespace(ch);
 	}
 	
-	static boolean digit(char ch) {
+	public static boolean isDigit(char ch) {
 		return ch >= '0' && ch <= '9';
 	}
 	
@@ -244,14 +244,14 @@ public class CompilerLexer {
 	}
 	
 	static boolean letterOrDigit(char ch) {
-		return letter(ch) || digit(ch);
+		return letter(ch) || isDigit(ch);
 	}
 	
-	static boolean identifierStart(char ch) {
+	public static boolean identifierStart(char ch) {
 		return letter(ch) || ch == '_';
 	}
 
-	static boolean identifierPart(char ch) {
+	public static boolean identifierPart(char ch) {
 		return letterOrDigit(ch) || ch == '_';
 	}
 	
@@ -259,7 +259,7 @@ public class CompilerLexer {
 		return ch == '"';
 	}
 	
-	static boolean isBinaryChar(char ch) {
+	public static boolean isBinaryChar(char ch) {
 		return ch == '~' || ch == '!' || ch == '@' || ch == '%' || ch == '&' || ch == '*'
 			|| ch == '-' || ch == '+' || ch == '=' || ch == '|' || ch == '\\'
 			|| ch == '<' || ch == '>' || ch == ',' || ch == '?' || ch == '/';

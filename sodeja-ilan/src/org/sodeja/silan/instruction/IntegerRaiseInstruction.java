@@ -1,13 +1,13 @@
 package org.sodeja.silan.instruction;
 
-import org.sodeja.silan.ObjectManager;
 import org.sodeja.silan.Process;
 import org.sodeja.silan.SILObject;
 import org.sodeja.silan.SILPrimitiveObject;
 import org.sodeja.silan.context.MethodContext;
+import org.sodeja.silan.objects.ImageObjectManager;
 
 public class IntegerRaiseInstruction extends PrimitiveInstruction {
-	public IntegerRaiseInstruction(ObjectManager manager) {
+	public IntegerRaiseInstruction(ImageObjectManager manager) {
 		super(manager);
 	}
 
@@ -19,8 +19,7 @@ public class IntegerRaiseInstruction extends PrimitiveInstruction {
 		SILPrimitiveObject<Integer> i1 = (SILPrimitiveObject<Integer>) mc.getReceiver();
 		SILPrimitiveObject<Integer> i2 = (SILPrimitiveObject<Integer>) mc.pop();
 		
-		Integer primitiveResult = (int) Math.pow(i1.value, i2.value);
-		SILObject result = manager.newInteger(primitiveResult);
+		SILObject result = manager.newInteger((int) Math.pow(i1.value, i2.value));
 		mc.push(result);
 	}
 }

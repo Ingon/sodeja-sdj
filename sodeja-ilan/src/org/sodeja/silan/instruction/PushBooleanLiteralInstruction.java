@@ -11,6 +11,6 @@ public class PushBooleanLiteralInstruction implements Instruction {
 	
 	@Override
 	public void execute(Process process) {
-		process.getActiveContext().push(process.vm.getObjectManager().newBoolean(value));
+		process.getActiveContext().push(process.vm.objects.newBoolean(value));
 	}
 }

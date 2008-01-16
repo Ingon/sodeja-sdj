@@ -15,6 +15,6 @@ public class ExecutableContext extends AbstractContext {
 		if(value != null) {
 			return value;
 		}
-		return process.vm.getObjectManager().getGlobal(reference);
+		return process.vm.objects.getGlobal(reference);
 	}
 }

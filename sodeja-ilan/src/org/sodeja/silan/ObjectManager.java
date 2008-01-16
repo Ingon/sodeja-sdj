@@ -11,6 +11,7 @@ import org.sodeja.silan.context.Context;
 import org.sodeja.silan.instruction.CallBlockInstruction;
 import org.sodeja.silan.instruction.Instruction;
 import org.sodeja.silan.instruction.IntegerAddInstruction;
+import org.sodeja.silan.instruction.IntegerLessThenInstruction;
 import org.sodeja.silan.instruction.IntegerMultyInstruction;
 import org.sodeja.silan.instruction.IntegerNegateInstruction;
 import org.sodeja.silan.instruction.IntegerRaiseInstruction;
@@ -21,7 +22,7 @@ import org.sodeja.silan.instruction.ReturnValueInstruction;
 import org.sodeja.silan.instruction.StringAppendInstruction;
 import org.sodeja.silan.instruction.StringDisplayInstruction;
 
-public class ObjectManager {
+public class ObjectManager implements TypeSupplier {
 
 	public final VirtualMachine vm;
 	
@@ -51,106 +52,115 @@ public class ObjectManager {
 		
 		typesMapping = new HashMap<String, SILClass>();
 		
-		init();
+//		init();
 	}
 
-	private void init() {
-		object.setType(objectClass);
-		List<Instruction> newInstructions = ListUtils.asList(
-				new NewObjectInstruction(this),
-				new ReturnValueInstruction());
-		objectClass.addMethod(new CompiledMethod("new", Collections.EMPTY_LIST,
-				Collections.EMPTY_LIST, 1, newInstructions));
-		
-		List<Instruction> dnuInstructions = ListUtils.asList(
-				);
-		object.addMethod(new CompiledMethod("doesNotUnderstand:", ListUtils.asList("aMessage"),
-				Collections.EMPTY_LIST, 0, dnuInstructions));
-		
-		initInteger();
-		initString();
-		initBoolean();
-		
-		typesMapping.put("Object", object);
-		typesMapping.put("Integer", integer);
-		typesMapping.put("String", string);
-		typesMapping.put("Boolean", bool);
-		typesMapping.put("True", trueClass);
-		typesMapping.put("False", falseClass);
-		typesMapping.put("CompiledBlock", compiledBlock);
-		typesMapping.put("Nil", nil);
-		
-		subclass("Object", "Transcript", Collections.EMPTY_LIST);
-		SILClassClass transcript = (SILClassClass) getByTypeName("Transcript").getType();
-		
-		List<Instruction> showInstructions = ListUtils.asList(
-				new PushReferenceInstruction("aString"),
-				new StringDisplayInstruction(this), 
-				new ReturnSelfInstruction());
-		transcript.addMethod(new CompiledMethod("show:", ListUtils.asList("aString"),
-				Collections.EMPTY_LIST, 1, showInstructions));
-		
-		
-		List<Instruction> blockInstructions = ListUtils.asList(
-				new CallBlockInstruction(),
-				new ReturnValueInstruction());
-		compiledBlock.addMethod(new CompiledMethod("value", Collections.EMPTY_LIST,
-				Collections.EMPTY_LIST, 0, blockInstructions));
-
-		List<Instruction> blockInstructions1 = ListUtils.asList(
-				new PushReferenceInstruction("anObject"),
-				new CallBlockInstruction(),
-				new ReturnValueInstruction());
-		compiledBlock.addMethod(new CompiledMethod("value:", ListUtils.asList("anObject"),
-				Collections.EMPTY_LIST, 1, blockInstructions1));
-	}
-
-	private void initInteger() {
-		List<Instruction> addInstructions = ListUtils.asList(
-				new PushReferenceInstruction("aNumber"),
-				new IntegerAddInstruction(this), 
-				new ReturnValueInstruction());
-		integer.addMethod(new CompiledMethod("+", ListUtils.asList("aNumber"), 
-				Collections.EMPTY_LIST, 1, addInstructions));
-
-		List<Instruction> multyInstructions = ListUtils.asList(
-				new PushReferenceInstruction("aNumber"),
-				new IntegerMultyInstruction(this), 
-				new ReturnValueInstruction());
-		integer.addMethod(new CompiledMethod("*", ListUtils.asList("aNumber"), 
-				Collections.EMPTY_LIST, 1, multyInstructions));
-		
-		List<Instruction> negatedInstructions = ListUtils.asList(
-				new IntegerNegateInstruction(this), 
-				new ReturnValueInstruction());
-		integer.addMethod(new CompiledMethod("negated", Collections.EMPTY_LIST, 
-				Collections.EMPTY_LIST, 1, negatedInstructions));
-
-		List<Instruction> raisedTo = ListUtils.asList(
-				new PushReferenceInstruction("aNumber"),
-				new IntegerRaiseInstruction(this), 
-				new ReturnValueInstruction());
-		integer.addMethod(new CompiledMethod("raisedTo:", ListUtils.asList("aNumber"), 
-				Collections.EMPTY_LIST, 1, raisedTo));
-	}
-	
-	private void initString() {
-		List<Instruction> appendInstructions = ListUtils.asList(
-				new PushReferenceInstruction("aString"),
-				new StringAppendInstruction(this), 
-				new ReturnValueInstruction());
-		string.addMethod(new CompiledMethod(",", ListUtils.asList("aString"),
-				Collections.EMPTY_LIST, 1, appendInstructions ));
-	}
-	
-	private void initBoolean() {
+//	private void init() {
+//		object.setType(objectClass);
+//		List<Instruction> newInstructions = ListUtils.asList(
+//				new NewObjectInstruction(this),
+//				new ReturnValueInstruction());
+//		objectClass.addMethod(new CompiledMethod("new", 
+//				Collections.EMPTY_LIST, 1, newInstructions));
+//		
+//		List<Instruction> dnuInstructions = ListUtils.asList(
+//				);
+//		object.addMethod(new CompiledMethod("doesNotUnderstand:", 
+//				ListUtils.asList("aMessage"), 0, dnuInstructions));
+//		
+//		initInteger();
+//		initString();
+//		
+//		typesMapping.put("Object", object);
+//		typesMapping.put("Integer", integer);
+//		typesMapping.put("String", string);
+//		typesMapping.put("Boolean", bool);
+//		typesMapping.put("True", trueClass);
+//		typesMapping.put("False", falseClass);
+//		typesMapping.put("CompiledBlock", compiledBlock);
+//		typesMapping.put("Nil", nil);
+//		
+//		subclass("Object", "Transcript", Collections.EMPTY_LIST);
+//		SILClassClass transcript = (SILClassClass) getByTypeName("Transcript").getType();
+//		
+//		List<Instruction> showInstructions = ListUtils.asList(
+//				new PushReferenceInstruction("aString"),
+//				new StringDisplayInstruction(this), 
+//				new ReturnSelfInstruction());
+//		transcript.addMethod(new CompiledMethod("show:", 
+//				ListUtils.asList("aString"), 1, showInstructions));
+//		
+//		
+//		initBlock();
+//	}
+//
+//	private void initInteger() {
+//		List<Instruction> addInstructions = ListUtils.asList(
+//				new PushReferenceInstruction("aNumber"),
+//				new IntegerAddInstruction(this), 
+//				new ReturnValueInstruction());
+//		integer.addMethod(new CompiledMethod("+", 
+//				ListUtils.asList("aNumber"), 1, addInstructions));
+//
+//		List<Instruction> multyInstructions = ListUtils.asList(
+//				new PushReferenceInstruction("aNumber"),
+//				new IntegerMultyInstruction(this), 
+//				new ReturnValueInstruction());
+//		integer.addMethod(new CompiledMethod("*", 
+//				ListUtils.asList("aNumber"), 1, multyInstructions));
+//		
+//		List<Instruction> negatedInstructions = ListUtils.asList(
+//				new IntegerNegateInstruction(this), 
+//				new ReturnValueInstruction());
+//		integer.addMethod(new CompiledMethod("negated", 
+//				Collections.EMPTY_LIST, 1, negatedInstructions));
+//
+//		List<Instruction> raisedTo = ListUtils.asList(
+//				new PushReferenceInstruction("aNumber"),
+//				new IntegerRaiseInstruction(this), 
+//				new ReturnValueInstruction());
+//		integer.addMethod(new CompiledMethod("raisedTo:", 
+//				ListUtils.asList("aNumber"), 1, raisedTo));
+//		
+//		List<Instruction> lessThan = ListUtils.asList(
+//				new PushReferenceInstruction("aNumber"),
+//				new IntegerLessThenInstruction(this), 
+//				new ReturnValueInstruction());
+//		integer.addMethod(new CompiledMethod("<", 
+//				ListUtils.asList("aNumber"), 1, lessThan));
+//	}
+//	
+//	private void initString() {
 //		List<Instruction> appendInstructions = ListUtils.asList(
-//				new PushReferenceInstruction("aBool"),
+//				new PushReferenceInstruction("aString"),
 //				new StringAppendInstruction(this), 
 //				new ReturnValueInstruction());
-//		bool.addMethod(new CompiledMethod("&", ListUtils.asList("aBool"),
-//				Collections.EMPTY_LIST, 1, appendInstructions ));
-	}
+//		string.addMethod(new CompiledMethod(",", 
+//				ListUtils.asList("aString"), 1, appendInstructions ));
+//	}
+//	
+//	private void initBlock() {
+//		List<Instruction> blockInstructions = ListUtils.asList(
+//				new CallBlockInstruction(),
+//				new ReturnValueInstruction());
+//		compiledBlock.addMethod(new CompiledMethod("value", 
+//				Collections.EMPTY_LIST, 0, blockInstructions));
+//
+//		List<Instruction> blockInstructions1 = ListUtils.asList(
+//				new PushReferenceInstruction("anObject"),
+//				new CallBlockInstruction(),
+//				new ReturnValueInstruction());
+//		compiledBlock.addMethod(new CompiledMethod("value:", 
+//				ListUtils.asList("anObject"), 1, blockInstructions1));
+//
+//		List<Instruction> blockInstructions2 = ListUtils.asList(
+//				new PushReferenceInstruction("anObject1"),
+//				new PushReferenceInstruction("anObject2"),
+//				new CallBlockInstruction(),
+//				new ReturnValueInstruction());
+//		compiledBlock.addMethod(new CompiledMethod("value:value:", 
+//				ListUtils.asList("anObject1", "anObject2"), 2, blockInstructions2));
+//	}
 	
 	public SILObject getNil() {
 		return nilInstance;
@@ -191,7 +201,7 @@ public class ObjectManager {
 		clazz.addMethod(method);
 	}
 	
-	protected SILClass getByTypeName(String typeName) {
+	public SILClass getByTypeName(String typeName) {
 		return typesMapping.get(typeName);
 	}
 

@@ -13,7 +13,7 @@ public class PushStringLiteralInstruction implements Instruction {
 
 	@Override
 	public void execute(Process process) {
-		SILObject obj = process.vm.getObjectManager().newString(value);
+		SILObject obj = process.vm.objects.newString(value);
 		process.getActiveContext().push(obj);
 	}
 }

@@ -2,13 +2,13 @@ package org.sodeja.silan;
 
 public class SILPrimitiveObject<T> implements SILObject {
 
-	private final ObjectManager manager;
+	private final TypeSupplier typeSupplier;
 	private final String typeName;
 	
 	public final T value;
 	
-	public SILPrimitiveObject(ObjectManager manager, String typeName, T value) {
-		this.manager = manager;
+	public SILPrimitiveObject(TypeSupplier typeSupplier, String typeName, T value) {
+		this.typeSupplier = typeSupplier;
 		this.typeName = typeName;
 		
 		this.value = value;
@@ -16,7 +16,7 @@ public class SILPrimitiveObject<T> implements SILObject {
 
 	@Override
 	public SILClass getType() {
-		return manager.getByTypeName(typeName);
+		return typeSupplier.getByTypeName(typeName);
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import java.util.Map;
 public class SILClass implements SILObject {
 	
 	private SILClass type;
-	private final SILClass superclass;
+	private SILClass superclass;
 	private final Map<String, CompiledMethod> methods;
 	
 	private final List<String> instanceVariableNames;
@@ -31,12 +31,16 @@ public class SILClass implements SILObject {
 		this.instanceVariableNames.addAll(instanceVariableNames);
 	}
 	
-	protected void addMethod(CompiledMethod method) {
+	public void addMethod(CompiledMethod method) {
 		methods.put(method.selector, method);
 	}
 	
 	public SILClass getSuperclass() {
 		return superclass;
+	}
+
+	public void setSuperclass(SILClass superclass) {
+		this.superclass = superclass;
 	}
 
 	public CompiledMethod findMethod(String selector) {
@@ -61,7 +65,7 @@ public class SILClass implements SILObject {
 		return type;
 	}
 	
-	protected void setType(SILClass type) {
+	public void setType(SILClass type) {
 		if(type instanceof SILClassClass) {
 			((SILClassClass) type).setInstanceClass(this);
 		}
