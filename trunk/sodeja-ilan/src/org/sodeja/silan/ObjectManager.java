@@ -11,6 +11,7 @@ import org.sodeja.silan.context.Context;
 import org.sodeja.silan.instruction.CallBlockInstruction;
 import org.sodeja.silan.instruction.Instruction;
 import org.sodeja.silan.instruction.IntegerAddInstruction;
+import org.sodeja.silan.instruction.IntegerMultyInstruction;
 import org.sodeja.silan.instruction.IntegerNegateInstruction;
 import org.sodeja.silan.instruction.IntegerRaiseInstruction;
 import org.sodeja.silan.instruction.NewObjectInstruction;
@@ -104,6 +105,13 @@ public class ObjectManager {
 				new ReturnValueInstruction());
 		integer.addMethod(new CompiledMethod("+", ListUtils.asList("aNumber"), 
 				Collections.EMPTY_LIST, 1, addInstructions));
+
+		List<Instruction> multyInstructions = ListUtils.asList(
+				new PushReferenceInstruction("aNumber"),
+				new IntegerMultyInstruction(this), 
+				new ReturnValueInstruction());
+		integer.addMethod(new CompiledMethod("*", ListUtils.asList("aNumber"), 
+				Collections.EMPTY_LIST, 1, multyInstructions));
 		
 		List<Instruction> negatedInstructions = ListUtils.asList(
 				new IntegerNegateInstruction(this), 
