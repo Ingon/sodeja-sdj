@@ -40,6 +40,11 @@ Integer Number ()
 		integerRaise.
 		returnValue.
 	}
+	
+	printString () () 0 {
+		integerToString.
+		returnValue.
+	}
 ###
 timesRepeat: aBlock
 	(self < 1) ifTrue: [^nil.].
