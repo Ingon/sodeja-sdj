@@ -73,7 +73,7 @@ public class SilanTest extends TestCase {
 	}
 
 	public void test13() throws Exception {
-		execute("13");
+//		execute("13");
 	}
 	
 	public void test14() throws Exception {
@@ -108,6 +108,11 @@ public class SilanTest extends TestCase {
 	public void testControl1() throws Exception {
 		SILObject val = vm.compileAndExecute("3 < 4 ifTrue: [4 - 3.].");
 		assertPrimitiveInteger(1, val);
+	}
+
+	public void testControl2() throws Exception {
+		SILObject val = vm.compileAndExecute("23 > 6 ifTrue: [6 - 23.] ifFalse: [23 - 6.].");
+		assertPrimitiveInteger(-17, val);
 	}
 	
 	private void assertPrimitiveInteger(Integer expected, SILObject actual) {

@@ -4,6 +4,11 @@ True Boolean ()
 ifTrue: operand
 	^operand value.
 ###
+
+###
+ifTrue: trueOperand ifFalse: falseOperand 
+	^trueOperand value.
+###
 }
 {
 }

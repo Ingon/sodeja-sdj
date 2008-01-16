@@ -23,6 +23,12 @@ Integer Number ()
 		integerLessThen.
 		returnValue.
 	}
+
+	> (aNumber) () 1 {
+		pushReference aNumber.
+		integerBigThen.
+		returnValue.
+	}
 	
 	negated () () 1 {
 		integerNegate.
