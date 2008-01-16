@@ -136,9 +136,6 @@ public class Compiler {
 			Message message = expression.messages.get(0);
 			if(message instanceof UnaryRootMessage) {
 				UnaryRootMessage root = (UnaryRootMessage) message;
-				if(root.keyword != null) {
-					throw new UnsupportedOperationException("Does not supports keyword messages");
-				}
 				
 				List<Instruction> unaryInstructions = compileUnaryChain(root.unaries);
 				instructions.addAll(unaryInstructions);
@@ -148,6 +145,11 @@ public class Compiler {
 					instructions.addAll(binInstructions);
 
 					tempCount++;
+				}
+
+				if(root.keyword != null) {
+					instructions.addAll(compileKeyword(root.keyword));
+					tempCount = Math.max(tempCount, root.keyword.arguments.size() + 2);
 				}
 			} else if(message instanceof KeywordMessage) {
 				KeywordMessage root = (KeywordMessage) message;

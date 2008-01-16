@@ -124,7 +124,7 @@ public class SilanTest extends TestCase {
 	}
 	
 	public void testControl5() throws Exception {
-		vm.compileAndExecute("1 to: 5 do: [:index | Transcript show: index .].");		
+		vm.compileAndExecute("1 to: 5 do: [:index | Transcript show: index printString.].");		
 	}
 	
 	private void assertPrimitiveInteger(Integer expected, SILObject actual) {

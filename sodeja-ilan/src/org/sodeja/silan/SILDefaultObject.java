@@ -28,7 +28,7 @@ public class SILDefaultObject implements SILObject {
 	public SILObject get(String reference) {
 		int index = type.getInstanceVariableIndex(reference);
 		if(index < 0) {
-			throw new UnsupportedOperationException("Global variable set.");
+			return null;
 		}
 		return this.instanceVariables[index];
 	}

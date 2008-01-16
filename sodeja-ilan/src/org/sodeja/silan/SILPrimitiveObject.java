@@ -31,6 +31,6 @@ public class SILPrimitiveObject<T> implements SILObject {
 
 	@Override
 	public SILObject get(String reference) {
-		throw new UnsupportedOperationException();
+		return null;
 	}
 }
