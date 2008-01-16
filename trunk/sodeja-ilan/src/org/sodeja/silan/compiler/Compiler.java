@@ -43,6 +43,8 @@ import org.sodeja.silan.instruction.ReturnCodeInstruction;
 import org.sodeja.silan.instruction.ReturnSelfInstruction;
 import org.sodeja.silan.instruction.ReturnValueInstruction;
 
+import com.sun.corba.se.impl.interceptors.PINoOpHandlerImpl;
+
 public class Compiler {
 	private final CompilerLexer lexer;
 	private final CompilerParser parser;
@@ -108,10 +110,8 @@ public class Compiler {
 			throw new UnsupportedOperationException("Does not supports cascade compile");
 		}
 		
-		int tempCount = 0;
+		int tempCount = 1;
 		List<Instruction> instructions = new ArrayList<Instruction>();
-		
-		tempCount++;
 		Pair<List<Instruction>, Integer> subResult = null;
 		
 		if(expression.primary instanceof NestedExpression) {
@@ -129,42 +129,31 @@ public class Compiler {
 					throw new UnsupportedOperationException("Does not supports keyword messages");
 				}
 				
-				Pair<List<Instruction>, Integer> unaryInstructions = compileUnaryChain(root.unaries);
-				instructions.addAll(unaryInstructions.first);
+				List<Instruction> unaryInstructions = compileUnaryChain(root.unaries);
+				instructions.addAll(unaryInstructions);
 				
 				if(! CollectionUtils.isEmpty(root.binaries)) {
-					Pair<List<Instruction>, Integer> binInstructions = compileBinary(root.binaries);
-					instructions.addAll(binInstructions.first);
+					List<Instruction> binInstructions = compileBinary(root.binaries);
+					instructions.addAll(binInstructions);
 
-					tempCount += 1;
+					tempCount++;
 				}
 			} else if(message instanceof KeywordMessage) {
 				KeywordMessage root = (KeywordMessage) message;
-				for(KeywordMessageArgument arg : root.arguments) {
-					instructions.add(compilePrimary(arg.primary));
-	
-					if(! CollectionUtils.isEmpty(arg.unaries)) {
-						Pair<List<Instruction>, Integer> unaryInstructions = compileUnaryChain(arg.unaries);
-						instructions.addAll(unaryInstructions.first);
-					}
-					
-					if(! CollectionUtils.isEmpty(arg.binaries)) {
-						Pair<List<Instruction>, Integer> binInstructions = compileBinary(arg.binaries);
-						instructions.addAll(binInstructions.first);
-					}
-				}
 				
+				instructions.addAll(compileKeyword(root));
 				tempCount += root.arguments.size() + 1;
-				instructions.add(new MessageInstruction(root.selector, root.arguments.size()));
 			} else if(message instanceof BinaryRootMessage) {
 				BinaryRootMessage root = (BinaryRootMessage) message;
-				if(root.keyword != null) {
-					throw new UnsupportedOperationException("Does not supports keyword messages");
-				}
 				
-				Pair<List<Instruction>, Integer> binInstructions = compileBinary(root.binaries);
-				instructions.addAll(binInstructions.first);
-				tempCount += 1;
+				List<Instruction> binInstructions = compileBinary(root.binaries);
+				instructions.addAll(binInstructions);
+				tempCount++;
+				
+				if (root.keyword != null) {
+					instructions.addAll(compileKeyword(root.keyword));
+					tempCount = Math.max(tempCount, root.keyword.arguments.size() + 2);
+				}
 			}
 		}
 		
@@ -173,6 +162,25 @@ public class Compiler {
 		}
 		
 		return Pair.of(instructions, tempCount);
+	}
+	
+	private List<Instruction> compileKeyword(KeywordMessage root) {
+		List<Instruction> instructions = new ArrayList<Instruction>();
+		for(KeywordMessageArgument arg : root.arguments) {
+			instructions.add(compilePrimary(arg.primary));
+
+			if(! CollectionUtils.isEmpty(arg.unaries)) {
+				List<Instruction> unaryInstructions = compileUnaryChain(arg.unaries);
+				instructions.addAll(unaryInstructions);
+			}
+			
+			if(! CollectionUtils.isEmpty(arg.binaries)) {
+				List<Instruction> binInstructions = compileBinary(arg.binaries);
+				instructions.addAll(binInstructions);
+			}
+		}
+		instructions.add(new MessageInstruction(root.selector, root.arguments.size()));
+		return instructions;
 	}
 
 	private Instruction compilePrimary(Primary primary) {
@@ -196,27 +204,27 @@ public class Compiler {
 		throw new UnsupportedOperationException();
 	}
 	
-	private Pair<List<Instruction>, Integer> compileBinary(List<BinaryMessage> binaries) {
+	private List<Instruction> compileBinary(List<BinaryMessage> binaries) {
 		List<Instruction> instructions = new ArrayList<Instruction>();
 		for(BinaryMessage binary : binaries) {
 			BinaryMessageOperand operand = binary.operand;
 			instructions.add(compilePrimary(operand.primary));
 			
-			Pair<List<Instruction>, Integer> unary = compileUnaryChain(operand.unaries);
-			instructions.addAll(unary.first);
+			List<Instruction> unary = compileUnaryChain(operand.unaries);
+			instructions.addAll(unary);
 			
 			instructions.add(new MessageInstruction(binary.selector, 1));
 		}
 		
-		return Pair.of(instructions, 2);
+		return instructions;
 	}
 
-	private Pair<List<Instruction>, Integer> compileUnaryChain(List<UnaryMessage> messages) {
+	private List<Instruction> compileUnaryChain(List<UnaryMessage> messages) {
 		List<Instruction> instructions = new ArrayList<Instruction>();
 		for(UnaryMessage msg : messages) {
 			instructions.add(new MessageInstruction(msg.selector, 0));
 		}
-		return Pair.of(instructions, 0);
+		return instructions;
 	}
 	
 	public CompiledMethod compileMethod(String methodSource) {

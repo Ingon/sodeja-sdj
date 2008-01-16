@@ -101,6 +101,15 @@ public class SilanTest extends TestCase {
 		assertPrimitiveBoolean(true, val);
 	}
 	
+	public void testBlock5() throws Exception {
+		
+	}
+	
+	public void testControl1() throws Exception {
+		SILObject val = vm.compileAndExecute("3 < 4 ifTrue: [4 - 3.].");
+		assertPrimitiveInteger(1, val);
+	}
+	
 	private void assertPrimitiveInteger(Integer expected, SILObject actual) {
 		assertTrue(actual instanceof SILPrimitiveObject);
 		assertEquals(expected, ((SILPrimitiveObject<Integer>) actual).value);
