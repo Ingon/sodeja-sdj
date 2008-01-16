@@ -6,6 +6,12 @@ Integer Number ()
 		returnValue.
 	}
 	
+	- (aNumber) () 1 {
+		pushReference aNumber.
+		integerSub.
+		returnValue.
+	}
+	
 	* (aNumber) () 1 {
 		pushReference aNumber.
 		integerMulty.

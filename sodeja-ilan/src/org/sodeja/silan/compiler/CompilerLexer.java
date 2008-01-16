@@ -74,6 +74,8 @@ public class CompilerLexer {
 				char next = str.charAt(i + 1);
 				if(isDigit(next)) {
 					throw new UnsupportedOperationException();
+				} else if(whitespaceChar(next)) {
+					// do nothing special.
 				} else {
 					throw new UnsupportedOperationException();
 				}

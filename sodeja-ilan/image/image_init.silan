@@ -20,6 +20,6 @@ arrayed_collection.silan
 string.silan
 
 ;Boolean
-;boolean.silan
-;true.silan
-;false.silan
+boolean.silan
+true.silan
+false.silan

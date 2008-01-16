@@ -109,7 +109,7 @@ public class CompilerParser {
 	
 	private final Parser<Token, KeywordMessage> KEYWORD_MESSAGE = applyCons("KEYWORD_MESSAGE", KEYWORD_MESSAGE_ARGUMENTS, KeywordMessage.class);
 
-	private final Parser<Token, KeywordMessage> OPTIONAL_KEYWORD_MESSAGE = zeroOrOne("OPTIONAL_KEYWORD_MESSAGE", KEYWORD_MESSAGE);
+	private final Parser<Token, KeywordMessage> OPTIONAL_KEYWORD_MESSAGE = thenParserJust2("OPTIONAL_KEYWORD_MESSAGE", OP_WHITESPACE, zeroOrOne("OPTIONAL_KEYWORD_MESSAGE", KEYWORD_MESSAGE));
 	
 	private final Parser<Token, BinaryRootMessage> BINARY_ROOT_MESSAGE = thenParserCons("BINARY_ROOT_MESSAGE", BINARY_CHAIN_ONE, OPTIONAL_KEYWORD_MESSAGE, BinaryRootMessage.class);
 	

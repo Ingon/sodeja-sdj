@@ -1,0 +1,9 @@
+Flase Boolean ()
+{
+###
+ifTrue: operand
+	^nil.
+###
+}
+{
+}
