@@ -4,6 +4,11 @@ Flase Boolean ()
 ifTrue: operand
 	^nil.
 ###
+
+###
+ifTrue: trueOperand ifFalse: falseOperand 
+	^falseOperand value.
+###
 }
 {
 }
