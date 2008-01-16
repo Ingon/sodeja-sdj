@@ -1,6 +1,6 @@
 CompiledBlock CompiledCode ()
 {
-	value () () 0 {
+	value () () 1 {
 		callBlock.
 		returnValue.
 	}
@@ -17,6 +17,19 @@ CompiledBlock CompiledCode ()
 		callBlock.
 		returnValue.
 	}
+###
+repeat
+	"Note that this message should be inlined by the Compiler for literal block receivers."
+	[self value. true.] whileTrue.
+###
+
+###
+whileTrue
+	"Implementation Note: This message should be inlined by the compiler if the
+	receiver is a zero-argument literal block, i.e. it will inline the definition
+	below, so this method is not actually recursive."
+	^[self value.] whileTrue.
+###
 }
 {
 }

@@ -15,6 +15,14 @@ public class MethodContext extends AbstractChildContext {
 
 	@Override
 	public SILObject resolve(String reference) {
+		if(reference.equals("self")) {
+			return receiver;
+		} else if(reference.equals("super")) {
+			throw new UnsupportedOperationException();
+		} else if(reference.equals("thisContext")) {
+			throw new UnsupportedOperationException();
+		}
+		
 		SILObject val = argumentValues.get(reference);
 		if(val != null) {
 			return val;
@@ -26,6 +34,11 @@ public class MethodContext extends AbstractChildContext {
 		}
 		
 		val = receiver.get(reference);
+		if(val != null) {
+			return val;
+		}
+		
+		val = process.vm.objects.getGlobal(reference);
 		if(val != null) {
 			return val;
 		}
