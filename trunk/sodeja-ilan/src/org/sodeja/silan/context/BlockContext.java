@@ -26,7 +26,12 @@ public class BlockContext extends AbstractChildContext {
 			return val;
 		}
 		
-		throw new UnsupportedOperationException("Not implemented above this scope");
+		val = process.vm.objects.getGlobal(reference);
+		if(val != null) {
+			return val;
+		}
+		
+		throw new UnsupportedOperationException("Not implemented above this scope - " + reference);
 	}
 	
 	public Context getHome() {

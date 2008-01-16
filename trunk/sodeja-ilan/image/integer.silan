@@ -40,6 +40,12 @@ Integer Number ()
 		integerRaise.
 		returnValue.
 	}
+###
+timesRepeat: aBlock
+	(self < 1) ifTrue: [^nil.].
+	aBlock value.
+	(self - 1) timesRepeat: aBlock.
+###
 }
 {
 }

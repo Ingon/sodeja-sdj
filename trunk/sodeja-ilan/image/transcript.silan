@@ -1,0 +1,10 @@
+Transcript Object ()
+{
+}
+{
+	show: (aString) () 1 {
+		pushReference aString.
+		stringDisplay.
+		returnSelf.
+	}
+}

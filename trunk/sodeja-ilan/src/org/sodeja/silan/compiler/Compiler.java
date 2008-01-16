@@ -39,11 +39,10 @@ import org.sodeja.silan.instruction.PushIntegerLiteralInstruction;
 import org.sodeja.silan.instruction.PushNilLiteralInstruction;
 import org.sodeja.silan.instruction.PushReferenceInstruction;
 import org.sodeja.silan.instruction.PushStringLiteralInstruction;
+import org.sodeja.silan.instruction.ReturnCallerValueInstruction;
 import org.sodeja.silan.instruction.ReturnCodeInstruction;
 import org.sodeja.silan.instruction.ReturnSelfInstruction;
 import org.sodeja.silan.instruction.ReturnValueInstruction;
-
-import com.sun.corba.se.impl.interceptors.PINoOpHandlerImpl;
 
 public class Compiler {
 	private final CompilerLexer lexer;
@@ -58,12 +57,12 @@ public class Compiler {
 		List<Token> tokens = lexer.lexify(codeSource);
 		ExecutableCode code = parser.parseCode(tokens);
 		
-		CompiledCode compiled = compileCode(code, false);
+		CompiledCode compiled = compileCode(code, CompileTargetType.CODE);
 		compiled.setSource(codeSource);
 		return compiled;
 	}
 
-	private CompiledCode compileCode(ExecutableCode code, boolean isMethod) {
+	private CompiledCode compileCode(ExecutableCode code, CompileTargetType type) {
 		int statementTempCount = 0;
 		List<Instruction> instructions = new ArrayList<Instruction>();
 		
@@ -75,10 +74,14 @@ public class Compiler {
 			}
 			instructions.addAll(result.first);
 			if(i == n - 1 && code.finalStatement == null) {
-				if(isMethod) {
-					instructions.add(new ReturnSelfInstruction());
-				} else {
+				if(type == CompileTargetType.CODE) {
 					instructions.add(new ReturnCodeInstruction());
+				} else if(type == CompileTargetType.METHOD) {
+					instructions.add(new ReturnSelfInstruction());
+				} else if(type == CompileTargetType.BLOCK) {
+					instructions.add(new ReturnValueInstruction());
+				} else {
+					throw new RuntimeException();
 				}
 			} else {
 				instructions.add(new ClearStackInstruction());
@@ -91,7 +94,15 @@ public class Compiler {
 				statementTempCount = result.second;
 			}
 			instructions.addAll(result.first);
-			instructions.add(new ReturnValueInstruction());
+			if(type == CompileTargetType.CODE) {
+				instructions.add(new ReturnCodeInstruction());
+			} else if(type == CompileTargetType.METHOD) {
+				instructions.add(new ReturnValueInstruction());
+			} else if(type == CompileTargetType.BLOCK) {
+				instructions.add(new ReturnCallerValueInstruction());
+			} else {
+				throw new RuntimeException();
+			}
 		}
 		
 		return new CompiledCode(code.localVariables, statementTempCount, instructions);
@@ -196,7 +207,7 @@ public class Compiler {
 			return new PushReferenceInstruction(((Reference) primary).value);
 		} else if(primary instanceof BlockLiteral) {
 			BlockLiteral blockLiteral = (BlockLiteral) primary;
-			CompiledCode code = compileCode(blockLiteral.code, false);
+			CompiledCode code = compileCode(blockLiteral.code, CompileTargetType.BLOCK);
 			CompiledBlock block = new CompiledBlock(blockLiteral.argument, 
 					code.localVariables, code.maxStackSize, code.instructions);
 			return new PushBlockInstruction(block);
@@ -231,7 +242,7 @@ public class Compiler {
 		List<Token> tokens = lexer.lexify(methodSource);
 		MethodDeclaration method = parser.parseMethod(tokens);
 		
-		CompiledCode code = compileCode(method.code, true);
+		CompiledCode code = compileCode(method.code, CompileTargetType.METHOD);
 		
 		CompiledMethod compiledMethod = new CompiledMethod(
 				method.header.getSelector(), method.header.getArguments(), 

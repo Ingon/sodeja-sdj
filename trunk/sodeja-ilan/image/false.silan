@@ -1,4 +1,4 @@
-Flase Boolean ()
+False Boolean ()
 {
 ###
 ifTrue: operand
