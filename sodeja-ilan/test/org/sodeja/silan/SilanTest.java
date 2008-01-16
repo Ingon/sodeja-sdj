@@ -123,6 +123,10 @@ public class SilanTest extends TestCase {
 		vm.compileAndExecute("3 timesRepeat: [Transcript show: 'I love you'.].");
 	}
 	
+	public void testControl5() throws Exception {
+		vm.compileAndExecute("1 to: 5 do: [:index | Transcript show: index .].");		
+	}
+	
 	private void assertPrimitiveInteger(Integer expected, SILObject actual) {
 		assertTrue(actual instanceof SILPrimitiveObject);
 		assertEquals(expected, ((SILPrimitiveObject<Integer>) actual).value);

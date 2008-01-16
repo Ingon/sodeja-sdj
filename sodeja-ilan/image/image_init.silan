@@ -18,6 +18,7 @@ collection.silan
 sequenceable_collection.silan
 arrayed_collection.silan
 string.silan
+interval.silan
 
 ;Boolean
 boolean.silan
