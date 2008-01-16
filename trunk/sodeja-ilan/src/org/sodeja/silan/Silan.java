@@ -23,7 +23,7 @@ public class Silan {
 		
 //		String source = readFully("test/silan/15.silan");
 //		SILObject value = vm.compileAndExecute(source);
-		SILObject value = vm.compileAndExecute("[3 + 5.] value.");
+		SILObject value = vm.compileAndExecute("1 to: 5 do: [:index | Transcript show: index printString.].");
 		System.out.println("Value: " + value);
 	}
 	

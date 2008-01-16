@@ -34,6 +34,11 @@ public class BlockContext extends AbstractChildContext {
 			return val;
 		}
 		
+		val = home.resolve(reference);
+		if(val != null) {
+			return val;
+		}
+		
 		val = process.vm.objects.getGlobal(reference);
 		if(val != null) {
 			return val;
