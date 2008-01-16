@@ -11,6 +11,7 @@ public class IntegerNegateInstruction extends PrimitiveInstruction {
 		super(manager);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(Process process) {
 		MethodContext mc = (MethodContext) process.getActiveContext();

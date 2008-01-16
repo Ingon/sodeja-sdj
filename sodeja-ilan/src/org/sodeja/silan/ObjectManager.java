@@ -8,6 +8,7 @@ import java.util.Map;
 import org.sodeja.collections.ListUtils;
 import org.sodeja.functional.Pair;
 import org.sodeja.silan.context.Context;
+import org.sodeja.silan.instruction.CallBlockInstruction;
 import org.sodeja.silan.instruction.Instruction;
 import org.sodeja.silan.instruction.IntegerAddInstruction;
 import org.sodeja.silan.instruction.IntegerNegateInstruction;
@@ -90,7 +91,8 @@ public class ObjectManager {
 		
 		
 		List<Instruction> blockInstructions = ListUtils.asList(
-				);
+				new CallBlockInstruction(),
+				new ReturnValueInstruction());
 		compiledBlock.addMethod(new CompiledMethod("value", Collections.EMPTY_LIST,
 				Collections.EMPTY_LIST, 0, blockInstructions));
 	}
