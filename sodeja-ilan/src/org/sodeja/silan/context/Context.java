@@ -9,6 +9,8 @@ public interface Context {
 	
 	public Instruction nextInstruction();
 
+	public void setInstructionPointer(int newValue);
+	
 	public SILObject pop();
 
 	public void push(SILObject value);

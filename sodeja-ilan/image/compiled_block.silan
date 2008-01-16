@@ -23,13 +23,17 @@ repeat
 	[self value. true.] whileTrue.
 ###
 
-###
-whileTrue
-	"Implementation Note: This message should be inlined by the compiler if the
-	receiver is a zero-argument literal block, i.e. it will inline the definition
-	below, so this method is not actually recursive."
-	^[self value.] whileTrue.
-###
+	whileTrue () () 1 {
+		callBlock.
+		gotoIfTrue.
+		returnSelf.
+	}
+	
+	whileFalse () () 1 {
+		callBlock.
+		gotoIfFalse.
+		returnSelf.
+	}
 }
 {
 }

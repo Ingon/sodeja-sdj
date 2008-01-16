@@ -4,7 +4,7 @@ import org.sodeja.silan.CompiledMethod;
 import org.sodeja.silan.SILObject;
 
 public class MethodContext extends AbstractChildContext {
-	private final SILObject receiver;
+	protected final SILObject receiver;
 	
 	public MethodContext(Context parent, SILObject receiver, 
 			CompiledMethod method, SILObject[] arguments) {
