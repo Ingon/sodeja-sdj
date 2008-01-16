@@ -18,10 +18,12 @@ public class Silan {
 //		vm.compileAndAttach(readFully("test/silan/7_2.silan"), "Association");
 //		vm.compileAndAttach(readFully("test/silan/11_1.silan"), "Association");
 		vm.compileAndAttach(readFully("test/silan/15_1.silan"), "True");
+		vm.compileAndAttach(readFully("test/silan/15_2.silan"), "False");
 //		vm.compileAndAttach(readFully("test/silan/15_5.silan"), "Boolean");
 		
-		String source = readFully("test/silan/15.silan");
-		SILObject value = vm.compileAndExecute(source);
+//		String source = readFully("test/silan/15.silan");
+//		SILObject value = vm.compileAndExecute(source);
+		SILObject value = vm.compileAndExecute("[3 + 5.] value.");
 		System.out.println("Value: " + value);
 	}
 	

@@ -77,6 +77,16 @@ public class SilanTest extends TestCase {
 		assertSame(vm.getObjectManager().getNil(), val);
 	}
 	
+	public void testBlock1() throws Exception {
+		SILObject val = vm.compileAndExecute("[3 + 4.] value.");
+		assertPrimitiveInteger(7, val);
+	}
+	
+	public void testBlock2() throws Exception {
+		SILObject val = vm.compileAndExecute("[1 * 2 * 3 * 4 * 5.] value.");
+		assertPrimitiveInteger(120, val);
+	}
+	
 	private void assertPrimitiveInteger(Integer expected, SILObject actual) {
 		assertTrue(actual instanceof SILPrimitiveObject);
 		assertEquals(expected, ((SILPrimitiveObject<Integer>) actual).value);
