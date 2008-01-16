@@ -1,6 +1,6 @@
-"We need class called Association (Pair is also good name). Gives 15."
+"We need class called Pair. Gives 15."
 | a |
-a := Association new.
+a := Pair new.
 a key: 3 + 5.
 a value: 4 + 3.
 a key: a key + a value.

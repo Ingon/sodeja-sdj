@@ -12,7 +12,7 @@ public class PushIntegerLiteralInstruction implements Instruction {
 
 	@Override
 	public void execute(Process process) {
-		SILObject obj = process.vm.getObjectManager().newInteger(value);
+		SILObject obj = process.vm.objects.newInteger(value);
 		process.getActiveContext().push(obj);
 	}
 }

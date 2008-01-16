@@ -1,0 +1,22 @@
+CompiledBlock CompiledCode ()
+{
+	value () () 0 {
+		callBlock.
+		returnValue.
+	}
+	
+	value: (anObject) () 1 {
+		pushReference anObject.
+		callBlock.
+		returnValue.
+	}
+
+	value:value: (anObject1 anObject2) () 2 {
+		pushReference anObject1.
+		pushReference anObject2.
+		callBlock.
+		returnValue.
+	}
+}
+{
+}

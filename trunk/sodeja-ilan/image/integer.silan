@@ -1,0 +1,33 @@
+Integer Number ()
+{
+	+ (aNumber) () 1 {
+		pushReference aNumber.
+		integerAdd.
+		returnValue.
+	}
+	
+	* (aNumber) () 1 {
+		pushReference aNumber.
+		integerMulty.
+		returnValue.
+	}
+	
+	< (aNumber) () 1 {
+		pushReference aNumber.
+		integerLessThen.
+		returnValue.
+	}
+	
+	negated () () 1 {
+		integerNegate.
+		returnValue.
+	}
+	
+	raisedTo: (aNumber) () 1 {
+		pushReference aNumber.
+		integerRaise.
+		returnValue.
+	}
+}
+{
+}

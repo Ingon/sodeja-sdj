@@ -1,7 +1,6 @@
 package org.sodeja.silan.compiler;
 
 import static org.sodeja.parsec.combinator.ParsecCombinators.*;
-import static org.sodeja.parsec.standart.StandartParsers.*;
 
 import java.util.List;
 
@@ -17,7 +16,6 @@ import org.sodeja.silan.compiler.src.BinaryMessage;
 import org.sodeja.silan.compiler.src.BinaryMessageOperand;
 import org.sodeja.silan.compiler.src.BinaryRootMessage;
 import org.sodeja.silan.compiler.src.BlockLiteral;
-import org.sodeja.silan.compiler.src.BlockLiteralArguments;
 import org.sodeja.silan.compiler.src.BooleanLiteral;
 import org.sodeja.silan.compiler.src.CharacterLiteral;
 import org.sodeja.silan.compiler.src.ExecutableCode;

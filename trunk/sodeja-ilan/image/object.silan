@@ -1,0 +1,13 @@
+Object Nil ()
+{
+###
+~= comparand
+	^(self = comparand) == false.
+###
+} 
+{
+	new () () 1 {
+		newObject.
+		returnValue.
+	}
+}

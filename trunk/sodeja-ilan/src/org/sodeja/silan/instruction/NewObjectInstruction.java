@@ -1,13 +1,13 @@
 package org.sodeja.silan.instruction;
 
-import org.sodeja.silan.ObjectManager;
 import org.sodeja.silan.Process;
 import org.sodeja.silan.SILClass;
 import org.sodeja.silan.SILDefaultObject;
 import org.sodeja.silan.context.MethodContext;
+import org.sodeja.silan.objects.ImageObjectManager;
 
 public class NewObjectInstruction extends PrimitiveInstruction {
-	public NewObjectInstruction(ObjectManager manager) {
+	public NewObjectInstruction(ImageObjectManager manager) {
 		super(manager);
 	}
 

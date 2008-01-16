@@ -14,7 +14,7 @@ public class PushBlockInstruction implements Instruction {
 
 	@Override
 	public void execute(Process process) {
-		SILObject obj = process.vm.getObjectManager().newBlock(block, process.getActiveContext());
+		SILObject obj = process.vm.objects.newBlock(block, process.getActiveContext());
 		process.getActiveContext().push(obj);
 	}
 }

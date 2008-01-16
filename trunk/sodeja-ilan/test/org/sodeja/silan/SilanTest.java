@@ -16,12 +16,12 @@ public class SilanTest extends TestCase {
 	protected void setUp() throws Exception {
 		vm = new VirtualMachine();
 		
-		vm.subclass("Object", "Association", ListUtils.asList("key", "value"));
-		vm.compileAndAttach(readFully("test/silan/6_1.silan"), "Association");
-		vm.compileAndAttach(readFully("test/silan/6_2.silan"), "Association");
-		vm.compileAndAttach(readFully("test/silan/7_1.silan"), "Association");
-		vm.compileAndAttach(readFully("test/silan/7_2.silan"), "Association");
-		vm.compileAndAttach(readFully("test/silan/11_1.silan"), "Association");
+//		vm.subclass("Object", "Association", ListUtils.asList("key", "value"));
+//		vm.compileAndAttach(readFully("test/silan/6_1.silan"), "Association");
+//		vm.compileAndAttach(readFully("test/silan/6_2.silan"), "Association");
+//		vm.compileAndAttach(readFully("test/silan/7_1.silan"), "Association");
+//		vm.compileAndAttach(readFully("test/silan/7_2.silan"), "Association");
+//		vm.compileAndAttach(readFully("test/silan/11_1.silan"), "Association");
 	}
 
 	public void test1() throws Exception {
@@ -72,9 +72,13 @@ public class SilanTest extends TestCase {
 		assertPrimitiveString("iuhu", execute("12"));
 	}
 
+	public void test13() throws Exception {
+		execute("13");
+	}
+	
 	public void test14() throws Exception {
 		SILObject val = execute("14");
-		assertSame(vm.getObjectManager().getNil(), val);
+		assertSame(vm.objects.nil(), val);
 	}
 	
 	public void testBlock1() throws Exception {
@@ -91,6 +95,11 @@ public class SilanTest extends TestCase {
 		SILObject val = vm.compileAndExecute("[:x | x * x.] value: 6.");
 		assertPrimitiveInteger(36, val);
 	}
+
+	public void testBlock4() throws Exception {
+		SILObject val = vm.compileAndExecute("[:a :b | a < b.] value: 3 value: 4.");
+		assertPrimitiveBoolean(true, val);
+	}
 	
 	private void assertPrimitiveInteger(Integer expected, SILObject actual) {
 		assertTrue(actual instanceof SILPrimitiveObject);
@@ -102,6 +111,11 @@ public class SilanTest extends TestCase {
 		assertEquals(expected, ((SILPrimitiveObject<String>) actual).value);
 	}
 
+	private void assertPrimitiveBoolean(Boolean expected, SILObject actual) {
+		assertTrue(actual instanceof SILPrimitiveObject);
+		assertEquals(expected, ((SILPrimitiveObject<Boolean>) actual).value);
+	}
+	
 	private SILObject execute(String fileNumber) throws IOException {
 		String source = readFully("test/silan/" + fileNumber + ".silan");
 		return vm.compileAndExecute(source);

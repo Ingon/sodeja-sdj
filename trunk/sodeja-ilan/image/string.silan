@@ -1,0 +1,10 @@
+String ArrayedCollection ()
+{
+	, (aString) () 1 {
+		pushReference aString.
+		stringAppend.
+		returnValue.
+	}
+}
+{
+}

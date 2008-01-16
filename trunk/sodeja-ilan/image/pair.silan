@@ -1,0 +1,30 @@
+Pair Object (key value)
+{
+###
+key: k
+	key := k.
+###
+
+###
+key
+	^key.
+###
+
+###
+value: v
+	value := v.
+###
+
+###
+value
+	^value.
+###
+
+###
+key: k value: v
+	key := k.
+	value := v.
+###
+}
+{
+}

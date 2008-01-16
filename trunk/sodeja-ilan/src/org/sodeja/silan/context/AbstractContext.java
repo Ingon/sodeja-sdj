@@ -26,7 +26,7 @@ public abstract class AbstractContext implements Context {
 		
 		localVariables = new HashMap<String, SILObject>();
 		for(String local : code.localVariables) {
-			localVariables.put(local, process.vm.getObjectManager().getNil());
+			localVariables.put(local, process.vm.objects.nil());
 		}
 		
 		stack = new SILObject[code.maxStackSize];

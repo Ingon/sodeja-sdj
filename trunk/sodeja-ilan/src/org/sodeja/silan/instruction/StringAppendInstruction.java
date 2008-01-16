@@ -1,13 +1,13 @@
 package org.sodeja.silan.instruction;
 
-import org.sodeja.silan.ObjectManager;
 import org.sodeja.silan.Process;
 import org.sodeja.silan.SILObject;
 import org.sodeja.silan.SILPrimitiveObject;
 import org.sodeja.silan.context.MethodContext;
+import org.sodeja.silan.objects.ImageObjectManager;
 
 public class StringAppendInstruction extends PrimitiveInstruction {
-	public StringAppendInstruction(ObjectManager manager) {
+	public StringAppendInstruction(ImageObjectManager manager) {
 		super(manager);
 	}
 
