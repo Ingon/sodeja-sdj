@@ -64,6 +64,11 @@ public abstract class AbstractContext implements Context {
 	}
 	
 	@Override
+	public void setInstructionPointer(int newValue) {
+		instructionPointer = newValue;
+	}
+
+	@Override
 	public boolean update(String reference, SILObject value) {
 		SILObject oldValue = localVariables.get(reference);
 		if(oldValue == null) {

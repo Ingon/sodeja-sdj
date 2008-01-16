@@ -16,6 +16,14 @@ public class BlockContext extends AbstractChildContext {
 
 	@Override
 	public SILObject resolve(String reference) {
+		if(reference.equals("self")) {
+			return ((MethodContext) home).receiver;
+		} else if(reference.equals("super")) {
+			throw new UnsupportedOperationException();
+		} else if(reference.equals("thisContext")) {
+			throw new UnsupportedOperationException();
+		}
+		
 		SILObject val = argumentValues.get(reference);
 		if(val != null) {
 			return val;

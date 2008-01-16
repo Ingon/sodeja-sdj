@@ -6,7 +6,7 @@ import java.util.Map;
 import org.sodeja.silan.CallableCompiledCode;
 import org.sodeja.silan.SILObject;
 
-public class AbstractChildContext extends AbstractContext implements ChildContext {
+public abstract class AbstractChildContext extends AbstractContext implements ChildContext {
 	private final Context parent;
 	
 	protected final Map<String, SILObject> argumentValues;
