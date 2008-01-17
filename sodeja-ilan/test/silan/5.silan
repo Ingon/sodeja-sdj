@@ -1,4 +1,0 @@
-"This gives 64."
-| a |
-a := 3 + 5.
-a raisedTo: 2.

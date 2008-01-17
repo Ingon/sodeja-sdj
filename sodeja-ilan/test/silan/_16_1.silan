@@ -1,2 +1,0 @@
-& operand
-	^(operand ifTrue: [:a | true.] ifFalse: [false.]) and: [self.].

@@ -1,5 +1,0 @@
-"We need class called Pair. Gives 17."
-| a |
-a := Pair new.
-a key: 3 + 5 + 9 value: 1 negated + 2.
-a key.
