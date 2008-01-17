@@ -8,6 +8,7 @@ compiled_method.silan
 
 ;Magnitudes
 magnitude.silan
+character.silan
 pair.silan
 aritmetic_value.silan
 number.silan
