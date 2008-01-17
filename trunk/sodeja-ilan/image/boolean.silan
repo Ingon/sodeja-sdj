@@ -2,12 +2,12 @@ Boolean Object ()
 {
 ###
 & operand
-	^(operand ifTrue: [true.] ifFalse: [false.]) and: [self.].
+	^(operand ifTrue: [true] ifFalse: [false]) and: [self]
 ###
 
 ###
 | operand
-	^(operand ifTrue: [true.] ifFalse: [false.]) or: [self.].
+	^(operand ifTrue: [true] ifFalse: [false]) or: [self]
 ###
 
 ###

@@ -20,6 +20,7 @@ import org.sodeja.silan.compiler.src.BooleanLiteral;
 import org.sodeja.silan.compiler.src.CharacterLiteral;
 import org.sodeja.silan.compiler.src.ExecutableCode;
 import org.sodeja.silan.compiler.src.Expression;
+import org.sodeja.silan.compiler.src.FinalStatement;
 import org.sodeja.silan.compiler.src.IntegerLiteral;
 import org.sodeja.silan.compiler.src.KeywordHeader;
 import org.sodeja.silan.compiler.src.KeywordHeaderSegment;
@@ -109,7 +110,8 @@ public class CompilerParser {
 	
 	private final Parser<Token, KeywordMessage> KEYWORD_MESSAGE = applyCons("KEYWORD_MESSAGE", KEYWORD_MESSAGE_ARGUMENTS, KeywordMessage.class);
 
-	private final Parser<Token, KeywordMessage> OPTIONAL_KEYWORD_MESSAGE = thenParserJust2("OPTIONAL_KEYWORD_MESSAGE", OP_WHITESPACE, zeroOrOne("OPTIONAL_KEYWORD_MESSAGE", KEYWORD_MESSAGE));
+//	private final Parser<Token, KeywordMessage> OPTIONAL_KEYWORD_MESSAGE = thenParserJust2("OPTIONAL_KEYWORD_MESSAGE", OP_WHITESPACE, zeroOrOne("OPTIONAL_KEYWORD_MESSAGE", KEYWORD_MESSAGE));
+	private final Parser<Token, KeywordMessage> OPTIONAL_KEYWORD_MESSAGE = zeroOrOne("OPTIONAL_KEYWORD_MESSAGE", thenParserJust2("OPTIONAL_KEYWORD_MESSAGE", OP_WHITESPACE, KEYWORD_MESSAGE));
 	
 	private final Parser<Token, BinaryRootMessage> BINARY_ROOT_MESSAGE = thenParserCons("BINARY_ROOT_MESSAGE", BINARY_CHAIN_ONE, OPTIONAL_KEYWORD_MESSAGE, BinaryRootMessage.class);
 	
@@ -128,10 +130,13 @@ public class CompilerParser {
 	private final Parser<Token, Statement> STATEMENT_INT = thenParser3Cons13("STATEMENT_INT", OPTIONAL_ASSIGNMENT, OP_WHITESPACE, EXPRESSION, Statement.class);
 	
 	private final Parser<Token, Statement> STATEMENT = thenParser3Just1("STATEMENT", STATEMENT_INT, OP_WHITESPACE, matchLiteral("."));
-	
-	private final Parser<Token, Statement> FINAL_STATEMENT = thenParser3Just3("FINAL_STATEMENT", OP_WHITESPACE, matchLiteral("^"), STATEMENT);
 
-	private final Parser<Token, Statement> OPTIONAL_FINAL_STATEMENT = zeroOrOne("OPTIONAL_FINAL_STATEMENT", FINAL_STATEMENT);
+	private final Parser<Token, Statement> FINAL_STATEMENT_INT = thenParser3Just1("STATEMENT", STATEMENT_INT, OP_WHITESPACE, zeroOrOne("FINAL_STATEMENT_INT_.", matchLiteral(".")));
+	
+//	private final Parser<Token, Statement> FINAL_STATEMENT = thenParser3Just3("FINAL_STATEMENT", OP_WHITESPACE, matchLiteral("^"), STATEMENT);
+	private final Parser<Token, FinalStatement> FINAL_STATEMENT = thenParser3Cons23("FINAL_STATEMENT", OP_WHITESPACE, zeroOrOne("FINAL_STATEMENT_^", matchLiteral("^")), FINAL_STATEMENT_INT, FinalStatement.class);
+
+	private final Parser<Token, FinalStatement> OPTIONAL_FINAL_STATEMENT = zeroOrOne("OPTIONAL_FINAL_STATEMENT", FINAL_STATEMENT);
 	
 	private final Parser<Token, List<Statement>> STATEMENTS = zeroOrMore("STATEMENTS", STATEMENT);
 	
