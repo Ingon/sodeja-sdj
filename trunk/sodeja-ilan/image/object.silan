@@ -30,6 +30,16 @@ Object Nil ()
 		invokePrimitiveMethod copy.
 		returnValue.
 	}
+	
+###
+hash
+	^self identityHash.
+###
+
+	identityHash () () 1 {
+		invokePrimitiveMethod hashCode.
+		returnValue.
+	}
 } 
 {
 	new () () 1 {

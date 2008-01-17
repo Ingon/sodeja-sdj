@@ -124,6 +124,31 @@ public class SilanTest extends TestCase {
 		assertPrimitiveBoolean(true, val);
 	}
 	
+	public void testBoolean() throws Exception {
+		SILObject val = vm.compileAndExecute("true & false.");
+		assertPrimitiveBoolean(false, val);
+
+		val = vm.compileAndExecute("true | false.");
+		assertPrimitiveBoolean(true, val);
+
+		val = vm.compileAndExecute("true eqv: true.");
+		assertPrimitiveBoolean(true, val);
+		
+		val = vm.compileAndExecute("true eqv: false.");
+		assertPrimitiveBoolean(false, val);
+
+		val = vm.compileAndExecute("false eqv: true.");
+		assertPrimitiveBoolean(false, val);
+		
+		val = vm.compileAndExecute("false eqv: false.");
+		assertPrimitiveBoolean(true, val);
+	}
+	
+	public void testHash() throws Exception {
+		SILObject val = vm.compileAndExecute("| a | a := 3. a hash = a identityHash.");
+		assertPrimitiveBoolean(true, val);
+	}
+	
 	public void testBlock1() throws Exception {
 		SILObject val = vm.compileAndExecute("[3 + 4.] value.");
 		assertPrimitiveInteger(7, val);
