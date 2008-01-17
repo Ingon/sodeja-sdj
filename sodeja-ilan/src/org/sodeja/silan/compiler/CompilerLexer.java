@@ -183,7 +183,7 @@ public class CompilerLexer {
 			}
 		}
 		
-		return str.length() - 1;
+		return str.length();
 	}
 
 	public static int readUntilDigits(String str, int start) {
@@ -194,7 +194,7 @@ public class CompilerLexer {
 			}
 		}
 		
-		return str.length() - 1;
+		return str.length();
 	}
 	
 	public static int readUntilBinary(String str, int start) {
@@ -205,7 +205,7 @@ public class CompilerLexer {
 			}
 		}
 		
-		return str.length() - 1;
+		return str.length();
 	}
 
 	public static int readUntilStringEnd(String str, int start) {

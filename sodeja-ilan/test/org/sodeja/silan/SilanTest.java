@@ -32,59 +32,59 @@ public class SilanTest extends TestCase {
 	}
 	
 	public void test1() throws Exception {
-		assertPrimitiveInteger(8, execute("1"));
+		assertPrimitiveInteger(8, execute("3 + 5"));
 	}
 
 	public void test2() throws Exception {
-		assertPrimitiveInteger(10, execute("2"));
+		assertPrimitiveInteger(10, execute("| a | a := 3 + 5. a + 2"));
 	}
 
 	public void test3() throws Exception {
-		assertPrimitiveInteger(-8, execute("3"));
+		assertPrimitiveInteger(-8, executeFF("3"));
 	}
 
 	public void test4() throws Exception {
-		assertPrimitiveInteger(8, execute("4"));
+		assertPrimitiveInteger(8, executeFF("4"));
 	}
 
 	public void test5() throws Exception {
-		assertPrimitiveInteger(64, execute("5"));
+		assertPrimitiveInteger(64, executeFF("5"));
 	}
 
 	public void test6() throws Exception {
-		assertPrimitiveInteger(8, execute("6"));
+		assertPrimitiveInteger(8, executeFF("6"));
 	}
 
 	public void test7() throws Exception {
-		assertPrimitiveInteger(15, execute("7"));
+		assertPrimitiveInteger(15, executeFF("7"));
 	}
 
 	public void test8() throws Exception {
-		assertPrimitiveInteger(14, execute("8"));
+		assertPrimitiveInteger(14, executeFF("8"));
 	}
 
 	public void test9() throws Exception {
-		assertPrimitiveInteger(8, execute("9"));
+		assertPrimitiveInteger(8, executeFF("9"));
 	}
 
 	public void test10() throws Exception {
-		assertPrimitiveInteger(16, execute("10"));
+		assertPrimitiveInteger(16, executeFF("10"));
 	}
 
 	public void test11() throws Exception {
-		assertPrimitiveInteger(17, execute("11"));
+		assertPrimitiveInteger(17, executeFF("11"));
 	}
 
 	public void test12() throws Exception {
-		assertPrimitiveString("iuhu", execute("12"));
+		assertPrimitiveString("iuhu", executeFF("12"));
 	}
 
 	public void test13() throws Exception {
-		execute("13");
+		executeFF("13");
 	}
 	
 	public void test14() throws Exception {
-		SILObject val = execute("14");
+		SILObject val = executeFF("14");
 		assertSame(vm.objects.nil(), val);
 	}
 	
@@ -132,10 +132,17 @@ public class SilanTest extends TestCase {
 	}
 	
 	public void testBoolean() throws Exception {
-		SILObject val = vm.compileAndExecute("true & false.");
-		assertPrimitiveBoolean(false, val);
+		assertPrimitiveBoolean(false, execute("false & false"));
+		assertPrimitiveBoolean(false, execute("false & true"));
+		assertPrimitiveBoolean(false, execute("true & false"));
+		assertPrimitiveBoolean(true, execute("true & true"));
 
-		val = vm.compileAndExecute("true | false.");
+		assertPrimitiveBoolean(false, execute("false | false"));
+		assertPrimitiveBoolean(true, execute("false | true"));
+		assertPrimitiveBoolean(true, execute("true | false"));
+		assertPrimitiveBoolean(true, execute("true | true"));
+		
+		SILObject val = vm.compileAndExecute("true | false.");
 		assertPrimitiveBoolean(true, val);
 
 		val = vm.compileAndExecute("true eqv: true.");
@@ -228,6 +235,27 @@ public class SilanTest extends TestCase {
 
 		val = vm.compileAndExecute("$A > $a.");
 		assertPrimitiveBoolean(false, val);
+
+		val = vm.compileAndExecute("$a isDigit.");
+		assertPrimitiveBoolean(false, val);
+		
+		val = vm.compileAndExecute("$3 isDigit.");
+		assertPrimitiveBoolean(true, val);
+
+		val = vm.compileAndExecute("$a isLetter.");
+		assertPrimitiveBoolean(true, val);
+		
+		val = vm.compileAndExecute("$3 isLetter.");
+		assertPrimitiveBoolean(false, val);
+
+		val = vm.compileAndExecute("$a isAlphaNumeric.");
+		assertPrimitiveBoolean(true, val);
+		
+		val = vm.compileAndExecute("$3 isAlphaNumeric.");
+		assertPrimitiveBoolean(true, val);
+
+		val = vm.compileAndExecute("$% isAlphaNumeric.");
+		assertPrimitiveBoolean(false, val);
 	}
 	
 	public void testBlock1() throws Exception {
@@ -296,7 +324,11 @@ public class SilanTest extends TestCase {
 		assertEquals(expected, ((SILPrimitiveObject<Boolean>) actual).value);
 	}
 	
-	private SILObject execute(String fileNumber) throws IOException {
+	private SILObject execute(String text) {
+		return vm.compileAndExecute(text);
+	}
+	
+	private SILObject executeFF(String fileNumber) throws IOException {
 		String source = readFully("test/silan/" + fileNumber + ".silan");
 		return vm.compileAndExecute(source);
 	}

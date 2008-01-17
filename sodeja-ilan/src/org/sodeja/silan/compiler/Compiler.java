@@ -52,15 +52,7 @@ public class Compiler {
 			}
 			
 			if(i == n - 1 && code.finalStatement == null) {
-				if(type == CompileTargetType.CODE) {
-					instructions.add(new ReturnCodeInstruction());
-				} else if(type == CompileTargetType.METHOD) {
-					instructions.add(new ReturnSelfInstruction());
-				} else if(type == CompileTargetType.BLOCK) {
-					instructions.add(new ReturnValueInstruction());
-				} else {
-					throw new RuntimeException();
-				}
+				addDefaultReturnInstruction(instructions, type);
 			} else {
 				instructions.add(new ClearStackInstruction());
 			}
@@ -75,18 +67,38 @@ public class Compiler {
 				statementTempCount = statementStackUsage;
 			}
 			
-			if(type == CompileTargetType.CODE) {
-				instructions.add(new ReturnCodeInstruction());
-			} else if(type == CompileTargetType.METHOD) {
-				instructions.add(new ReturnValueInstruction());
-			} else if(type == CompileTargetType.BLOCK) {
-				instructions.add(new ReturnCallerValueInstruction());
+			if(code.finalStatement.isExplicit()) {
+				addExplicitReturnInstruction(instructions, type);
 			} else {
-				throw new RuntimeException();
+				addDefaultReturnInstruction(instructions, type);
 			}
 		}
 		
 		return new CompiledCode(code.localVariables, statementTempCount, instructions);
+	}
+	
+	private void addDefaultReturnInstruction(List<Instruction> instructions, CompileTargetType type) {
+		if(type == CompileTargetType.CODE) {
+			instructions.add(new ReturnCodeInstruction());
+		} else if(type == CompileTargetType.METHOD) {
+			instructions.add(new ReturnSelfInstruction());
+		} else if(type == CompileTargetType.BLOCK) {
+			instructions.add(new ReturnValueInstruction());
+		} else {
+			throw new RuntimeException();
+		}
+	}
+	
+	private void addExplicitReturnInstruction(List<Instruction> instructions, CompileTargetType type) {
+		if(type == CompileTargetType.CODE) {
+			instructions.add(new ReturnCodeInstruction());
+		} else if(type == CompileTargetType.METHOD) {
+			instructions.add(new ReturnValueInstruction());
+		} else if(type == CompileTargetType.BLOCK) {
+			instructions.add(new ReturnCallerValueInstruction());
+		} else {
+			throw new RuntimeException();
+		}
 	}
 	
 	public CompiledMethod compileMethod(String methodSource) {
