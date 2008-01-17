@@ -27,11 +27,13 @@ import org.sodeja.silan.compiler.src.KeywordHeaderSegment;
 import org.sodeja.silan.compiler.src.KeywordMessage;
 import org.sodeja.silan.compiler.src.KeywordMessageArgument;
 import org.sodeja.silan.compiler.src.Literal;
+import org.sodeja.silan.compiler.src.LiteralElement;
 import org.sodeja.silan.compiler.src.Message;
 import org.sodeja.silan.compiler.src.MethodDeclaration;
 import org.sodeja.silan.compiler.src.MethodHeader;
 import org.sodeja.silan.compiler.src.NestedExpression;
 import org.sodeja.silan.compiler.src.NilLiteral;
+import org.sodeja.silan.compiler.src.ObjectArrayLiteral;
 import org.sodeja.silan.compiler.src.Primary;
 import org.sodeja.silan.compiler.src.Reference;
 import org.sodeja.silan.compiler.src.Statement;
@@ -78,9 +80,18 @@ public class CompilerParser {
 	
 	private final Parser<Token, ExecutableCode> EXECUTABLE_CODE_SPACE = thenParserJust1("EXECUTABLE_CODE_SPACE", EXECUTABLE_CODE_DEL, OP_WHITESPACE);
 	
+	// TODO only simple values are supported currently, make it correct
+	private final Parser<Token, LiteralElement> LITERAL_ARRAY_ELEMENT = oneOf1("LITERAL", CONSTANT_REFERENCE, INTEGER_LITERAL, CHARACTER_LITERAL, STRING_LITERAL);
+	
+	private final Parser<Token, List<LiteralElement>> LITERAL_ARRAY_ELEMENTS = zeroOrMoreSep("LITERAL_ARRAY_ELEMENTS", LITERAL_ARRAY_ELEMENT, WHITESPACE);
+
+	private final Parser<Token, ObjectArrayLiteral> OBJECT_ARRAY_LITERAL = thenParser3Cons2("OBJECT_ARRAY_LITERAL", OP_WHITESPACE, LITERAL_ARRAY_ELEMENTS, OP_WHITESPACE, ObjectArrayLiteral.class);
+	
+	private final Parser<Token, ObjectArrayLiteral> ARRAY_LITERAL = thenParser4Just3("ARRAY_LITERAL", matchLiteral("#"), matchLiteral("("), OBJECT_ARRAY_LITERAL, matchLiteral(")"));
+	
 	private final Parser<Token, BlockLiteral> BLOCK_LITERAL = thenParser4Cons23("BLOCK_LITERAL", matchLiteral("["), zeroOrOne("BLOCK_LITERAL_ARGUMENTS_", BLOCK_LITERAL_ARGUMENTS), EXECUTABLE_CODE_SPACE, matchLiteral("]"), BlockLiteral.class);
 	
-	private final Parser<Token, Literal> LITERAL = oneOf1("LITERAL", CONSTANT_REFERENCE, INTEGER_LITERAL, CHARACTER_LITERAL, STRING_LITERAL, BLOCK_LITERAL);
+	private final Parser<Token, Literal> LITERAL = oneOf1("LITERAL", CONSTANT_REFERENCE, INTEGER_LITERAL, CHARACTER_LITERAL, STRING_LITERAL, ARRAY_LITERAL, BLOCK_LITERAL);
 	
 	private final Parser<Token, NestedExpression> NESTED = thenParser4Cons2("NESTED", matchLiteral("("), STATEMENT_INT_DEL, OP_WHITESPACE, matchLiteral(")"), NestedExpression.class);
 	

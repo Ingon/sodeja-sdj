@@ -6,7 +6,7 @@ import org.sodeja.silan.compiler.Compiler;
 import org.sodeja.silan.instruction.Instruction;
 import org.sodeja.silan.instruction.PushCharacterLiteralInstruction;
 
-public class CharacterLiteral implements Literal {
+public class CharacterLiteral implements Literal, LiteralElement {
 	public final Character value;
 	
 	public CharacterLiteral(String str) {

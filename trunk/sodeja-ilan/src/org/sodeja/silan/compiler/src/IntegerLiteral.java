@@ -6,7 +6,7 @@ import org.sodeja.silan.compiler.Compiler;
 import org.sodeja.silan.instruction.Instruction;
 import org.sodeja.silan.instruction.PushIntegerLiteralInstruction;
 
-public class IntegerLiteral implements Literal {
+public class IntegerLiteral implements Literal, LiteralElement {
 	public final Integer value;
 
 	public IntegerLiteral(String strValue) {

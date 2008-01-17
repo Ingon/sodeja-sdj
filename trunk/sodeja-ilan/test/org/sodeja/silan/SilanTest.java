@@ -268,6 +268,10 @@ public class SilanTest extends TestCase {
 		
 	}
 	
+	public void testCollection() throws Exception {
+		assertPrimitiveBoolean(true, execute("#(1 2 3) allSatisfy: [ :a | a < 5]"));
+	}
+	
 	public void testControl1() throws Exception {
 		SILObject val = vm.compileAndExecute("3 < 4 ifTrue: [4 - 3.].");
 		assertPrimitiveInteger(1, val);

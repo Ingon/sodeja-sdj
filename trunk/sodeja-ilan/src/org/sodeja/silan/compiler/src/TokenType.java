@@ -10,4 +10,5 @@ public enum TokenType {
 	CHARACTER,
 	STRING,
 	SEPARATOR,
+	ARRAY
 }
