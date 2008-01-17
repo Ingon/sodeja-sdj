@@ -3,6 +3,7 @@ package org.sodeja.silan.compiler.src;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.sodeja.collections.CollectionUtils;
 import org.sodeja.silan.compiler.Compiler;
 import org.sodeja.silan.instruction.Instruction;
 
@@ -23,11 +24,14 @@ public class Expression implements Compiling {
 
 	@Override
 	public void compile(Compiler compiler, ExecutableCode codeModel, List<Instruction> instructions) {
+		primary.compile(compiler, codeModel, instructions);
+		if(CollectionUtils.isEmpty(messages)) {
+			return;
+		}
+		
 		if(messages.size() > 1) {
 			throw new UnsupportedOperationException("Does not supports cascade compile");
 		}
-		
-		primary.compile(compiler, codeModel, instructions);
 		for(Message message : messages) {
 			message.compile(compiler, codeModel, instructions);
 		}

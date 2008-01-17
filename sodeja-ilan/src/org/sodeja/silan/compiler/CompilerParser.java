@@ -119,7 +119,9 @@ public class CompilerParser {
 
 	private final Parser<Token, Message> MESSAGE = thenParserJust2("MESSAGE", OP_WHITESPACE, (Parser) oneOf1("MESSAGE", UNARY_ROOT_MESSAGE, BINARY_ROOT_MESSAGE, KEYWORD_MESSAGE));
 	
-	private final Parser<Token, List<Message>> MESSAGES = zeroOrMoreSep("MESSAGES", MESSAGE, matchLiteral(";"));
+	private final Parser<Token, List<Message>> CASCADE_MESSAGES = zeroOrMoreSep("CASCADE_MESSAGES", MESSAGE, matchLiteral(";"));
+	
+	private final Parser<Token, List<Message>> MESSAGES = zeroOrOne("MESSAGES", CASCADE_MESSAGES);
 	
 	private final Parser<Token, Expression> EXPRESSION = thenParserCons("EXPRESSION", PRIMARY, MESSAGES, Expression.class);
 	
