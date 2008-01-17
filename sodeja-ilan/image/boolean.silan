@@ -4,6 +4,16 @@ Boolean Object ()
 & operand
 	^(operand ifTrue: [true.] ifFalse: [false.]) and: [self.].
 ###
+
+###
+| operand
+	^(operand ifTrue: [true.] ifFalse: [false.]) or: [self.].
+###
+
+###
+eqv: operand
+	^self == operand.
+###
 }
 {
 }

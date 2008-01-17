@@ -1,6 +1,21 @@
 True Boolean ()
 {
 ###
+and: operand 
+	^operand value.
+###
+
+###
+ifFalse: operand 
+	^nil.
+###
+
+###
+ifFalse: falseOperand ifTrue: trueOperand 
+	^trueOperand value.
+###
+
+###
 ifTrue: operand
 	^operand value.
 ###
@@ -11,8 +26,18 @@ ifTrue: trueOperand ifFalse: falseOperand
 ###
 
 ###
-and: operand 
-	^operand value.
+not
+	^false.
+###
+
+###
+or: operand 
+	^self.
+###
+
+###
+xor: operand
+	^operand not.
 ###
 }
 {

@@ -19,7 +19,7 @@ public class IntegerEqualInstruction extends PrimitiveInstruction {
 		SILPrimitiveObject<Integer> i1 = (SILPrimitiveObject<Integer>) mc.getReceiver();
 		SILPrimitiveObject<Integer> i2 = (SILPrimitiveObject<Integer>) mc.pop();
 		
-		SILObject result = manager.newBoolean(i1.value == i2.value);
+		SILObject result = manager.newBoolean((int) i1.value == (int) i2.value);
 		mc.push(result);
 	}
 }
