@@ -1,0 +1,15 @@
+Java Object ()
+{
+	doesNotUnderstand: (message) () 1 {
+		pushReference message.
+		callJava.
+		returnValue.
+	}
+}
+{
+	makeNew: (name) () 1 {
+		pushReference name.
+		newJavaObject.
+		returnValue.
+	}
+}

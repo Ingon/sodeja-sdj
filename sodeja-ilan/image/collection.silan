@@ -5,6 +5,11 @@ allSatisfy: discriminator
 	self do: [:e | (discriminator value: e) ifFalse: [^false]].
 	^true
 ###
+
+###
+do: operation
+	^self subclassResponsibility
+###
 }
 {
 }
