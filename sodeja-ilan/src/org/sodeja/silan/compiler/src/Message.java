@@ -1,5 +1,5 @@
 package org.sodeja.silan.compiler.src;
 
-public interface Message {
+public interface Message extends Compiling {
 
 }

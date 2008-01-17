@@ -1,6 +1,6 @@
 package org.sodeja.silan.compiler;
 
-enum CompileTargetType {
+public enum CompileTargetType {
 	CODE,
 	METHOD,
 	BLOCK

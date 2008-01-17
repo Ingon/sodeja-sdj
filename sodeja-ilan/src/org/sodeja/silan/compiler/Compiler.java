@@ -62,7 +62,7 @@ public class Compiler {
 		return compiled;
 	}
 
-	private CompiledCode compileCode(ExecutableCode code, CompileTargetType type) {
+	public CompiledCode compileCode(ExecutableCode code, CompileTargetType type) {
 		int statementTempCount = 0;
 		List<Instruction> instructions = new ArrayList<Instruction>();
 		
@@ -70,7 +70,7 @@ public class Compiler {
 			Statement stmt = code.statements.get(i);
 			
 			int lastIndex = instructions.size();
-			compile(code, stmt, instructions);
+			stmt.compile(this, code, instructions);
 			
 			int statementStackUsage = computeStackUsage(instructions, lastIndex);
 			if(statementTempCount < statementStackUsage) {
@@ -94,7 +94,7 @@ public class Compiler {
 		
 		if(code.finalStatement != null) {
 			int lastIndex = instructions.size();
-			compile(code, code.finalStatement, instructions);
+			code.finalStatement.compile(this, code, instructions);
 
 			int statementStackUsage = computeStackUsage(instructions, lastIndex);
 			if(statementTempCount < statementStackUsage) {
@@ -131,104 +131,6 @@ public class Compiler {
 			}
 		}
 		return maxStackUsage;
-	}
-
-	private void compile(ExecutableCode code, Statement stmt, List<Instruction> instructions) {
-		compile(code, stmt.expression, instructions);
-		if(stmt.assignment != null) {
-			instructions.add(new PopReferenceInstruction(stmt.assignment));
-		}
-	}
-
-	private List<Instruction> compile(ExecutableCode codeModel, Expression expression, List<Instruction> instructions) {
-		if(expression.messages.size() > 1) {
-			throw new UnsupportedOperationException("Does not supports cascade compile");
-		}
-		
-		compilePrimary(codeModel, expression.primary, instructions);
-		
-		if(! expression.messages.isEmpty()) {
-			Message message = expression.messages.get(0);
-			if(message instanceof UnaryRootMessage) {
-				UnaryRootMessage root = (UnaryRootMessage) message;
-				
-				compileUnaryChain(codeModel, root.unaries, instructions);
-				compileBinary(codeModel, root.binaries, instructions);
-				compileKeyword(codeModel, root.keyword, instructions);
-			} else if(message instanceof KeywordMessage) {
-				KeywordMessage root = (KeywordMessage) message;
-
-				compileKeyword(codeModel, root, instructions);
-			} else if(message instanceof BinaryRootMessage) {
-				BinaryRootMessage root = (BinaryRootMessage) message;
-				
-				compileBinary(codeModel, root.binaries, instructions);
-				compileKeyword(codeModel, root.keyword, instructions);
-			}
-		}
-		
-		return instructions;
-	}
-	
-	private void compilePrimary(ExecutableCode codeModel, Primary primary, List<Instruction> instructions) {
-		if(primary instanceof NilLiteral) {
-			instructions.add(new PushNilLiteralInstruction());
-		} else if(primary instanceof BooleanLiteral) {
-			instructions.add(new PushBooleanLiteralInstruction(((BooleanLiteral) primary).value));
-		} else if(primary instanceof IntegerLiteral) {
-			instructions.add(new PushIntegerLiteralInstruction(((IntegerLiteral) primary).value));
-		} else if(primary instanceof StringLiteral) {
-			instructions.add(new PushStringLiteralInstruction(((StringLiteral) primary).value));
-		} else if(primary instanceof Reference) {
-			instructions.add(new PushReferenceInstruction(((Reference) primary).value));
-		} else if(primary instanceof BlockLiteral) {
-			BlockLiteral blockLiteral = (BlockLiteral) primary;
-			CompiledCode code = compileCode(blockLiteral.code, CompileTargetType.BLOCK);
-			CompiledBlock block = new CompiledBlock(blockLiteral.argument, 
-					code.localVariables, code.maxStackSize, code.instructions);
-			instructions.add(new PushBlockInstruction(block));
-		} else if(primary instanceof NestedExpression) {
-			NestedExpression nested = (NestedExpression) primary;
-			compile(codeModel, nested.statement, instructions);
-		} else {
-			throw new UnsupportedOperationException();
-		}
-	}
-	
-	private void compileUnaryChain(ExecutableCode codeModel, List<UnaryMessage> messages, List<Instruction> instructions) {
-		if(CollectionUtils.isEmpty(messages)) {
-			return;
-		}
-		
-		for(UnaryMessage msg : messages) {
-			instructions.add(new MessageInstruction(msg.selector, 0));
-		}
-	}
-	
-	private void compileBinary(ExecutableCode codeModel, List<BinaryMessage> messages, List<Instruction> instructions) {
-		if(CollectionUtils.isEmpty(messages)) {
-			return;
-		}
-		
-		for(BinaryMessage binary : messages) {
-			BinaryMessageOperand operand = binary.operand;
-			compilePrimary(codeModel, operand.primary, instructions);
-			compileUnaryChain(codeModel, operand.unaries, instructions);
-			instructions.add(new MessageInstruction(binary.selector, 1));
-		}
-	}
-
-	private void compileKeyword(ExecutableCode codeModel, KeywordMessage root, List<Instruction> instructions) {
-		if(root == null) {
-			return;
-		}
-		
-		for(KeywordMessageArgument arg : root.arguments) {
-			compilePrimary(codeModel, arg.primary, instructions);
-			compileUnaryChain(codeModel, arg.unaries, instructions);
-			compileBinary(codeModel, arg.binaries, instructions);
-		}
-		instructions.add(new MessageInstruction(root.selector, root.arguments.size()));
 	}
 
 	public CompiledMethod compileMethod(String methodSource) {
