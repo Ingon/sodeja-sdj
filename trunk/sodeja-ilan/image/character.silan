@@ -20,6 +20,10 @@ Character Magnitude ()
 		characterToUpperCase.
 		returnValue.
 	}
+
+	codePoint () () 0 {
+		primitiveException NotImplemented.
+	}
 }
 {
 }

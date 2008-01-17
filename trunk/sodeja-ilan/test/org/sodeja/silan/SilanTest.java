@@ -176,7 +176,7 @@ public class SilanTest extends TestCase {
 		assertPrimitiveBoolean(false, val);
 	}
 	
-	public void testChar1() throws Exception {
+	public void testChar() throws Exception {
 		SILObject val = vm.compileAndExecute("$a.");
 		assertPrimitiveCharacter('a', val);
 
@@ -200,6 +200,13 @@ public class SilanTest extends TestCase {
 
 		val = vm.compileAndExecute("$A asUppercase.");
 		assertPrimitiveCharacter('A', val);
+
+		try {
+			vm.compileAndExecute("$a codePoint.");
+			assertTrue(false);
+		} catch(RuntimeException exc) {
+			assertEquals("NotImplemented", exc.getMessage());
+		}
 	}
 	
 	public void testBlock1() throws Exception {
