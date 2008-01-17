@@ -27,8 +27,8 @@ public class ImageObjectManager implements TypeSupplier {
 	private final ScriptLexer lexer;
 	private final ScriptParser parser;
 	
-	private SILClass nilClass = new SILClass(null);
-	private SILClassClass nilClassClass = new SILClassClass(null);
+	private SILClass nilClass;
+	private SILClassClass nilClassClass;
 	private SILObject nilInstance = new SILPrimitiveObject<Void>(this, "Nil", null);
 	
 	private SILObject trueInstance = new SILPrimitiveObject<Boolean>(this, "True", Boolean.TRUE);
@@ -128,6 +128,14 @@ public class ImageObjectManager implements TypeSupplier {
 			return;
 		}
 		
+		if(newClassName.equals("Nil")) {
+			return;
+		}
+		
+		if(types.containsKey(newClassName)) {
+			throw new RuntimeException("Not able to override class definition");
+		}
+		
 		SILClass parent = getByTypeName(parentName);
 		
 		SILClassClass newClassClass = new SILClassClass(parent.getType());
@@ -149,9 +157,11 @@ public class ImageObjectManager implements TypeSupplier {
 		
 		objectClass.setType(objectClassClass);
 		
-		nilClass.setSuperclass(objectClass);
+		nilClass = new SILClass(objectClass);
+		nilClassClass = new SILClassClass(objectClassClass);
+		
+		objectClass.setSuperclass(nilClass);
 		nilClass.setType(nilClassClass);
-		nilClassClass.setSuperclass(objectClassClass);
 		
 		types.put("Object", objectClass);
 		types.put("Nil", nilClass);
