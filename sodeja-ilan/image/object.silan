@@ -40,6 +40,11 @@ hash
 		invokePrimitiveMethod hashCode.
 		returnValue.
 	}
+
+###
+isMemberOf: candidateClass
+	^self class == candidateClass.
+###
 } 
 {
 	new () () 1 {

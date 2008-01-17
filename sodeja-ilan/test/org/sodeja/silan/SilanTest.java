@@ -149,6 +149,14 @@ public class SilanTest extends TestCase {
 		assertPrimitiveBoolean(true, val);
 	}
 	
+	public void testClassMembership() throws Exception {
+		SILObject val = vm.compileAndExecute("3 isMemberOf: Integer.");
+		assertPrimitiveBoolean(true, val);
+		
+		val = vm.compileAndExecute("3 isMemberOf: Object.");
+		assertPrimitiveBoolean(false, val);
+	}
+	
 	public void testBlock1() throws Exception {
 		SILObject val = vm.compileAndExecute("[3 + 4.] value.");
 		assertPrimitiveInteger(7, val);
