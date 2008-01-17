@@ -36,6 +36,12 @@ Integer Number ()
 		returnValue.
 	}
 	
+	= (aNumber) () 1 {
+		pushReference aNumber.
+		integerEqual.
+		returnValue.
+	}
+	
 	negated () () 1 {
 		integerNegate.
 		returnValue.

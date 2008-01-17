@@ -73,9 +73,17 @@ class ScriptParser extends AbstractSemanticParser<Token, Script> {
 	
 	private final Parser<Token, MethodHeader> METHOD_HEADER = thenParser4Cons("METHOD_HEADER", METHOD_NAME, OPTIONAL_IDENTIFIERS, OPTIONAL_IDENTIFIERS, INTEGER, MethodHeader.class);
 
-	private final Parser<Token, List<String>> INSTRUCTION = thenParser3Just2("INSTRUCTION_INT", OPTIONAL_WHITESPACE, IDENTIFIERS, DOT);
+	private final Parser<Token, Object> INSTRUCTION_PARAM = oneOf1("INSTRUCTION_PARAM", IDENTIFIER, INTEGER_INT);
 	
-	private final Parser<Token, InstructionDefinition> INSTRUCTION_DEF = applyCons("INSTRUCTION_DEF", INSTRUCTION, InstructionDefinition.class);
+	private final Parser<Token, List<Object>> INSTRUCTION_PARAMS = zeroOrMoreSep("INSTRUCTION_PARAMS", INSTRUCTION_PARAM, WHITESPACE);
+	
+	private final Parser<Token, String> INSTRUCTION_NAME = thenParserJust2("INSTRUCTION_NAME", OPTIONAL_WHITESPACE, IDENTIFIER);
+	
+	private final Parser<Token, InstructionDefinition> INSTRUCTION_DEF = thenParser4Cons13("INSTRUCTION_DEF", INSTRUCTION_NAME, OPTIONAL_WHITESPACE, INSTRUCTION_PARAMS, DOT, InstructionDefinition.class);
+	
+//	private final Parser<Token, List<String>> INSTRUCTION_INT = thenParser3Just2("INSTRUCTION_INT", OPTIONAL_WHITESPACE, IDENTIFIERS, DOT);
+//	
+//	private final Parser<Token, InstructionDefinition> INSTRUCTION_DEF = applyCons("INSTRUCTION_DEF", INSTRUCTION_INT, InstructionDefinition.class);
 
 	private final Parser<Token, List<InstructionDefinition>> INSTRUCTIONS = zeroOrMoreSep("INSTRUCTIONS", INSTRUCTION_DEF, WHITESPACE);
 	

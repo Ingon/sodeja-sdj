@@ -2,14 +2,12 @@ package org.sodeja.silan.objects;
 
 import java.util.List;
 
-import org.sodeja.collections.ListUtils;
-
 public class InstructionDefinition {
 	public final String name;
-	public final List<String> params;
+	public final List<Object> params;
 
-	public InstructionDefinition(List<String> contents) {
-		this.name = ListUtils.head(contents);
-		this.params = ListUtils.tail(contents);
+	public InstructionDefinition(String name, List<Object> contents) {
+		this.name = name;
+		this.params = contents;
 	}
 }
