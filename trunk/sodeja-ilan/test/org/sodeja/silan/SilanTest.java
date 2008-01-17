@@ -182,6 +182,24 @@ public class SilanTest extends TestCase {
 
 		val = vm.compileAndExecute("$a = $a.");
 		assertPrimitiveBoolean(true, val);
+
+		val = vm.compileAndExecute("$a ~= $a.");
+		assertPrimitiveBoolean(false, val);
+		
+		val = vm.compileAndExecute("$a asLowercase.");
+		assertPrimitiveCharacter('a', val);
+
+		val = vm.compileAndExecute("$A asLowercase.");
+		assertPrimitiveCharacter('a', val);
+		
+		val = vm.compileAndExecute("$a asString.");
+		assertPrimitiveString("a", val);
+
+		val = vm.compileAndExecute("$a asUppercase.");
+		assertPrimitiveCharacter('A', val);
+
+		val = vm.compileAndExecute("$A asUppercase.");
+		assertPrimitiveCharacter('A', val);
 	}
 	
 	public void testBlock1() throws Exception {

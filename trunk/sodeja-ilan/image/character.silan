@@ -5,6 +5,21 @@ Character Magnitude ()
 		characterEqual.
 		returnValue.
 	}
+	
+	asLowercase () () 1 {
+		characterToLowerCase.
+		returnValue.
+	}
+
+	asString () () 1 {
+		characterToString.
+		returnValue.
+	}
+
+	asUppercase () () 1 {
+		characterToUpperCase.
+		returnValue.
+	}
 }
 {
 }

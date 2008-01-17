@@ -166,7 +166,8 @@ public class ImageObjectManager implements TypeSupplier {
 		nilClass = new SILClass(objectClass);
 		nilClassClass = new SILClassClass(objectClassClass);
 		
-		objectClass.setSuperclass(nilClass);
+		// TODO make a way to set the nil and use it inside!!
+//		objectClass.setSuperclass(nilClass);
 		nilClass.setType(nilClassClass);
 		
 		types.put("Object", objectClass);
