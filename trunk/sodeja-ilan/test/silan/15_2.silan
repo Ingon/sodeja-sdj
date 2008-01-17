@@ -1,2 +1,0 @@
-ifTrue: operand
-	^nil.
