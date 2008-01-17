@@ -49,6 +49,11 @@ hash
 isMemberOf: candidateClass
 	^self class == candidateClass.
 ###
+
+###
+isNil
+	^false.
+###
 } 
 {
 	new () () 1 {
