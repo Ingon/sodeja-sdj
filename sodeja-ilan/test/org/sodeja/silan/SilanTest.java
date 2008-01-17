@@ -13,13 +13,6 @@ public class SilanTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		vm = new VirtualMachine();
-		
-//		vm.subclass("Object", "Association", ListUtils.asList("key", "value"));
-//		vm.compileAndAttach(readFully("test/silan/6_1.silan"), "Association");
-//		vm.compileAndAttach(readFully("test/silan/6_2.silan"), "Association");
-//		vm.compileAndAttach(readFully("test/silan/7_1.silan"), "Association");
-//		vm.compileAndAttach(readFully("test/silan/7_2.silan"), "Association");
-//		vm.compileAndAttach(readFully("test/silan/11_1.silan"), "Association");
 	}
 
 	public void testObject() throws Exception {
@@ -31,61 +24,60 @@ public class SilanTest extends TestCase {
 		}
 	}
 	
-	public void test1() throws Exception {
+	public void testParser1() throws Exception {
 		assertPrimitiveInteger(8, execute("3 + 5"));
 	}
 
-	public void test2() throws Exception {
+	public void testParser2() throws Exception {
 		assertPrimitiveInteger(10, execute("| a | a := 3 + 5. a + 2"));
 	}
 
-	public void test3() throws Exception {
-		assertPrimitiveInteger(-8, executeFF("3"));
+	public void testParser3() throws Exception {
+		assertPrimitiveInteger(-8, execute("| a | a := 3 + 5. a negated"));
 	}
 
-	public void test4() throws Exception {
-		assertPrimitiveInteger(8, executeFF("4"));
+	public void testParser4() throws Exception {
+		assertPrimitiveInteger(8, execute("| a | a := 3 + 5. a negated negated"));
 	}
 
-	public void test5() throws Exception {
-		assertPrimitiveInteger(64, executeFF("5"));
+	public void testParser5() throws Exception {
+		assertPrimitiveInteger(64, execute("| a | a := 3 + 5. a raisedTo: 2"));
 	}
 
-	public void test6() throws Exception {
-		assertPrimitiveInteger(8, executeFF("6"));
+	public void testParser6() throws Exception {
+		assertPrimitiveInteger(8, execute("| a | a := Pair new. a key: 3 + 5. a key"));
 	}
 
-	public void test7() throws Exception {
-		assertPrimitiveInteger(15, executeFF("7"));
+	public void testParser7() throws Exception {
+		assertPrimitiveInteger(15, execute("| a | a := Pair new. a key: 3 + 5. a value: 4 + 3. a key: a key + a value. a key"));
 	}
 
-	public void test8() throws Exception {
-		assertPrimitiveInteger(14, executeFF("8"));
+	public void testParser8() throws Exception {
+		assertPrimitiveInteger(14, execute("3 + 5 + 6"));
 	}
 
-	public void test9() throws Exception {
-		assertPrimitiveInteger(8, executeFF("9"));
+	public void testParser9() throws Exception {
+		assertPrimitiveInteger(8, execute("3 negated + 5 + 6"));
 	}
 
-	public void test10() throws Exception {
-		assertPrimitiveInteger(16, executeFF("10"));
+	public void testParser10() throws Exception {
+		assertPrimitiveInteger(16, execute("| a | a := Pair new. a key: 3 + 5 + 8. a key"));
 	}
 
-	public void test11() throws Exception {
-		assertPrimitiveInteger(17, executeFF("11"));
+	public void testParser11() throws Exception {
+		assertPrimitiveInteger(17, execute("| a | a := Pair new. a key: 3 + 5 + 9 value: 1 negated + 2. a key"));
 	}
 
-	public void test12() throws Exception {
-		assertPrimitiveString("iuhu", executeFF("12"));
+	public void testParser12() throws Exception {
+		assertPrimitiveString("iuhu", execute("'iu', 'hu'"));
 	}
 
-	public void test13() throws Exception {
-		executeFF("13");
+	public void testParser13() throws Exception {
+		execute("Transcript show: 'The message'");
 	}
 	
-	public void test14() throws Exception {
-		SILObject val = executeFF("14");
-		assertSame(vm.objects.nil(), val);
+	public void testParser14() throws Exception {
+		assertSame(vm.objects.nil(), execute("nil."));
 	}
 	
 	public void testEq1() throws Exception {
