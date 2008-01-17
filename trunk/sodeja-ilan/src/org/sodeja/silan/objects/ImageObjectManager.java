@@ -144,9 +144,9 @@ public class ImageObjectManager implements TypeSupplier {
 	}
 	
 	private void initObject() {
-		SILClassClass objectClassClass = new SILClassClass(null);
-		
 		SILClass objectClass = new SILClass(null);
+		SILClassClass objectClassClass = new SILClassClass(objectClass);
+		
 		objectClass.setType(objectClassClass);
 		
 		nilClass.setSuperclass(objectClass);
