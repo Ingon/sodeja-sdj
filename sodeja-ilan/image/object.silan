@@ -59,6 +59,10 @@ isNil
 notNil
 	^true.
 ###
+
+	subclassResponsibility () () 0 {
+		primitiveException SubclassResponsibility.
+	}
 } 
 {
 	new () () 1 {

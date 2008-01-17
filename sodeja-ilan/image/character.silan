@@ -5,7 +5,17 @@ Character Magnitude ()
 		characterEqual.
 		returnValue.
 	}
-	
+
+###
+< aCharacter
+	^self asInteger < aCharacter asInteger.
+###
+
+	asInteger () () 1 {
+		characterToInteger.
+		returnValue.
+	}
+
 	asLowercase () () 1 {
 		characterToLowerCase.
 		returnValue.
