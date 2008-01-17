@@ -98,6 +98,10 @@ public class ImageObjectManager implements TypeSupplier {
 		return new SILPrimitiveObject<String>(this, "String", value);
 	}
 
+	public SILObject newCharacter(Character value) {
+		return new SILPrimitiveObject<Character>(this, "Character", value);
+	}
+	
 	public SILObject newBoolean(Boolean value) {
 		if(value) {
 			return trueInstance;
@@ -114,6 +118,8 @@ public class ImageObjectManager implements TypeSupplier {
 			return (SILObject) obj;
 		} else if(obj instanceof String) {
 			return newString((String) obj);
+		} else if(obj instanceof Character) {
+			return newCharacter((Character) obj);
 		} else if(obj instanceof Integer) {
 			return newInteger((Integer) obj);
 		} else if(obj instanceof Boolean) {

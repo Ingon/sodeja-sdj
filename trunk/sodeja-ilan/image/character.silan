@@ -1,0 +1,10 @@
+Character Magnitude ()
+{
+	= (aChar) () 1 {
+		pushReference aChar.
+		characterEqual.
+		returnValue.
+	}
+}
+{
+}

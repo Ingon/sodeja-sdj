@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.sodeja.silan.compiler.Compiler;
 import org.sodeja.silan.instruction.Instruction;
+import org.sodeja.silan.instruction.PushCharacterLiteralInstruction;
 
 public class CharacterLiteral implements Literal {
 	public final Character value;
@@ -14,6 +15,6 @@ public class CharacterLiteral implements Literal {
 
 	@Override
 	public void compile(Compiler compiler, ExecutableCode codeModel, List<Instruction> instructions) {
-		throw new UnsupportedOperationException();
+		instructions.add(new PushCharacterLiteralInstruction(value));
 	}
 }

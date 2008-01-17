@@ -5,8 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 
-import org.sodeja.collections.ListUtils;
-
 import junit.framework.TestCase;
 
 public class SilanTest extends TestCase {
@@ -178,6 +176,14 @@ public class SilanTest extends TestCase {
 		assertPrimitiveBoolean(false, val);
 	}
 	
+	public void testChar1() throws Exception {
+		SILObject val = vm.compileAndExecute("$a.");
+		assertPrimitiveCharacter('a', val);
+
+		val = vm.compileAndExecute("$a = $a.");
+		assertPrimitiveBoolean(true, val);
+	}
+	
 	public void testBlock1() throws Exception {
 		SILObject val = vm.compileAndExecute("[3 + 4.] value.");
 		assertPrimitiveInteger(7, val);
@@ -227,6 +233,11 @@ public class SilanTest extends TestCase {
 	private void assertPrimitiveInteger(Integer expected, SILObject actual) {
 		assertTrue(actual instanceof SILPrimitiveObject);
 		assertEquals(expected, ((SILPrimitiveObject<Integer>) actual).value);
+	}
+
+	private void assertPrimitiveCharacter(Character expected, SILObject actual) {
+		assertTrue(actual instanceof SILPrimitiveObject);
+		assertEquals(expected, ((SILPrimitiveObject<Character>) actual).value);
 	}
 	
 	private void assertPrimitiveString(String expected, SILObject actual) {
