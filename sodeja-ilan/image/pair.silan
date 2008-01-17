@@ -30,6 +30,11 @@ key: k value: v
 = comparand
 	^(key = comparand key) & (value = comparand value).
 ###
+
+###
+~= comparand
+	^(self = comparand) == false.
+###
 }
 {
 }

@@ -118,9 +118,9 @@ public class SilanTest extends TestCase {
 		assertPrimitiveBoolean(false, val);
 
 		val = vm.compileAndExecute("| a b | a := Pair new key: 2 value: 5. b := a copy. a ~= b.");
-		assertPrimitiveBoolean(true, val);
+		assertPrimitiveBoolean(false, val);
 
-		val = vm.compileAndExecute("| a b | a := Pair new key: 2 value: 5. b := a copy. a == b.");
+		val = vm.compileAndExecute("| a b | a := Pair new key: 2 value: 5. b := a copy. a ~~ b.");
 		assertPrimitiveBoolean(true, val);
 	}
 	

@@ -43,15 +43,15 @@ public class InstructionMethod implements Method {
 			
 			Instruction instruction = null;
 			if(PrimitiveInstruction.class.isAssignableFrom(instructionClass)) {
-				Constructor constr = instructionClass.getConstructors()[0];
+				Constructor<Instruction> constr = (Constructor<Instruction>) instructionClass.getConstructors()[0];
 				if(CollectionUtils.isEmpty(def.params)) {
-					instruction = (Instruction) constr.newInstance(manager);
+					instruction = constr.newInstance(manager);
 				} else {
-					instruction = (Instruction) constr.newInstance(getManagerParams(manager, def));
+					instruction = constr.newInstance(getManagerParams(manager, def));
 				}
 			} else if(! CollectionUtils.isEmpty(def.params)){
-				Constructor constr = instructionClass.getConstructors()[0];
-				instruction = (Instruction) constr.newInstance(getParams(def));
+				Constructor<Instruction> constr = (Constructor<Instruction>) instructionClass.getConstructors()[0];
+				instruction = constr.newInstance(getParams(def));
 			} else {
 				instruction = instructionClass.newInstance();
 			}
