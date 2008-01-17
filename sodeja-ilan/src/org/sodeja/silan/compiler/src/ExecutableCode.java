@@ -1,6 +1,5 @@
 package org.sodeja.silan.compiler.src;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.sodeja.collections.CollectionUtils;
