@@ -23,6 +23,10 @@ public class SilanTest extends TestCase {
 			assertEquals("SubclassResponsibility", exc.getMessage());
 		}
 	}
+
+	public void testParser0() throws Exception {
+		assertPrimitiveInteger(3, execute("3"));
+	}
 	
 	public void testParser1() throws Exception {
 		assertPrimitiveInteger(8, execute("3 + 5"));
@@ -77,49 +81,49 @@ public class SilanTest extends TestCase {
 	}
 	
 	public void testParser14() throws Exception {
-		assertSame(vm.objects.nil(), execute("nil."));
+		assertSame(vm.objects.nil(), execute("nil"));
 	}
 	
 	public void testEq1() throws Exception {
-		SILObject val = vm.compileAndExecute("| a | a := 3. ^a == a.");
+		SILObject val = vm.compileAndExecute("| a | a := 3. ^a == a");
 		assertPrimitiveBoolean(true, val);
 	}
 
 	public void testEq2() throws Exception {
-		SILObject val = vm.compileAndExecute("| a | a := 3. ^a ~~ a.");
+		SILObject val = vm.compileAndExecute("| a | a := 3. ^a ~~ a");
 		assertPrimitiveBoolean(false, val);
 	}
 
 	public void testEq3() throws Exception {
-		SILObject val = vm.compileAndExecute("| a | a := 3. ^a = a.");
+		SILObject val = vm.compileAndExecute("| a | a := 3. ^a = a");
 		assertPrimitiveBoolean(true, val);
 	}
 
 	public void testEq4() throws Exception {
-		SILObject val = vm.compileAndExecute("| a | a := 3. ^a ~= a.");
+		SILObject val = vm.compileAndExecute("| a | a := 3. ^a ~= a");
 		assertPrimitiveBoolean(false, val);
 	}
 	
 	public void testClass() throws Exception {
-		SILObject val = vm.compileAndExecute("3 class.");
+		SILObject val = vm.compileAndExecute("3 class");
 		assertTrue(val instanceof SILClass);
 
-		val = vm.compileAndExecute("3 class class.");
+		val = vm.compileAndExecute("3 class class");
 		assertTrue(val instanceof SILClass);
 		assertTrue(val instanceof SILClassClass);
 	}
 	
 	public void testCopy() throws Exception {
-		SILObject val = vm.compileAndExecute("| a b | a := Pair new key: 2 value: 5. b := a copy. a = b.");
+		SILObject val = vm.compileAndExecute("| a b | a := Pair new key: 2 value: 5. b := a copy. a = b");
 		assertPrimitiveBoolean(true, val);
 		
-		val = vm.compileAndExecute("| a b | a := Pair new key: 2 value: 5. b := a copy. a == b.");
+		val = vm.compileAndExecute("| a b | a := Pair new key: 2 value: 5. b := a copy. a == b");
 		assertPrimitiveBoolean(false, val);
 
-		val = vm.compileAndExecute("| a b | a := Pair new key: 2 value: 5. b := a copy. a ~= b.");
+		val = vm.compileAndExecute("| a b | a := Pair new key: 2 value: 5. b := a copy. a ~= b");
 		assertPrimitiveBoolean(false, val);
 
-		val = vm.compileAndExecute("| a b | a := Pair new key: 2 value: 5. b := a copy. a ~~ b.");
+		val = vm.compileAndExecute("| a b | a := Pair new key: 2 value: 5. b := a copy. a ~~ b");
 		assertPrimitiveBoolean(true, val);
 	}
 	
@@ -133,37 +137,27 @@ public class SilanTest extends TestCase {
 		assertPrimitiveBoolean(true, execute("false | true"));
 		assertPrimitiveBoolean(true, execute("true | false"));
 		assertPrimitiveBoolean(true, execute("true | true"));
-		
-		SILObject val = vm.compileAndExecute("true | false.");
-		assertPrimitiveBoolean(true, val);
 
-		val = vm.compileAndExecute("true eqv: true.");
-		assertPrimitiveBoolean(true, val);
-		
-		val = vm.compileAndExecute("true eqv: false.");
-		assertPrimitiveBoolean(false, val);
-
-		val = vm.compileAndExecute("false eqv: true.");
-		assertPrimitiveBoolean(false, val);
-		
-		val = vm.compileAndExecute("false eqv: false.");
-		assertPrimitiveBoolean(true, val);
+		assertPrimitiveBoolean(true, execute("false eqv: false"));
+		assertPrimitiveBoolean(false, execute("false eqv: true"));
+		assertPrimitiveBoolean(false, execute("true eqv: false"));
+		assertPrimitiveBoolean(true, execute("true eqv: true"));
 	}
 	
 	public void testHash() throws Exception {
-		SILObject val = vm.compileAndExecute("| a | a := Object new. a hash = a identityHash.");
+		SILObject val = vm.compileAndExecute("| a | a := Object new. a hash = a identityHash");
 		assertPrimitiveBoolean(true, val);
 	}
 	
 	public void testClassMembership() throws Exception {
-		SILObject val = vm.compileAndExecute("3 isMemberOf: Integer.");
+		SILObject val = vm.compileAndExecute("3 isMemberOf: Integer");
 		assertPrimitiveBoolean(true, val);
 		
-		val = vm.compileAndExecute("3 isMemberOf: Object.");
+		val = vm.compileAndExecute("3 isMemberOf: Object");
 		assertPrimitiveBoolean(false, val);
 		
 		try {
-			vm.compileAndExecute("3 isKindOf: Boolean.");
+			vm.compileAndExecute("3 isKindOf: Boolean");
 			assertTrue(false);
 		} catch(RuntimeException exc) {
 			assertEquals("NotImplemented", exc.getMessage());
@@ -171,16 +165,16 @@ public class SilanTest extends TestCase {
 	}
 	
 	public void testNil() throws Exception {
-		SILObject val = vm.compileAndExecute("3 isNil.");
+		SILObject val = vm.compileAndExecute("3 isNil");
 		assertPrimitiveBoolean(false, val);
 		
-		val = vm.compileAndExecute("3 notNil.");
+		val = vm.compileAndExecute("3 notNil");
 		assertPrimitiveBoolean(true, val);
 		
-		val = vm.compileAndExecute("nil isNil.");
+		val = vm.compileAndExecute("nil isNil");
 		assertPrimitiveBoolean(true, val);
 
-		val = vm.compileAndExecute("nil notNil.");
+		val = vm.compileAndExecute("nil notNil");
 		assertPrimitiveBoolean(false, val);
 	}
 	
@@ -188,65 +182,65 @@ public class SilanTest extends TestCase {
 		SILObject val = vm.compileAndExecute("$a.");
 		assertPrimitiveCharacter('a', val);
 
-		val = vm.compileAndExecute("$a = $a.");
+		val = vm.compileAndExecute("$a = $a");
 		assertPrimitiveBoolean(true, val);
 
-		val = vm.compileAndExecute("$a ~= $a.");
+		val = vm.compileAndExecute("$a ~= $a");
 		assertPrimitiveBoolean(false, val);
 		
-		val = vm.compileAndExecute("$a asLowercase.");
+		val = vm.compileAndExecute("$a asLowercase");
 		assertPrimitiveCharacter('a', val);
 
-		val = vm.compileAndExecute("$A asLowercase.");
+		val = vm.compileAndExecute("$A asLowercase");
 		assertPrimitiveCharacter('a', val);
 		
-		val = vm.compileAndExecute("$a asString.");
+		val = vm.compileAndExecute("$a asString");
 		assertPrimitiveString("a", val);
 
-		val = vm.compileAndExecute("$a asUppercase.");
+		val = vm.compileAndExecute("$a asUppercase");
 		assertPrimitiveCharacter('A', val);
 
-		val = vm.compileAndExecute("$A asUppercase.");
+		val = vm.compileAndExecute("$A asUppercase");
 		assertPrimitiveCharacter('A', val);
 
 		try {
-			vm.compileAndExecute("$a codePoint.");
+			vm.compileAndExecute("$a codePoint");
 			assertTrue(false);
 		} catch(RuntimeException exc) {
 			assertEquals("NotImplemented", exc.getMessage());
 		}
 		
-		val = vm.compileAndExecute("$a < $A.");
+		val = vm.compileAndExecute("$a < $A");
 		assertPrimitiveBoolean(false, val);
 
-		val = vm.compileAndExecute("$A < $a.");
+		val = vm.compileAndExecute("$A < $a");
 		assertPrimitiveBoolean(true, val);
 
-		val = vm.compileAndExecute("$a > $A.");
+		val = vm.compileAndExecute("$a > $A");
 		assertPrimitiveBoolean(true, val);
 
-		val = vm.compileAndExecute("$A > $a.");
+		val = vm.compileAndExecute("$A > $a");
 		assertPrimitiveBoolean(false, val);
 
-		val = vm.compileAndExecute("$a isDigit.");
+		val = vm.compileAndExecute("$a isDigit");
 		assertPrimitiveBoolean(false, val);
 		
-		val = vm.compileAndExecute("$3 isDigit.");
+		val = vm.compileAndExecute("$3 isDigit");
 		assertPrimitiveBoolean(true, val);
 
-		val = vm.compileAndExecute("$a isLetter.");
+		val = vm.compileAndExecute("$a isLetter");
 		assertPrimitiveBoolean(true, val);
 		
-		val = vm.compileAndExecute("$3 isLetter.");
+		val = vm.compileAndExecute("$3 isLetter");
 		assertPrimitiveBoolean(false, val);
 
-		val = vm.compileAndExecute("$a isAlphaNumeric.");
+		val = vm.compileAndExecute("$a isAlphaNumeric");
 		assertPrimitiveBoolean(true, val);
 		
-		val = vm.compileAndExecute("$3 isAlphaNumeric.");
+		val = vm.compileAndExecute("$3 isAlphaNumeric");
 		assertPrimitiveBoolean(true, val);
 
-		val = vm.compileAndExecute("$% isAlphaNumeric.");
+		val = vm.compileAndExecute("$% isAlphaNumeric");
 		assertPrimitiveBoolean(false, val);
 	}
 	
