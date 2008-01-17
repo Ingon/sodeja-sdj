@@ -63,6 +63,10 @@ notNil
 	subclassResponsibility () () 0 {
 		primitiveException SubclassResponsibility.
 	}
+	
+	doesNotUnderstand: (aMessage) () 0 {
+		primitiveException DoesNotUnderstand.
+	}
 } 
 {
 	new () () 1 {

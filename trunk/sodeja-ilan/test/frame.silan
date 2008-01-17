@@ -1,0 +1,4 @@
+| frame |
+frame := Java makeNew: 'javax.swing.JFrame'.
+frame setVisible: true.
+^frame

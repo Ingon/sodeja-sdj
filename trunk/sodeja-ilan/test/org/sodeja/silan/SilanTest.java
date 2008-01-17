@@ -1,11 +1,10 @@
 package org.sodeja.silan;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 
 import junit.framework.TestCase;
+
+import org.sodeja.files.FileUtils;
 
 public class SilanTest extends TestCase {
 	private VirtualMachine vm;
@@ -319,23 +318,7 @@ public class SilanTest extends TestCase {
 	}
 	
 	private SILObject executeFF(String fileNumber) throws IOException {
-		String source = readFully("test/silan/" + fileNumber + ".silan");
+		String source = FileUtils.readFully("test/silan/" + fileNumber + ".silan");
 		return vm.compileAndExecute(source);
-	}
-	
-	private static String readFully(String file) throws IOException {
-		return readFully(new FileReader(file));
-	}
-	
-	private static String readFully(Reader reader) throws IOException {
-		StringBuilder sb = new StringBuilder();
-		BufferedReader br = new BufferedReader(reader);
-		
-		for(String str = br.readLine();str != null;str = br.readLine()) {
-			sb.append(str);
-			sb.append("\r\n");
-		}
-		
-		return sb.toString();
 	}
 }

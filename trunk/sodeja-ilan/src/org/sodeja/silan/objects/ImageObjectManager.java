@@ -12,6 +12,8 @@ import org.sodeja.silan.CompiledBlock;
 import org.sodeja.silan.CompiledMethod;
 import org.sodeja.silan.SILClass;
 import org.sodeja.silan.SILClassClass;
+import org.sodeja.silan.SILDefaultObject;
+import org.sodeja.silan.SILIndexedObject;
 import org.sodeja.silan.SILObject;
 import org.sodeja.silan.SILPrimitiveObject;
 import org.sodeja.silan.TypeSupplier;
@@ -113,7 +115,22 @@ public class ImageObjectManager implements TypeSupplier {
 		return new SILPrimitiveObject<Pair<CompiledBlock, Context>>(this, "CompiledBlock", Pair.of(block, ctx));
 	}
 	
+	public SILObject newMessage(String selector, SILObject[] arguments) {
+		SILDefaultObject def = new SILDefaultObject(getByTypeName("Message"));
+		def.set("selector", newString(selector));
+		def.set("arguments", newArray(arguments));
+		return def;
+	}
+	
+	public SILObject newArray(SILObject[] values) {
+		return new SILIndexedObject(getByTypeName("Array"), values);
+	}
+	
 	public SILObject newValueIfNeeded(Object obj) {
+		if(obj == null) {
+			return nil();
+		}
+		
 		if(obj instanceof SILObject) {
 			return (SILObject) obj;
 		} else if(obj instanceof String) {
@@ -125,7 +142,9 @@ public class ImageObjectManager implements TypeSupplier {
 		} else if(obj instanceof Boolean) {
 			return newBoolean((Boolean) obj);
 		}
-		throw new UnsupportedOperationException();
+		
+		return new SILPrimitiveObject(this, "Java", obj);
+//		throw new UnsupportedOperationException();
 	}
 	
 	public void subclass(String parentName, String newClassName, List<String> instanceVariables) {

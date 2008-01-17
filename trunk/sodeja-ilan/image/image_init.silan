@@ -1,6 +1,6 @@
 object.silan
 nil.silan
-;message.silan
+message.silan
 
 ;CompiledCode
 compiled_code.silan
@@ -20,6 +20,7 @@ integer.silan
 collection.silan
 sequenceable_collection.silan
 arrayed_collection.silan
+array.silan
 string.silan
 interval.silan
 
@@ -29,3 +30,5 @@ true.silan
 false.silan
 
 transcript.silan
+
+java.silan

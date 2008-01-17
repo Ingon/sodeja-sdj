@@ -1,0 +1,18 @@
+Message Object (selector arguments)
+{
+###
+selector
+	^selector
+###
+
+###
+arguments
+	^arguments
+###
+}
+{
+###
+new
+	^nil
+###
+}

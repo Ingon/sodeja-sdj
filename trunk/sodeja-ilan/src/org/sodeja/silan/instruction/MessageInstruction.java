@@ -25,7 +25,9 @@ public class MessageInstruction implements Instruction {
 		
 		CompiledMethod method = clazz.findMethod(selector);
 		if(method == null) {
-			throw new UnsupportedOperationException("Implements doesNotUnderstand: " + selector);
+			method = clazz.findMethod("doesNotUnderstand:");
+			arguments = new SILObject[] { process.vm.objects.newMessage(selector, arguments) };
+//			throw new UnsupportedOperationException("Implements doesNotUnderstand: " + selector);
 		}
 		
 		MethodContext newContext = new MethodContext(
