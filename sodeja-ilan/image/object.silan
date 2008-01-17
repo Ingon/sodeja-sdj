@@ -54,6 +54,11 @@ isMemberOf: candidateClass
 isNil
 	^false.
 ###
+
+###
+notNil
+	^true.
+###
 } 
 {
 	new () () 1 {

@@ -168,8 +168,14 @@ public class SilanTest extends TestCase {
 		SILObject val = vm.compileAndExecute("3 isNil.");
 		assertPrimitiveBoolean(false, val);
 		
+		val = vm.compileAndExecute("3 notNil.");
+		assertPrimitiveBoolean(true, val);
+		
 		val = vm.compileAndExecute("nil isNil.");
 		assertPrimitiveBoolean(true, val);
+
+		val = vm.compileAndExecute("nil notNil.");
+		assertPrimitiveBoolean(false, val);
 	}
 	
 	public void testBlock1() throws Exception {
