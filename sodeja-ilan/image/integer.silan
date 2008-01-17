@@ -66,22 +66,22 @@ Integer Number ()
 timesRepeat: aBlock
 	(self < 1) ifTrue: [^nil.].
 	aBlock value.
-	(self - 1) timesRepeat: aBlock.
+	(self - 1) timesRepeat: aBlock
 ###
 
 ###
 to: stop by: step
-	^Interval from: self to: stop by: step.
+	^Interval from: self to: stop by: step
 ###
 
 ###
 to: stop
-	^Interval from: self to: stop.
+	^Interval from: self to: stop
 ###
 
 ###
 to: stop do: operation
-	(self to: stop) do: operation.
+	(self to: stop) do: operation
 ###
 }
 {

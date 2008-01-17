@@ -12,7 +12,7 @@ Boolean Object ()
 
 ###
 eqv: operand
-	^self == operand.
+	^self == operand
 ###
 }
 {

@@ -2,42 +2,42 @@ False Boolean ()
 {
 ###
 and: operand 
-	^self.
+	^self
 ###
 
 ###
 ifFalse: operand 
-	^operand value.
+	^operand value
 ###
 
 ###
 ifFalse: falseOperand ifTrue: trueOperand 
-	^falseOperand value.
+	^falseOperand value
 ###
 
 ###
 ifTrue: operand
-	^nil.
+	^nil
 ###
 
 ###
 ifTrue: trueOperand ifFalse: falseOperand 
-	^falseOperand value.
+	^falseOperand value
 ###
 
 ###
 not
-	^true.
+	^true
 ###
 
 ###
 or: operand 
-	^operand value.
+	^operand value
 ###
 
 ###
 xor: operand
-	^operand.
+	^operand
 ###
 }
 {
