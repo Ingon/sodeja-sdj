@@ -2,12 +2,12 @@ Nil Object ()
 {
 ###
 isNil
-	^true.
+	^true
 ###
 
 ###
 notNil
-	^false.
+	^false
 ###
 }
 {

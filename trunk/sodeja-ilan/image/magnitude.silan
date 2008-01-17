@@ -2,51 +2,51 @@ Magnitude Object ()
 {
 ###
 < operand
-	^self subclassResponsibility.
+	^self subclassResponsibility
 ###
 
 ###
 <= operand
-	^(operand < self) == false.
+	^(operand < self) == false
 ###
 
 ###
 = aMagnitude
-	^self subclassResponsibility.
+	^self subclassResponsibility
 ###
 
 ###
 > operand
-	^operand < self.
+	^operand < self
 ###
 
 ###
 >= operand
-	^(self < operand) == false.
+	^(self < operand) == false
 ###
 
 ###
 between: min and: max
-	^self >= min and: [self <= max.].
+	^self >= min and: [self <= max]
 ###
 
 ###
 hash
-	^self subclassResponsibility.
+	^self subclassResponsibility
 ###
 
 ###
 max: operand
 	^self < operand
-		ifTrue:  [operand.]
-		ifFalse: [self.].
+		ifTrue:  [operand]
+		ifFalse: [self]
 ###
 
 ###
 min: operand
 	^self < operand
-		ifTrue:  [self.]
-		ifFalse: [operand.].
+		ifTrue:  [self]
+		ifFalse: [operand]
 ###
 }
 {

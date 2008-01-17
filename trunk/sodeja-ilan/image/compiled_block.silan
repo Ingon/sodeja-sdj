@@ -20,7 +20,7 @@ CompiledBlock CompiledCode ()
 ###
 repeat
 	"Note that this message should be inlined by the Compiler for literal block receivers."
-	[self value. true.] whileTrue.
+	[self value. true] whileTrue
 ###
 
 	whileTrue () () 1 {

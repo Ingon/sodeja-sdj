@@ -4,20 +4,20 @@ Interval SequenceableCollection (start stop step)
 setFrom: startInteger to: stopInteger by: stepInteger
 	start := startInteger.
 	stop := stopInteger.
-	step := stepInteger.
+	step := stepInteger
 ###
 
 ###
 do: aBlock
-	^ self ido: aBlock from: start to: stop step: step.
+	^ self ido: aBlock from: start to: stop step: step
 ###
 
 ###
 ido: aBlock from: start to: stop step: step
 	start <= stop ifTrue: [
 		aBlock value: start.
-		self ido: aBlock from: start + 1 to: stop step: step.
-	].
+		self ido: aBlock from: start + 1 to: stop step: step
+	]
 ###
 }
 {
@@ -26,7 +26,7 @@ from: fromNumber to: toNumber
 	^self 
 		from: fromNumber
 		to: toNumber
-		by: 1.
+		by: 1
 ###
 
 ###
@@ -34,6 +34,6 @@ from: fromNumber to: toNumber by: byNumber
 	^self new
 		setFrom: fromNumber
 		to: toNumber
-		by: byNumber.
+		by: byNumber
 ###
 }

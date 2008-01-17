@@ -2,7 +2,7 @@ Object Nil ()
 {
 ###
 = comparand
-	^self == comparand.
+	^self == comparand
 ###
 
 	== (comparand) () 1 {
@@ -13,12 +13,12 @@ Object Nil ()
 
 ###
 ~= comparand
-	^(self = comparand) == false.
+	^(self = comparand) == false
 ###
 
 ###
 ~~ comparand
-	^(self == comparand) == false.
+	^(self == comparand) == false
 ###
 
 	class () () 1 {
@@ -33,7 +33,7 @@ Object Nil ()
 	
 ###
 hash
-	^self identityHash.
+	^self identityHash
 ###
 
 	identityHash () () 1 {
@@ -47,17 +47,17 @@ hash
 
 ###
 isMemberOf: candidateClass
-	^self class == candidateClass.
+	^self class == candidateClass
 ###
 
 ###
 isNil
-	^false.
+	^false
 ###
 
 ###
 notNil
-	^true.
+	^true
 ###
 
 	subclassResponsibility () () 0 {

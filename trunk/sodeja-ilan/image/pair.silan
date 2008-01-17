@@ -2,38 +2,38 @@ Pair Object (key value)
 {
 ###
 key: k
-	key := k.
+	key := k
 ###
 
 ###
 key
-	^key.
+	^key
 ###
 
 ###
 value: v
-	value := v.
+	value := v
 ###
 
 ###
 value
-	^value.
+	^value
 ###
 
 ###
 key: k value: v
 	key := k.
-	value := v.
+	value := v
 ###
 
 ###
 = comparand
-	^(key = comparand key) & (value = comparand value).
+	^(key = comparand key) & (value = comparand value)
 ###
 
 ###
 ~= comparand
-	^(self = comparand) == false.
+	^(self = comparand) == false
 ###
 }
 {
