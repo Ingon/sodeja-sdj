@@ -4,6 +4,11 @@ Nil Object ()
 isNil
 	^true.
 ###
+
+###
+notNil
+	^false.
+###
 }
 {
 }
