@@ -3,42 +3,16 @@ package org.sodeja.silan.compiler;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.sodeja.collections.CollectionUtils;
-import org.sodeja.silan.CompiledBlock;
 import org.sodeja.silan.CompiledCode;
 import org.sodeja.silan.CompiledMethod;
-import org.sodeja.silan.compiler.src.BinaryMessage;
-import org.sodeja.silan.compiler.src.BinaryMessageOperand;
-import org.sodeja.silan.compiler.src.BinaryRootMessage;
-import org.sodeja.silan.compiler.src.BlockLiteral;
-import org.sodeja.silan.compiler.src.BooleanLiteral;
 import org.sodeja.silan.compiler.src.ExecutableCode;
-import org.sodeja.silan.compiler.src.Expression;
-import org.sodeja.silan.compiler.src.IntegerLiteral;
-import org.sodeja.silan.compiler.src.KeywordMessage;
-import org.sodeja.silan.compiler.src.KeywordMessageArgument;
-import org.sodeja.silan.compiler.src.Message;
 import org.sodeja.silan.compiler.src.MethodDeclaration;
-import org.sodeja.silan.compiler.src.NestedExpression;
-import org.sodeja.silan.compiler.src.NilLiteral;
-import org.sodeja.silan.compiler.src.Primary;
-import org.sodeja.silan.compiler.src.Reference;
 import org.sodeja.silan.compiler.src.Statement;
-import org.sodeja.silan.compiler.src.StringLiteral;
 import org.sodeja.silan.compiler.src.Token;
-import org.sodeja.silan.compiler.src.UnaryMessage;
-import org.sodeja.silan.compiler.src.UnaryRootMessage;
 import org.sodeja.silan.instruction.ClearStackInstruction;
 import org.sodeja.silan.instruction.Instruction;
 import org.sodeja.silan.instruction.MessageInstruction;
-import org.sodeja.silan.instruction.PopReferenceInstruction;
-import org.sodeja.silan.instruction.PushBlockInstruction;
-import org.sodeja.silan.instruction.PushBooleanLiteralInstruction;
 import org.sodeja.silan.instruction.PushInstruction;
-import org.sodeja.silan.instruction.PushIntegerLiteralInstruction;
-import org.sodeja.silan.instruction.PushNilLiteralInstruction;
-import org.sodeja.silan.instruction.PushReferenceInstruction;
-import org.sodeja.silan.instruction.PushStringLiteralInstruction;
 import org.sodeja.silan.instruction.ReturnCallerValueInstruction;
 import org.sodeja.silan.instruction.ReturnCodeInstruction;
 import org.sodeja.silan.instruction.ReturnSelfInstruction;
@@ -115,6 +89,19 @@ public class Compiler {
 		return new CompiledCode(code.localVariables, statementTempCount, instructions);
 	}
 	
+	public CompiledMethod compileMethod(String methodSource) {
+		List<Token> tokens = lexer.lexify(methodSource);
+		MethodDeclaration method = parser.parseMethod(tokens);
+		
+		CompiledCode code = compileCode(method.code, CompileTargetType.METHOD);
+		
+		CompiledMethod compiledMethod = new CompiledMethod(
+				method.header.getSelector(), method.header.getArguments(), 
+				code.localVariables, code.maxStackSize, code.instructions);
+		compiledMethod.setSource(methodSource);
+		return compiledMethod;
+	}
+	
 	private int computeStackUsage(List<Instruction> instructions, int lastIndex) {
 		int maxStackUsage = 0;
 		int stackUsage = 0;
@@ -131,18 +118,5 @@ public class Compiler {
 			}
 		}
 		return maxStackUsage;
-	}
-
-	public CompiledMethod compileMethod(String methodSource) {
-		List<Token> tokens = lexer.lexify(methodSource);
-		MethodDeclaration method = parser.parseMethod(tokens);
-		
-		CompiledCode code = compileCode(method.code, CompileTargetType.METHOD);
-		
-		CompiledMethod compiledMethod = new CompiledMethod(
-				method.header.getSelector(), method.header.getArguments(), 
-				code.localVariables, code.maxStackSize, code.instructions);
-		compiledMethod.setSource(methodSource);
-		return compiledMethod;
 	}
 }
