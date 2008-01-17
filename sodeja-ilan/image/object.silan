@@ -1,13 +1,44 @@
 Object Nil ()
 {
 ###
+= comparand
+	^self == comparand.
+###
+
+	== (comparand) () 1 {
+		pushReference comparand.
+		objectsSame.
+		returnValue.
+	}
+
+###
 ~= comparand
 	^(self = comparand) == false.
 ###
+
+###
+~~ comparand
+	^(self == comparand) == false.
+###
+
+	class () () 1 {
+		invokePrimitiveMethod getType.
+		returnValue.
+	}
+	
+	copy () () 1 {
+		invokePrimitiveMethod copy.
+		returnValue.
+	}
 } 
 {
 	new () () 1 {
 		newObject.
+		returnValue.
+	}
+
+	class () () 1 {
+		invokePrimitiveMethod getType.
 		returnValue.
 	}
 }

@@ -109,6 +109,19 @@ public class ImageObjectManager implements TypeSupplier {
 		return new SILPrimitiveObject<Pair<CompiledBlock, Context>>(this, "CompiledBlock", Pair.of(block, ctx));
 	}
 	
+	public SILObject newValueIfNeeded(Object obj) {
+		if(obj instanceof SILObject) {
+			return (SILObject) obj;
+		} else if(obj instanceof String) {
+			return newString((String) obj);
+		} else if(obj instanceof Integer) {
+			return newInteger((Integer) obj);
+		} else if(obj instanceof Boolean) {
+			return newBoolean((Boolean) obj);
+		}
+		throw new UnsupportedOperationException();
+	}
+	
 	public void subclass(String parentName, String newClassName, List<String> instanceVariables) {
 		if(parentName.equals("Nil")) {
 			initObject();

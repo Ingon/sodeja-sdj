@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sodeja.collections.CollectionUtils;
-import org.sodeja.functional.Pair;
 import org.sodeja.silan.CompiledBlock;
 import org.sodeja.silan.CompiledCode;
 import org.sodeja.silan.CompiledMethod;
@@ -35,6 +34,7 @@ import org.sodeja.silan.instruction.MessageInstruction;
 import org.sodeja.silan.instruction.PopReferenceInstruction;
 import org.sodeja.silan.instruction.PushBlockInstruction;
 import org.sodeja.silan.instruction.PushBooleanLiteralInstruction;
+import org.sodeja.silan.instruction.PushInstruction;
 import org.sodeja.silan.instruction.PushIntegerLiteralInstruction;
 import org.sodeja.silan.instruction.PushNilLiteralInstruction;
 import org.sodeja.silan.instruction.PushReferenceInstruction;
@@ -68,11 +68,15 @@ public class Compiler {
 		
 		for(int i = 0, n = code.statements.size();i < n;i++) {
 			Statement stmt = code.statements.get(i);
-			Pair<List<Instruction>, Integer> result = compile(code, stmt);
-			if(statementTempCount < result.second) {
-				statementTempCount = result.second;
+			
+			int lastIndex = instructions.size();
+			compile(code, stmt, instructions);
+			
+			int statementStackUsage = computeStackUsage(instructions, lastIndex);
+			if(statementTempCount < statementStackUsage) {
+				statementTempCount = statementStackUsage;
 			}
-			instructions.addAll(result.first);
+			
 			if(i == n - 1 && code.finalStatement == null) {
 				if(type == CompileTargetType.CODE) {
 					instructions.add(new ReturnCodeInstruction());
@@ -89,11 +93,14 @@ public class Compiler {
 		}
 		
 		if(code.finalStatement != null) {
-			Pair<List<Instruction>, Integer> result = compile(code, code.finalStatement);
-			if(statementTempCount < result.second) {
-				statementTempCount = result.second;
+			int lastIndex = instructions.size();
+			compile(code, code.finalStatement, instructions);
+
+			int statementStackUsage = computeStackUsage(instructions, lastIndex);
+			if(statementTempCount < statementStackUsage) {
+				statementTempCount = statementStackUsage;
 			}
-			instructions.addAll(result.first);
+			
 			if(type == CompileTargetType.CODE) {
 				instructions.add(new ReturnCodeInstruction());
 			} else if(type == CompileTargetType.METHOD) {
@@ -108,138 +115,122 @@ public class Compiler {
 		return new CompiledCode(code.localVariables, statementTempCount, instructions);
 	}
 	
-	private Pair<List<Instruction>, Integer> compile(ExecutableCode code, Statement stmt) {
-		Pair<List<Instruction>, Integer> result = compile(code, stmt.expression);
-		if(stmt.assignment != null) {
-			result.first.add(new PopReferenceInstruction(stmt.assignment));
+	private int computeStackUsage(List<Instruction> instructions, int lastIndex) {
+		int maxStackUsage = 0;
+		int stackUsage = 0;
+		for(int i = lastIndex, n = instructions.size();i < n;i++) {
+			Instruction instr = instructions.get(i);
+			if(instr instanceof PushInstruction) {
+				stackUsage++;
+				
+				if(stackUsage > maxStackUsage) {
+					maxStackUsage = stackUsage;
+				}
+			} else if(instr instanceof MessageInstruction) {
+				stackUsage -= ((MessageInstruction) instr).getSize();
+			}
 		}
-		return result;
+		return maxStackUsage;
 	}
 
-	private Pair<List<Instruction>, Integer> compile(ExecutableCode code, Expression expression) {
+	private void compile(ExecutableCode code, Statement stmt, List<Instruction> instructions) {
+		compile(code, stmt.expression, instructions);
+		if(stmt.assignment != null) {
+			instructions.add(new PopReferenceInstruction(stmt.assignment));
+		}
+	}
+
+	private List<Instruction> compile(ExecutableCode codeModel, Expression expression, List<Instruction> instructions) {
 		if(expression.messages.size() > 1) {
 			throw new UnsupportedOperationException("Does not supports cascade compile");
 		}
 		
-		int tempCount = 1;
-		List<Instruction> instructions = new ArrayList<Instruction>();
-		Pair<List<Instruction>, Integer> subResult = null;
-		
-		if(expression.primary instanceof NestedExpression) {
-			subResult = compile(code, ((NestedExpression) expression.primary).statement);
-			instructions.addAll(subResult.first);
-		} else {
-			instructions.add(compilePrimary(expression.primary));
-		}
+		compilePrimary(codeModel, expression.primary, instructions);
 		
 		if(! expression.messages.isEmpty()) {
 			Message message = expression.messages.get(0);
 			if(message instanceof UnaryRootMessage) {
 				UnaryRootMessage root = (UnaryRootMessage) message;
 				
-				List<Instruction> unaryInstructions = compileUnaryChain(root.unaries);
-				instructions.addAll(unaryInstructions);
-				
-				if(! CollectionUtils.isEmpty(root.binaries)) {
-					List<Instruction> binInstructions = compileBinary(root.binaries);
-					instructions.addAll(binInstructions);
-
-					tempCount++;
-				}
-
-				if(root.keyword != null) {
-					instructions.addAll(compileKeyword(root.keyword));
-					tempCount = Math.max(tempCount, root.keyword.arguments.size() + 2);
-				}
+				compileUnaryChain(codeModel, root.unaries, instructions);
+				compileBinary(codeModel, root.binaries, instructions);
+				compileKeyword(codeModel, root.keyword, instructions);
 			} else if(message instanceof KeywordMessage) {
 				KeywordMessage root = (KeywordMessage) message;
-				
-				instructions.addAll(compileKeyword(root));
-				tempCount += root.arguments.size() + 1;
+
+				compileKeyword(codeModel, root, instructions);
 			} else if(message instanceof BinaryRootMessage) {
 				BinaryRootMessage root = (BinaryRootMessage) message;
 				
-				List<Instruction> binInstructions = compileBinary(root.binaries);
-				instructions.addAll(binInstructions);
-				tempCount++;
-				
-				if (root.keyword != null) {
-					instructions.addAll(compileKeyword(root.keyword));
-					tempCount = Math.max(tempCount, root.keyword.arguments.size() + 2);
-				}
+				compileBinary(codeModel, root.binaries, instructions);
+				compileKeyword(codeModel, root.keyword, instructions);
 			}
 		}
 		
-		if(subResult != null) {
-			tempCount = Math.max(tempCount, subResult.second);
-		}
-		
-		return Pair.of(instructions, tempCount);
-	}
-	
-	private List<Instruction> compileKeyword(KeywordMessage root) {
-		List<Instruction> instructions = new ArrayList<Instruction>();
-		for(KeywordMessageArgument arg : root.arguments) {
-			instructions.add(compilePrimary(arg.primary));
-
-			if(! CollectionUtils.isEmpty(arg.unaries)) {
-				List<Instruction> unaryInstructions = compileUnaryChain(arg.unaries);
-				instructions.addAll(unaryInstructions);
-			}
-			
-			if(! CollectionUtils.isEmpty(arg.binaries)) {
-				List<Instruction> binInstructions = compileBinary(arg.binaries);
-				instructions.addAll(binInstructions);
-			}
-		}
-		instructions.add(new MessageInstruction(root.selector, root.arguments.size()));
 		return instructions;
 	}
-
-	private Instruction compilePrimary(Primary primary) {
+	
+	private void compilePrimary(ExecutableCode codeModel, Primary primary, List<Instruction> instructions) {
 		if(primary instanceof NilLiteral) {
-			return new PushNilLiteralInstruction();
+			instructions.add(new PushNilLiteralInstruction());
 		} else if(primary instanceof BooleanLiteral) {
-			return new PushBooleanLiteralInstruction(((BooleanLiteral) primary).value);
+			instructions.add(new PushBooleanLiteralInstruction(((BooleanLiteral) primary).value));
 		} else if(primary instanceof IntegerLiteral) {
-			return new PushIntegerLiteralInstruction(((IntegerLiteral) primary).value);
+			instructions.add(new PushIntegerLiteralInstruction(((IntegerLiteral) primary).value));
 		} else if(primary instanceof StringLiteral) {
-			return new PushStringLiteralInstruction(((StringLiteral) primary).value);
+			instructions.add(new PushStringLiteralInstruction(((StringLiteral) primary).value));
 		} else if(primary instanceof Reference) {
-			return new PushReferenceInstruction(((Reference) primary).value);
+			instructions.add(new PushReferenceInstruction(((Reference) primary).value));
 		} else if(primary instanceof BlockLiteral) {
 			BlockLiteral blockLiteral = (BlockLiteral) primary;
 			CompiledCode code = compileCode(blockLiteral.code, CompileTargetType.BLOCK);
 			CompiledBlock block = new CompiledBlock(blockLiteral.argument, 
 					code.localVariables, code.maxStackSize, code.instructions);
-			return new PushBlockInstruction(block);
+			instructions.add(new PushBlockInstruction(block));
+		} else if(primary instanceof NestedExpression) {
+			NestedExpression nested = (NestedExpression) primary;
+			compile(codeModel, nested.statement, instructions);
+		} else {
+			throw new UnsupportedOperationException();
 		}
-		throw new UnsupportedOperationException();
 	}
 	
-	private List<Instruction> compileBinary(List<BinaryMessage> binaries) {
-		List<Instruction> instructions = new ArrayList<Instruction>();
-		for(BinaryMessage binary : binaries) {
-			BinaryMessageOperand operand = binary.operand;
-			instructions.add(compilePrimary(operand.primary));
-			
-			List<Instruction> unary = compileUnaryChain(operand.unaries);
-			instructions.addAll(unary);
-			
-			instructions.add(new MessageInstruction(binary.selector, 1));
+	private void compileUnaryChain(ExecutableCode codeModel, List<UnaryMessage> messages, List<Instruction> instructions) {
+		if(CollectionUtils.isEmpty(messages)) {
+			return;
 		}
 		
-		return instructions;
-	}
-
-	private List<Instruction> compileUnaryChain(List<UnaryMessage> messages) {
-		List<Instruction> instructions = new ArrayList<Instruction>();
 		for(UnaryMessage msg : messages) {
 			instructions.add(new MessageInstruction(msg.selector, 0));
 		}
-		return instructions;
 	}
 	
+	private void compileBinary(ExecutableCode codeModel, List<BinaryMessage> messages, List<Instruction> instructions) {
+		if(CollectionUtils.isEmpty(messages)) {
+			return;
+		}
+		
+		for(BinaryMessage binary : messages) {
+			BinaryMessageOperand operand = binary.operand;
+			compilePrimary(codeModel, operand.primary, instructions);
+			compileUnaryChain(codeModel, operand.unaries, instructions);
+			instructions.add(new MessageInstruction(binary.selector, 1));
+		}
+	}
+
+	private void compileKeyword(ExecutableCode codeModel, KeywordMessage root, List<Instruction> instructions) {
+		if(root == null) {
+			return;
+		}
+		
+		for(KeywordMessageArgument arg : root.arguments) {
+			compilePrimary(codeModel, arg.primary, instructions);
+			compileUnaryChain(codeModel, arg.unaries, instructions);
+			compileBinary(codeModel, arg.binaries, instructions);
+		}
+		instructions.add(new MessageInstruction(root.selector, root.arguments.size()));
+	}
+
 	public CompiledMethod compileMethod(String methodSource) {
 		List<Token> tokens = lexer.lexify(methodSource);
 		MethodDeclaration method = parser.parseMethod(tokens);

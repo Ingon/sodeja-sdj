@@ -30,6 +30,7 @@ public class InstructionMethod implements Method {
 			return new CompiledMethod(header.selector, header.arguments, 
 					header.locals, header.stackSize, instructions);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException("Unable to load instructions for: " + header.selector);
 		}
 	}
@@ -43,7 +44,11 @@ public class InstructionMethod implements Method {
 			Instruction instruction = null;
 			if(PrimitiveInstruction.class.isAssignableFrom(instructionClass)) {
 				Constructor constr = instructionClass.getConstructors()[0];
-				instruction = (Instruction) constr.newInstance(manager);
+				if(CollectionUtils.isEmpty(def.params)) {
+					instruction = (Instruction) constr.newInstance(manager);
+				} else {
+					instruction = (Instruction) constr.newInstance(getManagerParams(manager, def));
+				}
 			} else if(! CollectionUtils.isEmpty(def.params)){
 				Constructor constr = instructionClass.getConstructors()[0];
 				instruction = (Instruction) constr.newInstance(getParams(def));
@@ -60,6 +65,15 @@ public class InstructionMethod implements Method {
 		return def.params.toArray(new Object[def.params.size()]);
 	}
 
+	private Object[] getManagerParams(ImageObjectManager manager, InstructionDefinition def) {
+		Object[] basic = getParams(def);
+		Object[] result = new Object[basic.length + 1];
+		
+		System.arraycopy(basic, 0, result, 1, basic.length);
+		result[0] = manager;
+		return result;
+	}
+	
 	private static String getInstructionClass(InstructionDefinition def) {
 		return INSTRUCTIONS_PACKAGE + 
 			StringUtils.capitalizeFirst(def.name) + 

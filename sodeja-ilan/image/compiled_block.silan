@@ -35,9 +35,11 @@ repeat
 		returnSelf.
 	}
 	
-	whileTrue () () 2 {
+	whileTrue (aBlock) () 2 {
 		callBlock.
 		gotoIfTrue.
+		pushReference anObject.
+		callBlock.
 		returnSelf.
 	}
 }
