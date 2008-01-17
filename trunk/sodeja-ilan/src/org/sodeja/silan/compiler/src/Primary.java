@@ -1,5 +1,5 @@
 package org.sodeja.silan.compiler.src;
 
-public interface Primary {
+public interface Primary extends Compiling {
 
 }
