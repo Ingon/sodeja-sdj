@@ -40,6 +40,10 @@ hash
 		invokePrimitiveMethod hashCode.
 		returnValue.
 	}
+	
+	isKindOf: (candidateClass) () 0 {
+		primitiveException NotImplemented.
+	}
 
 ###
 isMemberOf: candidateClass

@@ -155,6 +155,13 @@ public class SilanTest extends TestCase {
 		
 		val = vm.compileAndExecute("3 isMemberOf: Object.");
 		assertPrimitiveBoolean(false, val);
+		
+		try {
+			vm.compileAndExecute("3 isKindOf: Boolean.");
+			assertTrue(false);
+		} catch(RuntimeException exc) {
+			assertEquals("NotImplemented", exc.getMessage());
+		}
 	}
 	
 	public void testBlock1() throws Exception {
