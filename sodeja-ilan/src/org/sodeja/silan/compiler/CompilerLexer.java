@@ -110,8 +110,20 @@ public class CompilerLexer {
 			}
 			
 			if(ch == '#') {
-				// Symbol or array literal - not implemented
-				throw new UnsupportedOperationException();
+				char next = str.charAt(i + 1);
+				if(next == '(') {
+					result.add(new Token("#", TokenType.SEPARATOR));
+					continue;
+				} else if(identifierStart(ch)) {
+					int identifierEnd = readUntilIdentifierEnd(str, i);
+					String identifier = str.substring(i, identifierEnd);
+					
+					result.add(new Token(identifier, TokenType.IDENTIFIER));
+					i = identifierEnd - 1;
+					continue;
+				} else {
+					throw new UnsupportedOperationException();
+				}
 			}
 			
 			if(ch == '.') {
@@ -232,6 +244,16 @@ public class CompilerLexer {
 		return -1;
 	}
 
+	public static int readUntilArray(String str, int start) {
+		for(int i = start + 1, n = str.length();i < n;i++) {
+			char ch = str.charAt(i);
+			if(ch == ')') {
+				return i;
+			}
+		}
+		
+		return -1;
+	}
 	
 	public static boolean whitespaceChar(char ch) {
 		return Character.isWhitespace(ch);

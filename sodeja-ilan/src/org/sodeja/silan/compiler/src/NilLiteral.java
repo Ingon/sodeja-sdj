@@ -6,7 +6,7 @@ import org.sodeja.silan.compiler.Compiler;
 import org.sodeja.silan.instruction.Instruction;
 import org.sodeja.silan.instruction.PushNilLiteralInstruction;
 
-public class NilLiteral implements Literal {
+public class NilLiteral implements Literal, LiteralElement {
 	
 	private static final PushNilLiteralInstruction INSTRUCTION = new PushNilLiteralInstruction();
 	

@@ -6,7 +6,7 @@ import org.sodeja.silan.compiler.Compiler;
 import org.sodeja.silan.instruction.Instruction;
 import org.sodeja.silan.instruction.PushBooleanLiteralInstruction;
 
-public class BooleanLiteral implements Literal {
+public class BooleanLiteral implements Literal, LiteralElement {
 	public final Boolean value;
 	
 	public BooleanLiteral(String val) {

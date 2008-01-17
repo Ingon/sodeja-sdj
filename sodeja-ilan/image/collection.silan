@@ -1,5 +1,10 @@
 Collection Object ()
 {
+###
+allSatisfy: discriminator
+	self do: [:e | (discriminator value: e) ifFalse: [^false]].
+	^true
+###
 }
 {
 }
