@@ -1,5 +1,53 @@
 Magnitude Object ()
 {
+###
+< operand
+	^self subclassResponsibility.
+###
+
+###
+<= operand
+	^(operand < self) == false.
+###
+
+###
+= aMagnitude
+	^self subclassResponsibility.
+###
+
+###
+> operand
+	^operand < self.
+###
+
+###
+>= operand
+	^(self < operand) == false.
+###
+
+###
+between: min and: max
+	^self >= min and: [self <= max.].
+###
+
+###
+hash
+	^self subclassResponsibility.
+###
+
+###
+max: operand
+	^self < operand
+		ifTrue:  [operand.]
+		ifFalse: [self.].
+###
+
+###
+min: operand
+	^self < operand
+		ifTrue:  [self.]
+		ifFalse: [operand.].
+###
 }
 {
 }

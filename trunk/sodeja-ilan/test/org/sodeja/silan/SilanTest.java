@@ -22,6 +22,15 @@ public class SilanTest extends TestCase {
 //		vm.compileAndAttach(readFully("test/silan/11_1.silan"), "Association");
 	}
 
+	public void testObject() throws Exception {
+		try {
+			vm.compileAndExecute("$a subclassResponsibility.");
+			assertTrue(false);
+		} catch(RuntimeException exc) {
+			assertEquals("SubclassResponsibility", exc.getMessage());
+		}
+	}
+	
 	public void test1() throws Exception {
 		assertPrimitiveInteger(8, execute("1"));
 	}
@@ -143,7 +152,7 @@ public class SilanTest extends TestCase {
 	}
 	
 	public void testHash() throws Exception {
-		SILObject val = vm.compileAndExecute("| a | a := 3. a hash = a identityHash.");
+		SILObject val = vm.compileAndExecute("| a | a := Object new. a hash = a identityHash.");
 		assertPrimitiveBoolean(true, val);
 	}
 	
@@ -207,6 +216,18 @@ public class SilanTest extends TestCase {
 		} catch(RuntimeException exc) {
 			assertEquals("NotImplemented", exc.getMessage());
 		}
+		
+		val = vm.compileAndExecute("$a < $A.");
+		assertPrimitiveBoolean(false, val);
+
+		val = vm.compileAndExecute("$A < $a.");
+		assertPrimitiveBoolean(true, val);
+
+		val = vm.compileAndExecute("$a > $A.");
+		assertPrimitiveBoolean(true, val);
+
+		val = vm.compileAndExecute("$A > $a.");
+		assertPrimitiveBoolean(false, val);
 	}
 	
 	public void testBlock1() throws Exception {

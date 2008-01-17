@@ -42,6 +42,11 @@ Integer Number ()
 		returnValue.
 	}
 	
+	hash () () 1 {
+		integerHash.
+		returnValue.
+	}
+	
 	negated () () 1 {
 		integerNegate.
 		returnValue.
