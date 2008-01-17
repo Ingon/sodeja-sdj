@@ -4,7 +4,7 @@ import org.sodeja.silan.CompiledBlock;
 import org.sodeja.silan.Process;
 import org.sodeja.silan.SILObject;
 
-public class PushBlockInstruction implements Instruction {
+public class PushBlockInstruction implements PushInstruction {
 
 	private CompiledBlock block;
 	

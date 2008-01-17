@@ -9,6 +9,11 @@ ifTrue: operand
 ifTrue: trueOperand ifFalse: falseOperand 
 	^trueOperand value.
 ###
+
+###
+and: operand 
+	^operand value.
+###
 }
 {
 }

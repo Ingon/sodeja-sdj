@@ -16,6 +16,15 @@ public class SILDefaultObject implements SILObject {
 	}
 
 	@Override
+	public SILObject copy() {
+		SILDefaultObject copy = new SILDefaultObject(type);
+		for(int i = 0;i < instanceVariables.length;i++) {
+			copy.instanceVariables[i] = instanceVariables[i].copy();
+		}
+		return copy;
+	}
+
+	@Override
 	public void set(String reference, SILObject value) {
 		int index = type.getInstanceVariableIndex(reference);
 		if(index < 0) {

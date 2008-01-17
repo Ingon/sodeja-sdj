@@ -65,6 +65,11 @@ public class SILClass implements SILObject {
 		return type;
 	}
 	
+	@Override
+	public SILObject copy() {
+		throw new UnsupportedOperationException();
+	}
+
 	public void setType(SILClass type) {
 		if(type instanceof SILClassClass) {
 			((SILClassClass) type).setInstanceClass(this);

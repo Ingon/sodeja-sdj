@@ -3,7 +3,7 @@ package org.sodeja.silan.instruction;
 import org.sodeja.silan.Process;
 import org.sodeja.silan.SILObject;
 
-public class PushStringLiteralInstruction implements Instruction {
+public class PushStringLiteralInstruction implements PushInstruction {
 
 	private final String value;
 	

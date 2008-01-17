@@ -40,4 +40,8 @@ public class MessageInstruction implements Instruction {
 		}
 		return result;
 	}
+
+	public int getSize() {
+		return size;
+	}
 }

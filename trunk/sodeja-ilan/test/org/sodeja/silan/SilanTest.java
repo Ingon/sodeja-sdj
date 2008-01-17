@@ -81,6 +81,49 @@ public class SilanTest extends TestCase {
 		assertSame(vm.objects.nil(), val);
 	}
 	
+	public void testEq1() throws Exception {
+		SILObject val = vm.compileAndExecute("| a | a := 3. ^a == a.");
+		assertPrimitiveBoolean(true, val);
+	}
+
+	public void testEq2() throws Exception {
+		SILObject val = vm.compileAndExecute("| a | a := 3. ^a ~~ a.");
+		assertPrimitiveBoolean(false, val);
+	}
+
+	public void testEq3() throws Exception {
+		SILObject val = vm.compileAndExecute("| a | a := 3. ^a = a.");
+		assertPrimitiveBoolean(true, val);
+	}
+
+	public void testEq4() throws Exception {
+		SILObject val = vm.compileAndExecute("| a | a := 3. ^a ~= a.");
+		assertPrimitiveBoolean(false, val);
+	}
+	
+	public void testClass() throws Exception {
+		SILObject val = vm.compileAndExecute("3 class.");
+		assertTrue(val instanceof SILClass);
+
+		val = vm.compileAndExecute("3 class class.");
+		assertTrue(val instanceof SILClass);
+		assertTrue(val instanceof SILClassClass);
+	}
+	
+	public void testCopy() throws Exception {
+		SILObject val = vm.compileAndExecute("| a b | a := Pair new key: 2 value: 5. b := a copy. a = b.");
+		assertPrimitiveBoolean(true, val);
+		
+		val = vm.compileAndExecute("| a b | a := Pair new key: 2 value: 5. b := a copy. a == b.");
+		assertPrimitiveBoolean(false, val);
+
+		val = vm.compileAndExecute("| a b | a := Pair new key: 2 value: 5. b := a copy. a ~= b.");
+		assertPrimitiveBoolean(true, val);
+
+		val = vm.compileAndExecute("| a b | a := Pair new key: 2 value: 5. b := a copy. a == b.");
+		assertPrimitiveBoolean(true, val);
+	}
+	
 	public void testBlock1() throws Exception {
 		SILObject val = vm.compileAndExecute("[3 + 4.] value.");
 		assertPrimitiveInteger(7, val);

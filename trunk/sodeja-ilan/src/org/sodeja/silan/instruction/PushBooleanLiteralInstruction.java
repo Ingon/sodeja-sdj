@@ -2,7 +2,7 @@ package org.sodeja.silan.instruction;
 
 import org.sodeja.silan.Process;
 
-public class PushBooleanLiteralInstruction implements Instruction {
+public class PushBooleanLiteralInstruction implements PushInstruction {
 	public final Boolean value;
 	
 	public PushBooleanLiteralInstruction(Boolean value) {

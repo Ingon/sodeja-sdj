@@ -20,6 +20,11 @@ public class SILPrimitiveObject<T> implements SILObject {
 	}
 
 	@Override
+	public SILObject copy() {
+		return new SILPrimitiveObject<T>(typeSupplier, typeName, value);
+	}
+
+	@Override
 	public String toString() {
 		return String.valueOf(value);
 	}
