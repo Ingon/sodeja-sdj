@@ -1,5 +1,34 @@
 Array ArrayedCollection ()
 {
+	primitiveAt: (index) () 1 {
+		invokePrimitiveMethod at.
+		returnSelf.
+	}
+
+	primitiveAtPut (index obj) () 1 {
+		invokePrimitiveMethod at_put.
+		returnValue.
+	}
+
+	primitiveSize () () 1 {
+		invokePrimitiveMethod length.
+		returnValue.
+	}
+
+###
+size
+	^self primitiveSize
+###
+
+###
+at: index
+	self primitiveAt: index
+###	
+
+###
+do: operation
+	1 to: self size do: [:i | operation value: (self at: i)]
+###
 }
 {
 }

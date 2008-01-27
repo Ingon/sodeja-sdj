@@ -125,6 +125,14 @@ public class ImageObjectManager implements TypeSupplier {
 	public SILObject newArray(SILObject[] values) {
 		return new SILIndexedObject(getByTypeName("Array"), values);
 	}
+
+	public SILObject newArray(int size) {
+		SILObject[] values = new SILObject[size];
+		for(int i = 0;i < size;i++) {
+			values[i] = nil();
+		}
+		return newArray(values);
+	}
 	
 	public SILObject newValueIfNeeded(Object obj) {
 		if(obj == null) {
