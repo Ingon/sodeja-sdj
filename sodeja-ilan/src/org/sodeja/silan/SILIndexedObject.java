@@ -14,6 +14,18 @@ public class SILIndexedObject implements SILObject {
 		this.values = values;
 	}
 	
+	public int length() {
+		return values.length;
+	}
+	
+	public SILObject at(int index) {
+		return values[index];
+	}
+	
+	public void at_put(int index, SILObject obj) {
+		values[index] = obj;
+	}
+	
 	@Override
 	public SILClass getType() {
 		return type;
