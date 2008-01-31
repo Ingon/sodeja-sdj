@@ -10,8 +10,10 @@ import org.sodeja.silan.compiler.src.MethodDeclaration;
 import org.sodeja.silan.compiler.src.Statement;
 import org.sodeja.silan.compiler.src.Token;
 import org.sodeja.silan.instruction.ClearStackInstruction;
+import org.sodeja.silan.instruction.DuplicateStackInstruction;
 import org.sodeja.silan.instruction.Instruction;
 import org.sodeja.silan.instruction.MessageInstruction;
+import org.sodeja.silan.instruction.PopReferenceInstruction;
 import org.sodeja.silan.instruction.PushInstruction;
 import org.sodeja.silan.instruction.ReturnCallerValueInstruction;
 import org.sodeja.silan.instruction.ReturnCodeInstruction;
@@ -83,6 +85,9 @@ public class Compiler {
 		} else if(type == CompileTargetType.METHOD) {
 			instructions.add(new ReturnSelfInstruction());
 		} else if(type == CompileTargetType.BLOCK) {
+			if(instructions.get(instructions.size() - 1) instanceof PopReferenceInstruction) {
+				instructions.add(instructions.size() - 1, new DuplicateStackInstruction());
+			}
 			instructions.add(new ReturnValueInstruction());
 		} else {
 			throw new RuntimeException();

@@ -1,6 +1,8 @@
 package org.sodeja.silan.instruction;
 
 import org.sodeja.silan.Process;
+import org.sodeja.silan.SILObject;
+import org.sodeja.silan.context.Context;
 
 public class PopReferenceInstruction implements Instruction {
 	public final String reference;
@@ -11,6 +13,11 @@ public class PopReferenceInstruction implements Instruction {
 
 	@Override
 	public void execute(Process process) {
-		process.getActiveContext().update(reference, process.getActiveContext().pop());
+		Context activeContext = process.getActiveContext();
+		
+		SILObject obj = activeContext.pop();
+		if(activeContext.update(reference, obj)) {
+			return;
+		}
 	}
 }

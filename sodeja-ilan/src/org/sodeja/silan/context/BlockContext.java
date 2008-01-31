@@ -47,6 +47,15 @@ public class BlockContext extends AbstractChildContext {
 		throw new UnsupportedOperationException("Not implemented above this scope - " + reference);
 	}
 	
+	@Override
+	public boolean update(String reference, SILObject value) {
+		if(super.update(reference, value)) {
+			return true;
+		}
+		
+		return home.update(reference, value);
+	}
+
 	public Context getHome() {
 		return home;
 	}
