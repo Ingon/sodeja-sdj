@@ -73,7 +73,11 @@ public class CompilerLexer {
 			if(ch == '-') {
 				char next = str.charAt(i + 1);
 				if(isDigit(next)) {
-					throw new UnsupportedOperationException();
+					int integerEnd = readUntilDigits(str, i + 1);
+					String val = str.substring(i, integerEnd);
+					result.add(new Token(val, TokenType.INTEGER));
+					i = integerEnd - 1;
+					continue;
 				} else if(whitespaceChar(next)) {
 					// do nothing special.
 				} else {

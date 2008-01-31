@@ -279,6 +279,10 @@ public class SilanTest extends TestCase {
 		assertPrimitiveInteger(1, execute("#(1 2 3) do: [ :a | ^a]"));
 	}
 	
+	public void testCollection4() throws Exception {
+		assertPrimitiveInteger(108, execute("| sum | sum := 0. #(-35 51 6 -192 278) do: [:element | sum := sum + element]. ^sum"));
+	}
+	
 	public void testControl1() throws Exception {
 		SILObject val = vm.compileAndExecute("3 < 4 ifTrue: [4 - 3.].");
 		assertPrimitiveInteger(1, val);
