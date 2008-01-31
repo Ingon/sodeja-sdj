@@ -134,7 +134,7 @@ public class ImageObjectManager implements TypeSupplier {
 		return newArray(values);
 	}
 	
-	public SILObject newValueIfNeeded(Object obj) {
+	public SILObject wrap(Object obj) {
 		if(obj == null) {
 			return nil();
 		}
@@ -153,6 +153,13 @@ public class ImageObjectManager implements TypeSupplier {
 		
 		return new SILPrimitiveObject(this, "Java", obj);
 //		throw new UnsupportedOperationException();
+	}
+	
+	public Object unwrap(SILObject obj) {
+		if(obj instanceof SILPrimitiveObject) {
+			return ((SILPrimitiveObject<?>) obj).value;
+		}
+		return obj;
 	}
 	
 	public void subclass(String parentName, String newClassName, List<String> instanceVariables) {

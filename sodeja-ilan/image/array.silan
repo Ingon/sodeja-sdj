@@ -1,13 +1,16 @@
 Array ArrayedCollection ()
 {
 	primitiveAt: (index) () 1 {
+		pushReference index.
 		invokePrimitiveMethod at.
-		returnSelf.
+		returnValue.
 	}
 
 	primitiveAtPut (index obj) () 1 {
+		pushReference index.
+		pushReference obj.
 		invokePrimitiveMethod at_put.
-		returnValue.
+		returnSelf.
 	}
 
 	primitiveSize () () 1 {
@@ -22,7 +25,7 @@ size
 
 ###
 at: index
-	self primitiveAt: index
+	^self primitiveAt: index
 ###	
 
 ###
