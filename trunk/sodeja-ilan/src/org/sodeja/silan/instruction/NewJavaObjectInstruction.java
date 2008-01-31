@@ -16,7 +16,7 @@ public class NewJavaObjectInstruction extends PrimitiveInstruction {
 		String typeName = val.value;
 		try {
 			Class clazz = Class.forName(typeName);
-			SILObject value = manager.newValueIfNeeded(clazz.newInstance());
+			SILObject value = manager.wrap(clazz.newInstance());
 			process.getActiveContext().push(value);
 		} catch(Exception exc) {
 			throw new RuntimeException("Creation of " + typeName + " failed.", exc);

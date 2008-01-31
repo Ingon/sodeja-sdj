@@ -19,11 +19,11 @@ public class SILIndexedObject implements SILObject {
 	}
 	
 	public SILObject at(int index) {
-		return values[index];
+		return values[index - 1];
 	}
 	
 	public void at_put(int index, SILObject obj) {
-		values[index] = obj;
+		values[index - 1] = obj;
 	}
 	
 	@Override

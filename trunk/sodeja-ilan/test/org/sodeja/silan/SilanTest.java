@@ -267,8 +267,16 @@ public class SilanTest extends TestCase {
 		
 	}
 	
-	public void testCollection() throws Exception {
+	public void testCollection1() throws Exception {
 		assertPrimitiveBoolean(true, execute("#(1 2 3) allSatisfy: [ :a | a < 5]"));
+	}
+
+	public void testCollection2() throws Exception {
+		assertPrimitiveBoolean(false, execute("#(1 2 3) allSatisfy: [ :a | a > 5]"));
+	}
+
+	public void testCollection3() throws Exception {
+		assertPrimitiveInteger(1, execute("#(1 2 3) do: [ :a | ^a]"));
 	}
 	
 	public void testControl1() throws Exception {
