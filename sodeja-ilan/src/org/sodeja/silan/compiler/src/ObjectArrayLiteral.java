@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.sodeja.silan.compiler.Compiler;
 import org.sodeja.silan.instruction.Instruction;
-import org.sodeja.silan.instruction.NewArrayInstruction;
+import org.sodeja.silan.instruction.PushNewArrayInstruction;
 
 public class ObjectArrayLiteral implements ArrayLiteral {
 	public final List<LiteralElement> elements;
@@ -19,6 +19,6 @@ public class ObjectArrayLiteral implements ArrayLiteral {
 			element.compile(compiler, codeModel, instructions);
 		}
 		
-		instructions.add(new NewArrayInstruction(elements.size()));
+		instructions.add(new PushNewArrayInstruction(elements.size()));
 	}
 }
