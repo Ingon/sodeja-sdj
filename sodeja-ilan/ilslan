@@ -1,0 +1,94 @@
+### BNF
+## Lexical
+INT_LITERAL = NUMBER*
+
+CONST = INT_LITERAL
+
+SPEC_CHAR = '!' | '@' | '#' | '$' | '%' | '^' | '&' | '|' | 
+	'+' | '-' | '*' | '\' | '/' | ':' | '~' | '<' | '>' | '='
+NAME_CHAR = 'a' | ... | 'z' | 'A' | ... | 'Z' | SPEC_CHAR
+ 
+NAME = NAME_CHAR*
+
+###  Syntax
+### ? - optional, + - 1..., * - 0..., | - or, () - grouping
+
+const = CONST
+var = NAME
+oper = SPEC_CHAR*
+
+expr = const | var | fun-cal | unary-op-call | binary-op-call | expr-brack 
+expr-brack = '[', expr, ']'
+expr-list = expr | expr, expr-list-rest
+expr-list-rest = ' ', expr-list
+
+fun-call = expr, '[', expr-list, ']'
+unary-op-call = oper, expr
+binary-op-call = expr, oper, expr
+
+statement = expr, ';' | block
+block = '{', statement*, '}'
+
+def-macro = 'def', 'macro', NAME, clause*, end
+clause = pattern, '=>', rewrite
+
+pattern = simple-pattern | simple-pattern, pattern
+simple-pattern = NAME | pattern-var
+pattern-var = '?', NAME, [':', type]
+type = 'block', 'statement', 'expr-list', 'expr', 'oper', 'var', 'const'
+
+###
+let <point> = create-class[];
+add-field[<point> 'x' <integer>]
+add-field[<point> 'y' <integer>]
+
+def macro class-definer
+	{ def class ?cname:name ?fields end } => {
+		let ?cname = create-class[];
+		?fields
+	}
+fields:
+	{ } => {}
+	{ var ?fname:name ?type:name; ... } =>  add-field[?cname ?fname ?type];
+	{ val ?fname:name ?type:type ?value:expression; ... } => add-constant[?cname ?fname ?type ?value];
+	{ fun ?fname:name [?params:*] ?:body } => add-method[?cname ?fname ?params ?body];
+end
+
+def class <point>
+	val zero <integer> 0;
+	var x <integer>;
+	var y <integer>;
+end
+
+def ext <point>
+	fun offset[xo yo] { this.x += xo; this.y += yo; } 
+end
+
+let rp = new[<point>];
+rp.x := 3;
+rp.y := 45;
+rp.offset[3 6];
+
+to-string[1];
+set-r[context 'cpUser' user]; 
+! val;
+3 + 5 * [3 - 4] / 43;
+3 + [5 * [[3 - 4] / 43]];
+5 * 3 + 2;
+5 * [3 + 2];
+[5 * 3] + 2;
+5 + get-int[context 'dss'];
+remove-val[[3 - 4] 21];
+set-form[alen get-val[ctx '123']];
+refresh[];
+
+def macro if
+	if [?:expr] ?:statement ?if-rest => case ?expr => ?statement ?if-rest
+if-rest:
+	 => end
+	else ?:statement => otherwise ?statement end
+	elseif [?:expr] ?:statement ... => ?expr => ?statement ...
+end
+if [3 > 4] {
+}
+
