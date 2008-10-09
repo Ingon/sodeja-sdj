@@ -5,6 +5,8 @@ import static org.sodeja.parsec.combinator.ParsecCombinators.*;
 import java.util.List;
 
 import org.sodeja.collections.ConsList;
+import org.sodeja.collections.ListUtils;
+import org.sodeja.functional.Predicate1;
 import org.sodeja.parsec.AbstractParser;
 import org.sodeja.parsec.ParseError;
 import org.sodeja.parsec.ParseSuccess;

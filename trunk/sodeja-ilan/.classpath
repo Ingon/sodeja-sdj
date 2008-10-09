@@ -6,5 +6,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/SodejaLang"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SodejaParsec"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SodejaSwing2"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
